@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import About from './components/About';
 import Portfolio from './components/Portfolio';
@@ -12,10 +12,10 @@ function App() {
         <header>
           <h1>My Personal Website</h1>
           <nav>
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/portfolio">Portfolio</a>
-            <a href="/contact">Contact</a>
+            <a href="#/">Home</a>
+            <a href="#/about">About</a>
+            <a href="#/portfolio">Portfolio</a>
+            <a href="#/contact">Contact</a>
           </nav>
         </header>
         <main>
