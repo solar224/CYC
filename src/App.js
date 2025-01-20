@@ -2,7 +2,7 @@ import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { createContext, useState, useEffect } from "react";
 
 import Home from "./components/Home";
-// import Aboutme from "./components/Aboutme";
+import Aboutme from "./components/Aboutme";
 // import Contactme from "./components/Contactme";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -40,8 +40,8 @@ export default function App() {
             <Header />
             <Routes>
               <Route path="/" element={<Home />} />
-              {/* <Route path="#/Aboutme" element={<Aboutme />} />
-              <Route path="#/Contactme" element={<Contactme />} /> */}
+              <Route path="/Aboutme" element={<Aboutme />} />
+              {/* <Route path="#/Contactme" element={<Contactme />} /> */}
             </Routes>
             <FloatingCircle />
             <Footer />
