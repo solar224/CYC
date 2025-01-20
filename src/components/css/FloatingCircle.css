@@ -1,0 +1,162 @@
+.floating-circle-container {
+    position: fixed;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: bottom 0.6s ease-in-out;
+}
+
+/* 圓圈基礎樣式 */
+.floating-circle {
+    width: 60px;
+    height: 60px;
+    background-color: #cdcdcd;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 第一顆圓圈的特定樣式 */
+.scroll-to-top-circle {
+    background-color: #f39212;
+    /* 起初隱藏 */
+    opacity: 0;
+    transform: translateY(0px);
+}
+
+/* 第一顆圓圈顯示時的動畫 */
+.scroll-to-top-circle.visible {
+    opacity: 1;
+    transform: translateY(-80px);
+}
+
+.settings-circle {
+    background-color: #28a745;
+}
+
+
+
+
+
+/* 展開圓圈樣式 */
+.expanded-circles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: expand 0.3s ease-in-out;
+}
+
+.settings-circles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: expandButton 10s ease-in-out;
+}
+
+/* 收起圓圈樣式 */
+.expanded-circles.closing {
+    animation: collapse 0.6s ease-in-out;
+}
+
+.settings-circle.closing {
+    animation: collapseButton 0.6s ease-in-out;
+    /* 改為 0.6s */
+}
+
+.extra-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #61FF6e;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Icon 樣式 */
+.icon {
+    font-size: 200%;
+    /* 根據需求調整圖示大小 */
+    color: #fff;
+    /* 設置圖示顏色 */
+}
+
+.icon-LightModeIcon {
+    font-size: 200%;
+    /* 根據需求調整圖示大小 */
+    color: #ffea008b;
+}
+
+.icon-NightlightIcon {
+    font-size: 200%;
+    /* 根據需求調整圖示大小 */
+    color: #ffea008b;
+}
+
+.icon-AbcIconIcon {
+    font-size: 200%;
+    /* 根據需求調整圖示大小 */
+    color: #ffea008b;
+}
+
+.icon-GTranslateIcon {
+    font-size: 200%;
+    /* 根據需求調整圖示大小 */
+    color: #ffea008b;
+}
+
+
+/* 展開動畫 */
+@keyframes expand {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes collapse {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+/* 收起動畫對應設置按鈕 */
+@keyframes collapseButton {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(20px);
+    }
+}
+
+@keyframes expandButton {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

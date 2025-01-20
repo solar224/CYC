@@ -1,0 +1,25 @@
+:root {
+    --background-light: #ffffff;
+    --background-dark: #000000b4;
+    --text-light: #000000;
+    --text-dark: #ffffff;
+}
+
+.app {
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-top: 60px;
+    font-family: "Microsoft JhengHei", sans-serif;
+    /* 設定微軟正黑體為主要字體 */
+
+}
+
+.app.light {
+    background-color: var(--background-light);
+    color: var(--text-light);
+}
+
+.app.dark {
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+}
