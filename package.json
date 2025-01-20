@@ -4,6 +4,12 @@
   "private": true,
   "homepage": "https://solar224.github.io/CYC",
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.0",
+    "@mui/material": "^6.4.0",
+    "animejs": "^3.2.2",
+    "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "gh-pages": "^6.3.0",
     "react": "^19.0.0",
