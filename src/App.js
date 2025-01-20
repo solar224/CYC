@@ -31,7 +31,20 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("language", language);
   }, [language]);
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // 清除 localStorage
+      localStorage.clear();
+    };
 
+    // 監聽 beforeunload 事件
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // 清理事件監聽器
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <LanguageContext.Provider value={{ language, toggleLanguage }}>

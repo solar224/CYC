@@ -18,6 +18,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ycChanImage from "../images/YC-Chan_image.jpg"; // 引入圖片
 
 const options = ["About", "Projects", "Contact", "Settings", "Help"]; // for Header [Autocomplete]
 const els = ["歡", "迎", "來", "到", "我", "的", "網", "站"];
@@ -87,7 +88,7 @@ const About = () => {
                 <Grid container spacing={4}>
                     <Grid item xs={12} md={4} style={{ padding: "3em", paddingBottom: "1em" }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <img
-                            src="/YC-Chan_image.jpg"
+                            src={ycChanImage}
                             alt="詹宇宸"
                             style={{
                                 maxWidth: "200px", // 最大寬度限制

@@ -28,6 +28,7 @@ import { CardHeader, CardActions, Collapse } from "@mui/material";
 import { Link } from "react-router-dom";
 import "./css/Header.css"; // 確保引入了相應的 CSS 文件
 import useScrollTrigger from "@mui/material/useScrollTrigger";
+import ycChanImage from "../images/YC-Chan_image.jpg"; // 引入圖片
 
 const API = "http://localhost:5000/api";
 const options = ["About", "Projects", "Contact", "Settings", "Help"]; // for Header [Autocomplete]
@@ -94,7 +95,7 @@ const Header = () => {
     const isMobile_els = useMediaQuery("(max-width: 1250px)");
     const [activePage, setActivePage] = useState(() => {
         // 從 localStorage 讀取資料，初始值為空字串
-        return localStorage.getItem("activePage") || "/";
+        return localStorage.getItem("activePage") || "";
     });
     const handlePageClick = (page) => {
         setActivePage(page); // 設置當前選中的頁面
@@ -223,7 +224,7 @@ const Header = () => {
                                     <Button
                                         color="inherit"
                                         component={Link}
-                                        to="/"
+                                        to=""
                                         sx={{
                                             textTransform: "none",
                                             color: activePage === "" ? "yellow" : "white",
@@ -305,7 +306,7 @@ const Header = () => {
                                         }}
                                     >
                                         <img
-                                            src="/YC-Chan_image.jpg" // 自定義圖片 URL
+                                            src={ycChanImage} // 自定義圖片 URL
                                             style={{
                                                 width: "100%", // 圖片寬度填滿框
                                                 height: "100%", // 圖片高度填滿框
