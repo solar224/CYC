@@ -87,7 +87,7 @@ const About = () => {
                 <Grid container spacing={4}>
                     <Grid item xs={12} md={4} style={{ padding: "3em", paddingBottom: "1em" }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <img
-                            src="./images/YC-Chan_image.jpg"
+                            src="/YC-Chan_image.jpg"
                             alt="詹宇宸"
                             style={{
                                 maxWidth: "200px", // 最大寬度限制

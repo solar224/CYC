@@ -94,7 +94,7 @@ const Header = () => {
     const isMobile_els = useMediaQuery("(max-width: 1250px)");
     const [activePage, setActivePage] = useState(() => {
         // 從 localStorage 讀取資料，初始值為空字串
-        return localStorage.getItem("activePage") || "";
+        return localStorage.getItem("activePage") || "/";
     });
     const handlePageClick = (page) => {
         setActivePage(page); // 設置當前選中的頁面
@@ -126,8 +126,6 @@ const Header = () => {
         <Box
             sx={{ width: 250 }}
             role="presentation"
-        // onClick={toggleDrawer(false)}
-        // onKeyDown={toggleDrawer(false)}
         >
             <Search>
                 <SearchIconWrapper>
@@ -307,7 +305,7 @@ const Header = () => {
                                         }}
                                     >
                                         <img
-                                            src="/../../public/images/YC-Chan_image.jpg" // 自定義圖片 URL
+                                            src="/YC-Chan_image.jpg" // 自定義圖片 URL
                                             style={{
                                                 width: "100%", // 圖片寬度填滿框
                                                 height: "100%", // 圖片高度填滿框
