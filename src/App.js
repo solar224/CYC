@@ -6,7 +6,7 @@ import Home from "./components/Home";
 // import Contactme from "./components/Contactme";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-// import FloatingCircle from "./components/FloatingCircle";
+import FloatingCircle from "./components/FloatingCircle";
 import "./components/css/App.css";
 
 export const ThemeContext = createContext();
@@ -43,7 +43,7 @@ export default function App() {
               {/* <Route path="#/Aboutme" element={<Aboutme />} />
               <Route path="#/Contactme" element={<Contactme />} /> */}
             </Routes>
-            {/* <FloatingCircle /> */}
+            <FloatingCircle />
             <Footer />
           </Router>
         </div>
