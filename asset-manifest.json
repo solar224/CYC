@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/CYC/static/css/main.e6c13ad2.css",
+    "main.js": "/CYC/static/js/main.366cc95e.js",
+    "static/js/488.17bae1ff.chunk.js": "/CYC/static/js/488.17bae1ff.chunk.js",
+    "index.html": "/CYC/index.html",
+    "main.e6c13ad2.css.map": "/CYC/static/css/main.e6c13ad2.css.map",
+    "main.366cc95e.js.map": "/CYC/static/js/main.366cc95e.js.map",
+    "488.17bae1ff.chunk.js.map": "/CYC/static/js/488.17bae1ff.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.366cc95e.js"
+  ]
+}
