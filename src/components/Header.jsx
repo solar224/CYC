@@ -307,7 +307,7 @@ const Header = () => {
                                         }}
                                     >
                                         <img
-                                            src="./images/YC-Chan_image.jpg" // 自定義圖片 URL
+                                            src="/../../public/images/YC-Chan_image.jpg" // 自定義圖片 URL
                                             style={{
                                                 width: "100%", // 圖片寬度填滿框
                                                 height: "100%", // 圖片高度填滿框
