@@ -5,7 +5,7 @@ import Home from "./components/Home";
 // import Aboutme from "./components/Aboutme";
 // import Contactme from "./components/Contactme";
 import Header from "./components/Header";
-// import Footer from "./components/Footer";
+import Footer from "./components/Footer";
 // import FloatingCircle from "./components/FloatingCircle";
 import "./components/css/App.css";
 
@@ -44,7 +44,7 @@ export default function App() {
               <Route path="#/Contactme" element={<Contactme />} /> */}
             </Routes>
             {/* <FloatingCircle /> */}
-            {/* <Footer /> */}
+            <Footer />
           </Router>
         </div>
       </LanguageContext.Provider>
