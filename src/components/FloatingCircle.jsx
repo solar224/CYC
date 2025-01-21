@@ -10,18 +10,13 @@ import AbcIcon from '@mui/icons-material/Abc';
 import GTranslateIcon from '@mui/icons-material/GTranslate';
 
 export default function FloatingCircle() {
-    const [isOpen, setIsOpen] = useState(() => { return localStorage.getItem('isOpen') || "false" }); // 管理第二個圓圈是否展開的狀態
+    const [isOpen, setIsOpen] = useState(() => { return localStorage.getItem('isOpen') || false }); // 管理第二個圓圈是否展開的狀態
     const [bottomOffset, setBottomOffset] = useState(20); // 初始距離底部的偏移量
     const [showScrollToTop, setShowScrollToTop] = useState(false); // 控制是否顯示滾動到頂部按鈕
     const [isClosing, setIsClosing] = useState(false); // 用於追踪收起動畫
     const { theme, toggleTheme } = useContext(ThemeContext);
     const { language, toggleLanguage } = useContext(LanguageContext);
-    // useEffect(() => { console.log(theme) }, [theme]);
-    // useEffect(() => {
-    //     // 當 activePage 變化時，將其儲存到 localStorage
-    //     localStorage.setItem("language", language);
-    //     // console.log(language);
-    // }, [language]);
+
     useEffect(() => {
         // 當 activePage 變化時，將其儲存到 localStorage
         localStorage.setItem("isOpen", isOpen);
