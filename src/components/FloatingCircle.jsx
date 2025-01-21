@@ -10,7 +10,7 @@ import AbcIcon from '@mui/icons-material/Abc';
 import GTranslateIcon from '@mui/icons-material/GTranslate';
 
 export default function FloatingCircle() {
-    const [isOpen, setIsOpen] = useState(() => { return localStorage.getItem('isOpen') || false }); // 管理第二個圓圈是否展開的狀態
+    const [isOpen, setIsOpen] = useState(() => { return localStorage.getItem('isOpen') || 0 }); // 管理第二個圓圈是否展開的狀態
     const [bottomOffset, setBottomOffset] = useState(20); // 初始距離底部的偏移量
     const [showScrollToTop, setShowScrollToTop] = useState(false); // 控制是否顯示滾動到頂部按鈕
     const [isClosing, setIsClosing] = useState(false); // 用於追踪收起動畫
@@ -46,15 +46,15 @@ export default function FloatingCircle() {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
     const toggleSettings = () => {
-        if (isOpen) {
+        if (isOpen == 1) {
             // 先觸發收起動畫
             setIsClosing(true);
             setTimeout(() => {
-                setIsOpen(false); // 在動畫結束後實際關閉
+                setIsOpen(0); // 在動畫結束後實際關閉
                 setIsClosing(false);
             }, 300); // 與動畫時長一致
         } else {
-            setIsOpen(true);
+            setIsOpen(1);
         }
     };
 
@@ -83,11 +83,11 @@ export default function FloatingCircle() {
                 className={`floating-circle settings-circle ${isClosing ? "closing" : ""}`}
                 onClick={toggleSettings}
             >
-                {isOpen ? <KeyboardDoubleArrowDownIcon className="icon" /> : <SettingsIcon className="icon" />}
+                {isOpen == 1 ? <KeyboardDoubleArrowDownIcon className="icon" /> : <SettingsIcon className="icon" />}
             </div>
 
             {/* 展開的圓圈，根據 isOpen 狀態顯示 */}
-            {isOpen && (
+            {isOpen == 1 ? (
                 <div className={`expanded-circles ${isClosing ? "closing" : ""}`}>
                     {/* 控制語言 (中、英) */}
                     <div className="floating-circle extra-circle">
@@ -146,7 +146,7 @@ export default function FloatingCircle() {
                         </div>
                     </div>
                 </div>
-            )
+            ) : null
             }
         </div >
     );

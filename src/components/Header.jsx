@@ -187,7 +187,7 @@ const Header = () => {
                                     textAlign: isMobile ? "center" : "left",
                                 }}
                             >
-                                *YC-Chan websites
+                                YC-Chan websites
                             </Typography>
                             {!isMobile_els && (
                                 <Box

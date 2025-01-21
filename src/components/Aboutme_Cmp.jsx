@@ -80,11 +80,23 @@ const Section = ({ id, title, children }) => {
 const About = () => {
     const { theme, toggleTheme } = useContext(ThemeContext);
     const { language, toggleLanguage } = useContext(LanguageContext); // 主題狀態
+    const [activeSection, setActiveSection] = useState("學歷");
+    const handleScrollTo = (section) => {
+        setActiveSection(section);
+        const element = document.getElementById(section);
+        const headerOffset = 80; // 固定的 header 高度（單位：像素）
+        const elementPosition = element.getBoundingClientRect().top; // 元素相對於視窗的距離
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+        });
+    };
     return (
         <Box sx={{ maxWidth: "1100px", margin: "0 auto", padding: 5 }}>
-
-            <Paper elevation={3} sx={{ padding: 2, marginBottom: 5 }}>
+            {/* 個人介紹 */}
+            <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
                 <Grid container spacing={4}>
                     <Grid item xs={12} md={4} style={{ padding: "3em", paddingBottom: "1em" }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <img
@@ -98,8 +110,8 @@ const About = () => {
                         />
 
                         {/* <Typography variant="h5" gutterBottom>
-              {language == 'zh' ? '詹宇宸' : 'CHAN,YU-CHEN'}
-            </Typography> */}
+                            {language == 'zh' ? '詹宇宸' : 'CHAN,YU-CHEN'}
+                        </Typography> */}
                     </Grid>
                     <Grid item xs={12} md={8} style={{ padding: "3em" }}>
                         <Typography variant="">
@@ -118,140 +130,138 @@ const About = () => {
                                 數據科學與工程研究所 (DSIE)
                             </a> 攻讀碩士學位。
                             <br /><br />
-                            大學期間主修資工，輔修通訊
+
                         </Typography>
                     </Grid>
                 </Grid>
             </Paper>
 
+            {/* 下方資訊 */}
 
             <Grid container spacing={4}>
-                <Grid item xs={12} md={4}>
-                    <Paper elevation={3} sx={{ padding: 0, marginBottom: 4, textAlign: "center" }}>
+                {/* 左側內容 */}
+                <Grid item xs={12} md={3}>
+                    <Paper elevation={3} sx={{ padding: 0, marginBottom: 2, textAlign: "" }}>
                         <Accordion>
                             <AccordionSummary
                                 expandIcon={<ArrowDropDownIcon />}
                                 aria-controls="panel2-content"
                                 id="panel2-header"
                             >
-                                <Typography variant="h5">目錄</Typography>
+                                <Typography variant="h6">目錄</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
-                                    test
+                                    <Button
+                                        variant={activeSection === "學歷" ? "contained" : "outlined"}
+                                        sx={{ width: "100%", marginBottom: 0.5 }}
+                                        onClick={() => handleScrollTo("學歷")}
+                                    >
+                                        學歷
+                                    </Button>
+                                </Typography>
+                                <Typography>
+                                    <Button
+                                        variant={activeSection === "教學經驗" ? "contained" : "outlined"}
+                                        sx={{ width: "100%", marginBottom: 0.5 }}
+                                        onClick={() => handleScrollTo("教學經驗")}
+                                    >
+                                        教學經驗
+                                    </Button>
+                                </Typography>
+                                <Typography>
+                                    <Button
+                                        variant={activeSection === "專案" ? "contained" : "outlined"}
+                                        sx={{ width: "100%", marginBottom: 0.5 }}
+                                        onClick={() => handleScrollTo("專案")}
+                                    >
+                                        專案
+                                    </Button>
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
                     </Paper>
-                    <Paper elevation={3} sx={{ padding: 2, textAlign: "left" }}>
-                        <Box>
-                            <Typography variant="h5" gutterBottom>
-                                聯絡資訊
+                </Grid>
+
+                {/* 右側內容 */}
+                <Grid item xs={12} md={9}>
+                    <Paper
+                        elevation={3}
+                        sx={{ padding: 2, marginBottom: 2 }}
+                        id="學歷"
+                        onMouseEnter={() => setActiveSection("學歷")}
+                    >
+                        <Typography variant="h5" gutterBottom>
+                            學歷
+                        </Typography>
+                        <ul>
+                            <li>國立彰化師範大學附屬高級工業職業學校 控制科</li>
+                            <li>國立高雄科技大學 電腦與通訊工程系</li>
+                            <li>國立陽明交通大學 數據科學與工程研究所</li>
+                        </ul>
+                    </Paper>
+
+                    <Paper
+                        elevation={3}
+                        sx={{ padding: 2, marginBottom: 2 }}
+                        id="教學經驗"
+                        onMouseEnter={() => setActiveSection("教學經驗")}
+                    >
+                        <Typography variant="h5" gutterBottom>
+                            教學經驗
+                        </Typography>
+                        <Box sx={{ marginBottom: 2 }}>
+                            <Typography variant="h6">線性代數助教</Typography>
+                            <Typography variant="subtitle1">2023年9月 - 2024年1月</Typography>
+                            <Typography variant="body1" gutterBottom>
+                                <strong>助教</strong>
                             </Typography>
-                            <Typography variant="body1">地址:</Typography>
-                            <Typography variant="body1">電話: (04) 8221437</Typography>
-                            <Typography variant="body1">
-                                郵件: <a href="mailto:C110110157@nkust.edu.tw">C110110157@nkust.edu.tw</a>
+                            <Typography variant="body2">
+                                <strong>工作內容:</strong> 協助教授講解線性代數課程內容，解答學生疑問，並提供課後輔導。
                             </Typography>
-                            <Typography variant="body1">
-                                LinkedIn:{" "}
-                                <Link href="https://www.linkedin.com/company/the-museum-of-modern-art/" target="_blank">
-                                    https://www.linkedin.com
-                                </Link>
+                        </Box>
+                        <Box sx={{ marginBottom: 2 }}>
+                            <Typography variant="h6">線性代數助教</Typography>
+                            <Typography variant="subtitle1">2023年9月 - 2024年1月</Typography>
+                            <Typography variant="body1" gutterBottom>
+                                <strong>助教</strong>
+                            </Typography>
+                            <Typography variant="body2">
+                                <strong>工作內容:</strong> 協助教授講解線性代數課程內容，解答學生疑問，並提供課後輔導。
+                            </Typography>
+                        </Box>
+                        <Box sx={{ marginBottom: 2 }}>
+                            <Typography variant="h6">線性代數助教</Typography>
+                            <Typography variant="subtitle1">2023年9月 - 2024年1月</Typography>
+                            <Typography variant="body1" gutterBottom>
+                                <strong>助教</strong>
+                            </Typography>
+                            <Typography variant="body2">
+                                <strong>工作內容:</strong> 協助教授講解線性代數課程內容，解答學生疑問，並提供課後輔導。
                             </Typography>
                         </Box>
                     </Paper>
-                </Grid>
 
-                {/* 右侧内容 */}
-                <Grid item xs={12} md={8}>
-                    {/* About Me */}
-                    <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
-                        <div>
-                            <Typography variant="h5" gutterBottom>
-                                學歷
+                    <Paper
+                        elevation={3}
+                        sx={{ padding: 2 }}
+                        id="專案"
+                        onMouseEnter={() => setActiveSection("專案")}
+                    >
+                        <Typography variant="h5" gutterBottom>
+                            專案
+                        </Typography>
+                        <Box sx={{ marginBottom: 2 }}>
+                            <Typography variant="h6">自我創作</Typography>
+                            <Typography variant="subtitle1">January 1880 - July 1890</Typography>
+                            <Typography variant="body1" gutterBottom>
+                                <strong>Artist</strong>
                             </Typography>
-                            <ul>
-                                <li>
-                                    國立彰化師範大學附屬高級工業職業學校 控制科
-                                </li>
-                                <li>
-                                    國立高雄科技大學 電腦與通訊工程系
-                                </li>
-                                <li>
-                                    國立陽明交通大學 數據科學與工程研究所
-                                </li>
-                            </ul>
-                        </div>
-                    </Paper>
-
-                    {/* Experience */}
-                    <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
-                        <div>
-                            <Typography variant="h5" gutterBottom>
-                                教學經驗
+                            <Typography variant="body2">
+                                <strong>Summary:</strong> Independent artist specializing in emotive, vibrant works.
                             </Typography>
-                            <Box sx={{ marginBottom: 2 }}>
-                                <Typography variant="h6">線性代數助教</Typography>
-                                <Typography variant="subtitle1">2023年9月 - 2024年1月</Typography>
-                                <Typography variant="body1" gutterBottom>
-                                    <strong>助教</strong>
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>工作內容:</strong> 協助教授講解線性代數課程內容，解答學生疑問，並提供課後輔導。
-                                </Typography>
-                            </Box>
-
-                            <Box sx={{ marginBottom: 2 }}>
-                                <Typography variant="h6">機率助教</Typography>
-                                <Typography variant="subtitle1">2024年2月 - 2024年6月</Typography>
-                                <Typography variant="body1" gutterBottom>
-                                    <strong>助教</strong>
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>工作內容:</strong> 協助教授機率與統計課程，準備教材，並提供課堂討論與練習題指導。
-                                </Typography>
-                            </Box>
-
-                            <Box sx={{ marginBottom: 2 }}>
-                                <Typography variant="h6">國小暑期教師</Typography>
-                                <Typography variant="subtitle1">2024年7月 - 2024年8月</Typography>
-                                <Typography variant="body1" gutterBottom>
-                                    <strong>教師</strong>
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>工作內容:</strong> 設計並執行適合國小學生的暑期課程，教學數學和科學，並組織學習活動以增強學生的興趣。
-                                </Typography>
-                            </Box>
-                        </div>
+                        </Box>
                     </Paper>
-                    <Paper elevation={3} sx={{ padding: 2 }}>
-                        <div>
-                            <Typography variant="h5" gutterBottom>
-                                專案
-                            </Typography>
-                            <Box sx={{ marginBottom: 2 }}>
-                                <Typography variant="h6">Self Employed</Typography>
-                                <Typography variant="subtitle1">January 1880 - July 1890</Typography>
-                                <Typography variant="body1" gutterBottom>
-                                    <strong>Artist</strong>
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>Summary:</strong> Independent artist specializing in emotive, vibrant works that explore nature, humanity, and personal expression. Developed a unique post-impressionist style recognized for its bold colors and dynamic brushwork.
-                                </Typography>
-                                <strong>Responsibilities:</strong>
-                                <ul>
-                                    <li>Created original oil paintings and drawings for exhibitions and private collections.</li>
-                                    <li>Coordinated with galleries and patrons to showcase and sell artwork.</li>
-                                    <li>Researched and refined techniques to innovate within the visual arts.</li>
-                                </ul>
-                                <Typography variant="body2">
-                                    <strong>Accomplishments:</strong> Featured in notable exhibitions, with works like <i>The Starry Night</i> and <i>Sunflowers</i> celebrated worldwide.
-                                </Typography>
-                            </Box>
-                        </div>
-                    </Paper>
-
                 </Grid>
             </Grid>
         </Box >
