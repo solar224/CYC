@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { styled, alpha } from "@mui/material/styles";
-import { Tooltip } from "@mui/material";
+import { Tooltip, ButtonGroup } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -18,6 +18,23 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import {
+    ComposedChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip as RechartsTooltip,
+    Legend,
+    ResponsiveContainer,
+    Brush,
+    Radar,
+    Bar,
+    RadarChart,
+    PolarGrid,
+    PolarAngleAxis,
+    PolarRadiusAxis,
+} from "recharts";
 // 引入圖片
 import ycChanImage from "../images/YC-Chan_image.jpg";
 import exploration from "../images/exploration.png";
@@ -27,6 +44,7 @@ import education from "../images/education.png";
 import schoolbag from "../images/schoolbag.png";
 import project from "../images/project.png";
 import score from "../images/score.png";
+import algorithms from "../images/algorithms.png";
 
 const options = ["About", "Projects", "Contact", "Settings", "Help"]; // for Header [Autocomplete]
 const els = ["歡", "迎", "來", "到", "我", "的", "網", "站"];
@@ -89,6 +107,7 @@ const About = () => {
     const { theme, toggleTheme } = useContext(ThemeContext);
     const { language, toggleLanguage } = useContext(LanguageContext); // 主題狀態
     const [activeSection, setActiveSection] = useState("學歷");
+    const [showUndergrad, setShowUndergrad] = useState(true); // 控制顯示狀態 (true=大學, false=研究所)
     const handleScrollTo = (section) => {
         setActiveSection(section);
         const element = document.getElementById(section);
@@ -100,7 +119,29 @@ const About = () => {
             behavior: "smooth",
         });
     };
+    const College_grades = [
+        { semester: "大一上", GPA: 3.56, PR: 83.60, Credits: 27 },
+        { semester: "大一下", GPA: 3.91, PR: 93.33, Credits: 22 },
+        { semester: "大二上", GPA: 4.12, PR: 96.67, Credits: 26 },
+        { semester: "大二下", GPA: 4.19, PR: 98.31, Credits: 23 },
+        { semester: "大三上", GPA: 4.22, PR: 98.31, Credits: 21 },
+        { semester: "大三下", GPA: 4.24, PR: 98.31, Credits: 15 },
+        { semester: "大四上", GPA: 4.3, PR: 99.99, Credits: 10 },
+        { semester: "大四下", GPA: 4.3, PR: 99.99, Credits: 8 },
+    ];
+    const Master_degree = [
+        { semester: "碩一上", GPA: 3.56, PR: 83.60 },
+        { semester: "碩一下", GPA: 3.91, PR: 93.33 },
+        { semester: "碩二上", GPA: 4.12, PR: 96.67 },
+        { semester: "碩二下", GPA: 4.19, PR: 98.31 },
 
+    ];
+    const Skill_distribution = [
+        { subject: 'C/C++', A: 90, fullMark: 100 },
+        { subject: '', A: 85, fullMark: 100 },
+        { subject: '', A: 80, fullMark: 100 },
+        { subject: '', A: 75, fullMark: 100 },
+    ];
     return (
         <Box sx={{ maxWidth: "1100px", margin: "0 auto", padding: 5 }}>
             {/* 個人介紹 */}
@@ -142,49 +183,75 @@ const About = () => {
                             {/* <br /><br /> */}
                         </Typography>
                         <Typography gutterBottom >
-                            我的研究興趣，包括：
+                            我的研究興趣：
                         </Typography>
                         <br />
-                        <Grid container sx={{ marginRight: "auto", width: "fit-content" }} spacing={9} justifyContent="flex-end">
-                            <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
+                        <Grid container sx={{ width: "100%" }} justifyContent="space-between">
+                            <Grid item xs={6} md={3} display="flex" flexDirection="column" alignItems="center" >
                                 <img
                                     src={exploration}
                                     alt="exploration"
                                     style={{
                                         maxWidth: "70px",
                                         width: "100%",
+                                        height: "100%",
                                     }}
                                 />
                                 <Typography gutterBottom variant="body2" sx={{ marginTop: 1, textAlign: "center" }}>
                                     資料分析
                                 </Typography>
                             </Grid>
-                            <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
+                            <Grid item xs={6} md={3} display="flex" flexDirection="column" alignItems="center">
+                                <img
+                                    src={algorithms}
+                                    alt="algorithms"
+                                    style={{
+                                        maxWidth: "70px",
+                                        width: "100%",
+                                        height: "100%",
+                                    }}
+                                />
+                                <Typography gutterBottom variant="body2" sx={{ marginTop: 1, textAlign: "center" }}>
+                                    程式撰寫
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6} md={3} display="flex" flexDirection="column" alignItems="center">
                                 <img
                                     src={communication}
                                     alt="communication"
                                     style={{
                                         maxWidth: "70px",
                                         width: "100%",
+                                        height: "100%",
                                     }}
                                 />
                                 <Typography gutterBottom variant="body2" sx={{ marginTop: 1, textAlign: "center" }}>
                                     通訊設計
                                 </Typography>
                             </Grid>
-                            <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
+                            <Grid item xs={6} md={3} display="flex" flexDirection="column" alignItems="center">
                                 <img
                                     src={cpu}
                                     alt="cpu"
                                     style={{
                                         maxWidth: "70px",
                                         width: "100%",
+                                        height: "100%",
                                     }}
                                 />
                                 <Typography gutterBottom variant="body2" sx={{ marginTop: 1, textAlign: "center" }}>
                                     電路設計
                                 </Typography>
                             </Grid>
+                            {/* <ResponsiveContainer width="100%" height="100%">
+                                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={Skill_distribution}>
+                                        <PolarGrid />
+                                        <PolarAngleAxis dataKey="subject" />
+                                        <PolarRadiusAxis angle={30} domain={[0, 10]} />
+                                        <Radar name="技能評估" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                                    </RadarChart>
+                                </ResponsiveContainer> */}
+
                         </Grid>
                     </Grid>
                 </Grid>
@@ -299,35 +366,48 @@ const About = () => {
                             /> 教學經驗
                         </Typography>
                         <Box sx={{ marginBottom: 2 }}>
-                            <Typography variant="h6">機率助教</Typography>
-                            <Typography variant="subtitle1">2024年1月 - 2024年6月</Typography>
                             <Typography variant="body1" gutterBottom>
-                                <strong>助教</strong>
+                                <strong>暑期教師 [小學]</strong>
                             </Typography>
                             <Typography variant="body2">
-                                <strong>工作內容:</strong> 協助教授講解線性代數課程內容，解答學生疑問，並提供課後輔導。
+                                <strong>工作時間：</strong>2024年7月 - 2024年8月
+                            </Typography>
+                            <Typography variant="body2" >
+                                <strong>工作內容：</strong>教授講解國小課程內容，陪同學生寫作業。
+                            </Typography>
+                            <Typography variant="body2" >
+                                <strong>工作資料:</strong>
                             </Typography>
                         </Box>
                         <Box sx={{ marginBottom: 2 }}>
-                            <Typography variant="h6">線性代數助教</Typography>
-                            <Typography variant="subtitle1">2023年9月 - 2024年1月</Typography>
                             <Typography variant="body1" gutterBottom>
-                                <strong>助教</strong>
+                                <strong>機率助教 [大學]</strong>
                             </Typography>
                             <Typography variant="body2">
-                                <strong>工作內容:</strong> 協助教授講解線性代數課程內容，解答學生疑問，並提供課後輔導。
+                                <strong>工作時間：</strong>2024年2月 - 2024年6月
+                            </Typography>
+                            <Typography variant="body2">
+                                <strong>工作內容:</strong> 協助教授講解機率課程內容，解答學生疑問，並提供課後輔導。
+                            </Typography>
+                            <Typography variant="body2" >
+                                <strong>工作資料:</strong>
                             </Typography>
                         </Box>
                         <Box sx={{ marginBottom: 2 }}>
-                            <Typography variant="h6">線性代數助教</Typography>
-                            <Typography variant="subtitle1">2023年9月 - 2024年1月</Typography>
                             <Typography variant="body1" gutterBottom>
-                                <strong>助教</strong>
+                                <strong>線性代數助教 [大學]</strong>
+                            </Typography>
+                            <Typography variant="body2">
+                                <strong>工作時間：</strong>2023年9月 - 2024年1月
                             </Typography>
                             <Typography variant="body2">
                                 <strong>工作內容:</strong> 協助教授講解線性代數課程內容，解答學生疑問，並提供課後輔導。
                             </Typography>
+                            <Typography variant="body2" >
+                                <strong>工作資料:</strong>
+                            </Typography>
                         </Box>
+
                     </Paper>
 
                     <Paper
@@ -363,21 +443,126 @@ const About = () => {
                         id="學業表現"
                         onMouseEnter={() => setActiveSection("學業表現")}
                     >
-                        <Typography variant="h5" gutterBottom>
-                            <img
-                                src={score}
-                                alt="score"
-                                style={{
-                                    maxWidth: "20px",
-                                    width: "100%",
-                                }}
-                            /> 學業表現
-                        </Typography>
-                        <ul>
-                            <li>國立彰化師範大學附屬高級工業職業學校 控制科</li>
-                            <li>國立高雄科技大學 電腦與通訊工程系</li>
-                            <li>國立陽明交通大學 數據科學與工程研究所</li>
-                        </ul>
+                        <Grid container>
+                            <Grid md={6} xs={6}>
+                                <Typography variant="h5" gutterBottom>
+                                    <img
+                                        src={score}
+                                        alt="score"
+                                        style={{
+                                            maxWidth: "20px",
+                                            width: "100%",
+                                        }}
+                                    /> 學業表現
+                                </Typography>
+                            </Grid>
+                            {/* 切換按鈕 */}
+                            <Grid item xs={6} md={6} display="flex" justifyContent="flex-end">
+                                <ButtonGroup variant="text">
+                                    <Button
+                                        onClick={() => setShowUndergrad(true)}
+                                        color={showUndergrad ? "primary" : "inherit"}
+                                    >
+                                        大學
+                                    </Button>
+                                    <Button
+                                        onClick={() => setShowUndergrad(false)}
+                                        color={!showUndergrad ? "primary" : "inherit"}
+                                    >
+                                        研究所
+                                    </Button>
+                                </ButtonGroup>
+                            </Grid>
+                        </Grid>
+                        <br />
+                        <Grid container spacing={4}>
+                            {/* 大學圖表 */}
+                            {showUndergrad && (
+                                <>
+                                    <Grid item xs={12} md={12}>
+                                        <ResponsiveContainer width="100%" height={250}>
+                                            <ComposedChart data={College_grades} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+                                                <CartesianGrid strokeDasharray="1 1" stroke="#ddd" />
+                                                <XAxis dataKey="semester" />
+                                                <YAxis
+                                                    yAxisId="left"
+                                                    orientation="left"
+                                                    domain={[3.3, 4.3]}
+                                                    label={{ value: "GPA", angle: -90, position: "insideLeft" }} />
+                                                <YAxis
+                                                    yAxisId="right"
+                                                    orientation="right"
+                                                    domain={[0, 100]}
+                                                    label={{ value: "班級 PR", angle: -90, position: "insideRight" }}
+                                                />
+                                                <RechartsTooltip />
+                                                <Legend />
+                                                {/* 學分數的 Bar */}
+                                                <Bar
+                                                    yAxisId="right"
+                                                    dataKey="Credits"
+                                                    fill="#ff7300"
+                                                    barSize={2.5}
+                                                    name="學分"
+                                                />
+                                                {/* GPA 線條 */}
+                                                <Line yAxisId="left" type="monotone" name="GPA" dataKey="GPA" stroke="#8884d8" strokeWidth={2} activeDot={{ r: 8 }} />
+                                                {/* 班級排名線條 */}
+                                                <Line yAxisId="right" type="monotone" name="PR" dataKey="PR" stroke="#82ca9d" strokeWidth={2} activeDot={{ r: 8 }} />
+                                                <Brush dataKey="semester" height={10} stroke="#8884d8" />
+                                            </ComposedChart>
+                                        </ResponsiveContainer>
+                                    </Grid>
+                                    <Grid item xs={12} md={5.75}>左</Grid>
+                                    <Grid item xs={12} md={0.5} />
+                                    <Grid item xs={12} md={5.75}>右</Grid>
+                                </>
+                            )}
+
+                            {/* 研究所圖表 */}
+                            {!showUndergrad && (
+                                <>
+                                    <Grid item xs={12} md={12}>
+                                        <ResponsiveContainer width="100%" height={250}>
+                                            <ComposedChart data={College_grades} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+                                                <CartesianGrid strokeDasharray="1 1" stroke="#ddd" />
+                                                <XAxis dataKey="semester" />
+                                                <YAxis
+                                                    yAxisId="left"
+                                                    orientation="left"
+                                                    domain={[3.3, 4.3]}
+                                                    label={{ value: "GPA", angle: -90, position: "insideLeft" }} />
+                                                <YAxis
+                                                    yAxisId="right"
+                                                    orientation="right"
+                                                    domain={[0, 100]}
+                                                    label={{ value: "班級 PR", angle: -90, position: "insideRight" }}
+                                                />
+                                                <RechartsTooltip />
+                                                <Legend />
+                                                {/* 學分數的 Bar */}
+                                                <Bar
+                                                    yAxisId="right"
+                                                    dataKey="Credits"
+                                                    fill="#ff7300"
+                                                    barSize={2.5}
+                                                    name="學分"
+                                                />
+                                                {/* GPA 線條 */}
+                                                <Line yAxisId="left" type="monotone" name="GPA" dataKey="GPA" stroke="#8884d8" strokeWidth={2} activeDot={{ r: 8 }} />
+                                                {/* 班級排名線條 */}
+                                                <Line yAxisId="right" type="monotone" name="PR" dataKey="PR" stroke="#82ca9d" strokeWidth={2} activeDot={{ r: 8 }} />
+                                                <Brush dataKey="semester" height={10} stroke="#8884d8" />
+                                            </ComposedChart>
+                                        </ResponsiveContainer>
+                                    </Grid>
+                                    <Grid item xs={12} md={5.75}>左</Grid>
+                                    <Grid item xs={12} md={0.5} />
+                                    <Grid item xs={12} md={5.75}>右</Grid>
+                                </>
+                            )}
+
+                        </Grid>
                     </Paper>
                 </Grid>
             </Grid>
