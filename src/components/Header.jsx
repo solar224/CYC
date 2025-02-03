@@ -178,6 +178,7 @@ const Header = () => {
                             >
                                 <MenuIcon />
                             </IconButton>
+
                             <Typography
                                 variant="h6"
                                 component="div"
@@ -187,7 +188,9 @@ const Header = () => {
                                     textAlign: isMobile ? "center" : "left",
                                 }}
                             >
-                                YC-Chan websites
+                                <a href="https://solar224.github.io/CYC/#/" style={{ textDecoration: "none", color: "inherit" }}>
+                                    YC-Chan websites
+                                </a>
                             </Typography>
                             {!isMobile_els && (
                                 <Box

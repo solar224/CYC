@@ -9,8 +9,8 @@ const Aboutme = () => {
         >
             <main style={{ minHeight: "400px", flexGrow: 1 }}>
                 <About />
-                <Projects />
-                <Contact />
+                {/* <Projects />
+                <Contact /> */}
             </main>
         </div>
     );

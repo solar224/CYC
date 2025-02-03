@@ -10,6 +10,7 @@
     transition: background-color 0.3s ease, color 0.3s ease;
     padding-top: 60px;
     font-family: "Microsoft JhengHei", sans-serif;
+    letter-spacing: 1px;
     /* 設定微軟正黑體為主要字體 */
 
 }
