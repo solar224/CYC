@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import { Tooltip } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
@@ -92,18 +93,18 @@ function ElevationScroll(props) {
 }
 
 const Header = () => {
-
+    const location = useLocation();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
     const isMobile = useMediaQuery("(max-width: 900px)");
     const isMobile_els = useMediaQuery("(max-width: 1250px)");
     const [activePage, setActivePage] = useState(() => {
-        // 從 localStorage 讀取資料，初始值為空字串
-        return localStorage.getItem("activePage") || "";
+        return location.pathname;
     });
-    const handlePageClick = (page) => {
-        setActivePage(page); // 設置當前選中的頁面
-    };
+    // 設置當前選中的頁面
+    useEffect(() => {
+        setActivePage(location.pathname);
+    }, [location.pathname]);
     // 當點擊事件發生時，讓正方形隨機移動與旋轉
     const handleClick = () => {
         anime({
@@ -116,7 +117,6 @@ const Header = () => {
         });
         setIsClicked(!isClicked); // 切換點擊狀態
     };
-
     const toggleDrawer = (open) => (event) => {
         if (
             event.type === "keydown" &&
@@ -153,10 +153,6 @@ const Header = () => {
             <Divider />
         </Box>
     );
-    useEffect(() => {
-        // 當 activePage 變化時，將其儲存到 localStorage
-        localStorage.setItem("activePage", activePage);
-    }, [activePage]);
     useEffect(() => {
         // 初始隨機設置三個小正方形的位置與角度
         anime.set(".el", {
@@ -234,11 +230,10 @@ const Header = () => {
                                         to=""
                                         sx={{
                                             textTransform: "none",
-                                            color: activePage === "" ? "yellow" : "white",
-                                            fontWeight: activePage === "" ? "bold" : "",
-                                            fontSize: activePage === "" ? "1.02rem" : "1rem",
+                                            color: activePage === "/" ? "yellow" : "white",
+                                            fontWeight: activePage === "/" ? "bold" : "",
+                                            fontSize: activePage === "/" ? "1.02rem" : "1rem",
                                         }}
-                                        onClick={() => handlePageClick("")}
                                     >
                                         首頁
                                     </Button>
@@ -248,12 +243,10 @@ const Header = () => {
                                         to="/Aboutme"
                                         sx={{
                                             textTransform: "none",
-                                            color: activePage === "Aboutme" ? "yellow" : "white",
-                                            fontWeight: activePage === "Aboutme" ? "bold" : "",
-                                            fontSize: activePage === "Aboutme" ? "1.02rem" : "1rem",
-
+                                            color: activePage === "/Aboutme" ? "yellow" : "white",
+                                            fontWeight: activePage === "/Aboutme" ? "bold" : "",
+                                            fontSize: activePage === "/Aboutme" ? "1.02rem" : "1rem",
                                         }}
-                                        onClick={() => handlePageClick("Aboutme")}
                                     >
                                         關於我
                                     </Button>
@@ -263,12 +256,10 @@ const Header = () => {
                                         to="/Contactme"
                                         sx={{
                                             textTransform: "none",
-                                            color: activePage === "Contactme" ? "yellow" : "white",
-                                            fontWeight: activePage === "Contactme" ? "bold" : "",
-                                            fontSize: activePage === "Contactme" ? "1.02rem" : "1rem",
-
+                                            color: activePage === "/Contactme" ? "yellow" : "white",
+                                            fontWeight: activePage === "/Contactme" ? "bold" : "",
+                                            fontSize: activePage === "/Contactme" ? "1.02rem" : "1rem",
                                         }}
-                                        onClick={() => handlePageClick("Contactme")}
                                     >
                                         聯絡
                                     </Button>

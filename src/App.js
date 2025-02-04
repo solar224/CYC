@@ -32,16 +32,17 @@ export default function App() {
     localStorage.setItem("language", language);
   }, [language]);
   // useEffect(() => {
-  //   const handleVisibilityChange = () => {
-  //     if (document.visibilityState === "hidden") {
-  //       localStorage.clear();
-  //     }
+  //   const handleBeforeUnload = () => {
+  //     // 清除 localStorage
+  //     localStorage.clear();
   //   };
 
-  //   document.addEventListener("visibilitychange", handleVisibilityChange);
+  //   // 監聽 beforeunload 事件
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
 
+  //   // 清理事件監聽器
   //   return () => {
-  //     document.removeEventListener("visibilitychange", handleVisibilityChange);
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
   //   };
   // }, []);
   return (
