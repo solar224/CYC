@@ -26,9 +26,13 @@ import axios from "axios";
 import { Card, CardMedia, CardContent } from "@mui/material";
 import { CardHeader, CardActions, Collapse } from "@mui/material";
 import { Link } from "react-router-dom";
-import "./css/Header.css"; // 確保引入了相應的 CSS 文件
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import ycChanImage from "../images/YC-Chan_image.jpg"; // 引入圖片
+
+// 確保引入了相應的 CSS 文件
+import "./css/Header.css";
+
+// 引入圖片
+import ycChanImage from "../images/YC-Chan_image.jpg";
 
 const API = "http://localhost:5000/api";
 const options = ["About", "Projects", "Contact", "Settings", "Help"]; // for Header [Autocomplete]
@@ -318,6 +322,8 @@ const Header = () => {
                                             alt=""
                                         />
                                     </Box>
+                                    {/* <Avatar alt="Remy Sharp" src={ycChanImage} /> */}
+
                                 </Box>
                             )}
                         </Toolbar>

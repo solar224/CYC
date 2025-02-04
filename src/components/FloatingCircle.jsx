@@ -8,6 +8,7 @@ import NightlightIcon from '@mui/icons-material/Nightlight';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import AbcIcon from '@mui/icons-material/Abc';
 import GTranslateIcon from '@mui/icons-material/GTranslate';
+import Tooltip from '@mui/material/Tooltip';
 
 export default function FloatingCircle() {
     const [isOpen, setIsOpen] = useState(() => { return localStorage.getItem('isOpen') || 0 }); // 管理第二個圓圈是否展開的狀態
@@ -64,68 +65,73 @@ export default function FloatingCircle() {
             style={{ bottom: `${bottomOffset}px` }} // 動態調整距離底部的偏移量
         >
             {/* 第一個圓圈：滾動到頁面頂部，根據 showScrollToTop 判斷是否顯示 */}
-
-            <div
-                className={`floating-circle scroll-to-top-circle ${showScrollToTop ? "visible" : ""
-                    }`}
-                style={{
-                    transform: showScrollToTop
-                        ? "translateY(0px)" // 從第二顆圓圈向上滑出
-                        : "translateY(500px)", // 回到第二顆圓圈位置
-                    opacity: showScrollToTop ? 1 : 0, // 控制透明度
-                }}
-                onClick={handleScrollToTop}
-            ><KeyboardArrowUpIcon className="icon" />
-            </div>
-
+            <Tooltip title="回到最上面" placement="left">
+                <div
+                    className={`floating-circle scroll-to-top-circle ${showScrollToTop ? "visible" : ""
+                        }`}
+                    style={{
+                        transform: showScrollToTop
+                            ? "translateY(0px)" // 從第二顆圓圈向上滑出
+                            : "translateY(500px)", // 回到第二顆圓圈位置
+                        opacity: showScrollToTop ? 1 : 0, // 控制透明度
+                    }}
+                    onClick={handleScrollToTop}
+                ><KeyboardArrowUpIcon className="icon" />
+                </div>
+            </Tooltip>
             {/* 第二個圓圈：設置按鈕 */}
-            <div
-                className={`floating-circle settings-circle ${isClosing ? "closing" : ""}`}
-                onClick={toggleSettings}
-            >
-                {isOpen == 1 ? <KeyboardDoubleArrowDownIcon className="icon" /> : <SettingsIcon className="icon" />}
-            </div>
-
+            <Tooltip title="設定" placement="left">
+                <div
+                    className={`floating-circle settings-circle ${isClosing ? "closing" : ""}`}
+                    onClick={toggleSettings}
+                >
+                    {isOpen == 1 ? <KeyboardDoubleArrowDownIcon className="icon" /> : <SettingsIcon className="icon" />}
+                </div>
+            </Tooltip>
             {/* 展開的圓圈，根據 isOpen 狀態顯示 */}
             {isOpen == 1 ? (
                 <div className={`expanded-circles ${isClosing ? "closing" : ""}`}>
                     {/* 控制語言 (中、英) */}
                     <div className="floating-circle extra-circle">
-                        <div
-                            onClick={toggleLanguage}
-                            style={{
-                                backgroundColor: theme === "zh" ? "#555" : "#555",
-                                color: theme === "zh" ? "#555" : "#555",
-                                borderRadius: "50%",
-                                width: "47px",
-                                height: "47px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                cursor: "pointer",
-                            }}
-                        >
-                            {language === "zh" ? <GTranslateIcon className="icon-GTranslateIcon" /> : <AbcIcon className="icon-AbcIconIcon" />}
-                        </div>
+                        <Tooltip title={(language === "zh" ? "中文" : "英文")} placement="left">
+                            <div
+                                onClick={toggleLanguage}
+                                style={{
+                                    backgroundColor: theme === "zh" ? "#555" : "#555",
+                                    color: theme === "zh" ? "#555" : "#555",
+                                    borderRadius: "50%",
+                                    width: "47px",
+                                    height: "47px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                {language === "zh" ? <GTranslateIcon className="icon-GTranslateIcon" /> : <AbcIcon className="icon-AbcIconIcon" />}
+                            </div>
+                        </Tooltip>
                     </div>
                     {/* 控制背景 (暗、亮) */}
                     <div className="floating-circle extra-circle">
-                        <div
-                            onClick={toggleTheme}
-                            style={{
-                                backgroundColor: theme === "light" ? "#fff" : "#555",
-                                color: theme === "light" ? "#555" : "#fff",
-                                borderRadius: "50%",
-                                width: "47px",
-                                height: "47px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                cursor: "pointer",
-                            }}
-                        >
-                            {theme === "light" ? <LightModeIcon className="icon-LightModeIcon" /> : <NightlightIcon className="icon-NightlightIcon" />}
-                        </div>
+                        <Tooltip title={(theme === "light" ? "淺色" : "深色")} placement="left">
+                            <div
+                                onClick={toggleTheme}
+                                style={{
+                                    backgroundColor: theme === "light" ? "#fff" : "#555",
+                                    color: theme === "light" ? "#555" : "#fff",
+                                    borderRadius: "50%",
+                                    width: "47px",
+                                    height: "47px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                {theme === "light" ? <LightModeIcon className="icon-LightModeIcon" /> : <NightlightIcon className="icon-NightlightIcon" />}
+                            </div>
+                        </Tooltip>
                     </div>
                     <div className="floating-circle extra-circle">
                         <div
