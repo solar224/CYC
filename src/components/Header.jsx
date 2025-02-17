@@ -132,6 +132,7 @@ const Header = () => {
             sx={{ width: 250 }}
             role="presentation"
         >
+            {/* 搜尋 */}
             <Search>
                 <SearchIconWrapper>
                     <SearchIcon />
@@ -141,10 +142,13 @@ const Header = () => {
                     inputProps={{ "aria-label": "search" }}
                 />
             </Search>
+            {/* 列表 */}
             <List>
-                {["關於我", "聯絡"].map((text, index) => (
+                {["首頁", "關於我", "聯絡我"].map((text, index) => (
                     <ListItem key={index} disablePadding>
-                        <ListItemButton component="a" href={`#${text.toLowerCase()}`}>
+                        <ListItemButton
+                            component={Link}
+                            to={text === "首頁" ? "" : (text === "關於我" ? "/Aboutme" : "/Contactme")}>
                             <ListItemText primary={text} />
                         </ListItemButton>
                     </ListItem>
@@ -322,10 +326,10 @@ const Header = () => {
                 </AppBar>
             </ElevationScroll>
             {/* 手機板未完成 */}
-            {/* <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
-        {drawerContent}
-      </Drawer> */}
-        </div>
+            <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+                {drawerContent}
+            </Drawer>
+        </div >
     );
 };
 export default Header;

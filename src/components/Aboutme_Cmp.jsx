@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { styled, alpha, ThemeProvider, createTheme } from "@mui/material/styles";
-import { Tooltip, ButtonGroup, THEME_ID } from "@mui/material";
+import { Tooltip, ButtonGroup } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -143,7 +143,6 @@ function a11yProps(index) {
 function createData(subject, credits, score) {
     return { subject, credits, score };
 }
-
 // ---------------------------------------------------------------------------
 const About = () => {
     const { theme, toggleTheme } = useContext(ThemeContext);
@@ -189,49 +188,26 @@ const About = () => {
             behavior: "smooth",
         });
     };
-    const data = [
+    const College_Fractions = [
         {
-            name: 'Page A',
-            uv: 4000,
-            pv: 2400,
-            amt: 2400,
+            name: '資工',
+            aa: 24,
+            a: 6,
+            as: 3,
         },
         {
-            name: 'Page B',
-            uv: 3000,
-            pv: 1398,
-            amt: 2210,
+            name: '通訊',
+            aa: 27,
+            a: 3,
+            as: 6,
         },
         {
-            name: 'Page C',
-            uv: 2000,
-            pv: 9800,
-            amt: 2290,
+            name: '其他',
+            aa: 9,
+            a: 3,
+            as: 18,
         },
-        {
-            name: 'Page D',
-            uv: 2780,
-            pv: 3908,
-            amt: 2000,
-        },
-        {
-            name: 'Page E',
-            uv: 1890,
-            pv: 4800,
-            amt: 2181,
-        },
-        {
-            name: 'Page F',
-            uv: 2390,
-            pv: 3800,
-            amt: 2500,
-        },
-        {
-            name: 'Page G',
-            uv: 3490,
-            pv: 4300,
-            amt: 2100,
-        },
+
     ];
     const College_grades = [
         { semester: "大一上", GPA: 3.56, PR: 83.60, Credits: 27 },
@@ -240,14 +216,14 @@ const About = () => {
         { semester: "大二下", GPA: 4.19, PR: 98.31, Credits: 23 },
         { semester: "大三上", GPA: 4.22, PR: 98.31, Credits: 21 },
         { semester: "大三下", GPA: 4.24, PR: 98.31, Credits: 15 },
-        { semester: "大四上", GPA: 4.3, PR: 99.99, Credits: 10 },
-        { semester: "大四下", GPA: 4.3, PR: 99.99, Credits: 8 },
+        { semester: "大四上", GPA: 3.48, PR: 45.76, Credits: 10 },
+        { semester: "大四下", GPA: 0, PR: 0, Credits: 0 },
     ];
     const Master_degree = [
-        { semester: "碩一上", GPA: 3.56, PR: 83.60 },
-        { semester: "碩一下", GPA: 3.91, PR: 93.33 },
-        { semester: "碩二上", GPA: 4.12, PR: 96.67 },
-        { semester: "碩二下", GPA: 4.19, PR: 98.31 },
+        { semester: "碩一上", GPA: 0, PR: 0 },
+        { semester: "碩一下", GPA: 0, PR: 0 },
+        { semester: "碩二上", GPA: 0, PR: 0 },
+        { semester: "碩二下", GPA: 0, PR: 0 },
 
     ];
     const Skill_distribution = [
@@ -265,24 +241,43 @@ const About = () => {
             createData('離散數學', 3, 98),
             createData('資料結構', 3, 88),
             createData('作業系統', 3, 97),
+            createData('電腦網路', 3, 95),
             createData('演化式計算', 3, 99),
             createData('計算機組織', 3, 98),
             createData('巨量資料分析', 3, 95),
             createData('視窗程式設計', 3, 93),
+            createData('電腦圖學', 3, 93),
+
 
         ],
         communications: [
+            createData('電路學', 3, 88),
             createData('通訊原理', 3, 99),
             createData('通訊工程', 3, 99),
             createData('電子電路', 3, 99),
             createData('數位電路', 3, 99),
+            createData('數位電子電路', 3, 99),
             createData('富氏分析', 3, 98),
             createData('微處理器', 3, 99),
             createData('積體電路', 3, 99),
+            createData('數位設計', 3, 99),
+            createData('信號與系統', 3, 85),
+            createData('生醫訊號處理', 3, 93),
+
+
         ],
         others: [
+            createData('物理(一)', 3, 74),
+            createData('物理(二)', 3, 86),
+            createData('微積分(一)', 3, 87),
+            createData('微積分(二)', 3, 92),
+            createData('微分方程', 3, 97),
+            createData('計算機程式設計(一)', 3, 81),
+            createData('計算機程式設計(二)', 3, 87),
             createData('機率', 3, 99),
             createData('線性代數', 3, 99),
+            createData('數值方法', 3, 88),
+
         ],
     };
     const Master_Degree_Group = {
@@ -501,16 +496,16 @@ const About = () => {
                                 /> 教育學歷
                             </Typography>
                             <ul>
-                                <li>國立彰師附工 控制科 (110 畢業)</li>
-                                <li>國立高雄科技大學 電腦與通訊工程系 (在讀中)</li>
                                 <li>國立陽明交通大學 數據科學與工程研究所 (未來)</li>
+                                <li>國立高雄科技大學 電腦與通訊工程系 (在讀中)</li>
+                                <li>國立彰師附工 控制科 (110 畢業)</li>
                             </ul>
                         </Paper>
                     </ThemeProvider>
                     <ThemeProvider theme={ThemeProviderTheme}>
 
                         <Paper
-                            elevation={(theme == 'light' ? 1 : 12)}
+                            elevation={(theme === 'light' ? 1 : 12)}
                             sx={{ padding: 2, marginBottom: 2 }}
                             id="教學經驗"
                             onMouseEnter={() => setActiveSection("教學經驗")}
@@ -648,29 +643,29 @@ const About = () => {
                                                 <ComposedChart data={College_grades} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
                                                     <CartesianGrid strokeDasharray="1 1" stroke="#ddd" />
                                                     <XAxis dataKey="semester"
-                                                        tick={{ fill: theme === 'dark' ? '#fff' : '#000' }} // 設定刻度文字顏色
-                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }} // 設定X軸線條顏色
+                                                        tick={{ fill: theme === 'dark' ? '#fff' : '#333' }} // 設定刻度文字顏色
+                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }} // 設定X軸線條顏色
                                                     />
                                                     <YAxis
                                                         yAxisId="left"
                                                         orientation="left"
-                                                        domain={[3.3, 4.3]}
+                                                        domain={[0, 4.3]}
                                                         label={{ value: "GPA", angle: -90, position: "insideLeft" }}
-                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }}  // 根據模式改變軸線顏色
-                                                        tickLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }}  // 根據模式改變刻度線顏色
+                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
+                                                        tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
                                                     />
                                                     <YAxis
                                                         yAxisId="right"
                                                         orientation="right"
                                                         domain={[0, 100]}
                                                         label={{ value: "班級 PR", angle: -90, position: "insideRight" }}
-                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }}  // 根據模式改變軸線顏色
-                                                        tickLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }}  // 根據模式改變刻度線顏色
+                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
+                                                        tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
                                                     />
                                                     <RechartsTooltip
                                                         contentStyle={{
                                                             backgroundColor: theme === 'dark' ? '#333' : '#fff', // 深色模式背景為深灰色，淺色模式為白色
-                                                            color: theme === 'dark' ? '#fff' : '#000', // 文字顏色根據模式變化
+                                                            color: theme === 'dark' ? '#fff' : '#333', // 文字顏色根據模式變化
                                                             border: '1px solid', // 可以添加邊框以增強可視化效果
                                                             borderColor: theme === 'dark' ? '#444' : '#ccc', // 邊框顏色
                                                         }}
@@ -781,46 +776,65 @@ const About = () => {
 
                                         <Grid item xs={12} md={5.9} sx={{ mt: 2 }}>
                                             {/* 雷達圖 */}
-                                            <ResponsiveContainer width="100%" height={250}>
-                                                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={Skill_distribution}>
+                                            <ResponsiveContainer width="100%" height={300}>
+                                                <RadarChart cx="50%" cy="50%" outerRadius="75%" data={Skill_distribution}>
                                                     <PolarGrid />
-                                                    <PolarAngleAxis dataKey="subject" />
-                                                    <PolarRadiusAxis />
-                                                    <Radar name="技能評估" dataKey="score" stroke="#8884d8" fill="#8884d8" fillOpacity={0.4} />
-                                                    <Tooltip cursor={{ stroke: 'red', strokeWidth: 2 }} />
-                                                    {/* <Tooltip content={({ active, payload }) => {
-                                                        if (active && payload && payload.length) {
-                                                            return (
-                                                                <div style={{ backgroundColor: "white", padding: "10px", border: "1px solid #ccc" }}>
-                                                                    <p>{`技能: ${payload[0].payload.subject}`}</p>
-                                                                    <p>{`評估分數: ${payload[0].value}`}</p>
-                                                                </div>
-                                                            );
-                                                        }
-                                                        return null;
-                                                    }} /> */}
+                                                    <PolarAngleAxis dataKey="subject" stroke={theme === 'dark' ? '#fff' : '#333'}
+                                                        tick={{ dy: 5 }} // 使用 dy 調整標籤距離
+                                                    /> {/* 設置軸標籤字體顏色 */}
+                                                    <PolarRadiusAxis stroke={theme === 'dark' ? '#fff' : '#333'} /> {/* 設置輻射軸字體顏色 */}
+                                                    <Radar name="技能評估" dataKey="score" stroke="#8884d8" fill="#8884d8" fillOpacity={0.4}
+
+                                                    />
                                                 </RadarChart>
                                             </ResponsiveContainer>
                                             {/* 直方圖 */}
                                             <ResponsiveContainer width="100%" height={200}>
-                                                <BarChart
-                                                    width={500}
-                                                    height={300}
-                                                    data={data}
-                                                    margin={{
-                                                        top: 5,
-                                                        right: 30,
-                                                        left: 20,
-                                                        bottom: 5,
-                                                    }}
-                                                >
-                                                    <CartesianGrid strokeDasharray="3 3" />
-                                                    <XAxis dataKey="name" />
-                                                    <YAxis />
-                                                    <Tooltip />
+                                                <ComposedChart data={College_Fractions} margin={{
+                                                    top: 5,
+                                                    right: 30,
+                                                    left: 20,
+                                                    bottom: 5,
+                                                }}>
+                                                    <CartesianGrid strokeDasharray="1 1" stroke="#ddd" />
+
+                                                    <YAxis
+                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
+                                                        tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
+                                                    />
+                                                    <XAxis
+                                                        dataKey="name"
+                                                        tick={{ fill: theme === 'dark' ? '#fff' : '#333' }} // 設定刻度文字顏色
+                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }} // 設定X軸線條顏色
+                                                    />
+
+                                                    <RechartsTooltip
+                                                        contentStyle={{
+                                                            backgroundColor: theme === 'dark' ? '#333' : '#fff', // 深色模式背景為深灰色，淺色模式為白色
+                                                            color: theme === 'dark' ? '#fff' : '#333', // 文字顏色根據模式變化
+                                                            border: '1px solid', // 可以添加邊框以增強可視化效果
+                                                            borderColor: theme === 'dark' ? '#444' : '#ccc', // 邊框顏色
+                                                        }}
+                                                    />
                                                     <Legend />
-                                                    <Bar dataKey="pv" barSize={20} fill="#8884d8" />
-                                                </BarChart>
+                                                    {/* 學分數的 Bar */}
+                                                    <Bar
+                                                        dataKey="aa"
+                                                        fill="#8884d8"
+                                                        barSize={20} name="A+"
+                                                    />
+                                                    <Bar
+                                                        dataKey="a"
+                                                        fill="#82ca9d"
+                                                        barSize={20} name="A"
+                                                    />
+                                                    <Bar
+                                                        dataKey="as"
+                                                        fill="#ff7300"
+                                                        barSize={20}
+                                                        name="A-"
+                                                    />
+                                                </ComposedChart>
                                             </ResponsiveContainer>
                                         </Grid>
                                     </>
@@ -834,29 +848,29 @@ const About = () => {
                                                 <ComposedChart data={College_grades} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
                                                     <CartesianGrid strokeDasharray="1 1" stroke="#ddd" />
                                                     <XAxis dataKey="semester"
-                                                        tick={{ fill: theme === 'dark' ? '#fff' : '#000' }} // 設定刻度文字顏色
-                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }} // 設定X軸線條顏色
+                                                        tick={{ fill: theme === 'dark' ? '#fff' : '#333' }} // 設定刻度文字顏色
+                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }} // 設定X軸線條顏色
                                                     />
                                                     <YAxis
                                                         yAxisId="left"
                                                         orientation="left"
-                                                        domain={[3.3, 4.3]}
+                                                        domain={[0, 4.3]}
                                                         label={{ value: "GPA", angle: -90, position: "insideLeft" }}
-                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }}  // 根據模式改變軸線顏色
-                                                        tickLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }}  // 根據模式改變刻度線顏色
+                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
+                                                        tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
                                                     />
                                                     <YAxis
                                                         yAxisId="right"
                                                         orientation="right"
                                                         domain={[0, 100]}
                                                         label={{ value: "班級 PR", angle: -90, position: "insideRight" }}
-                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }}  // 根據模式改變軸線顏色
-                                                        tickLine={{ stroke: theme === 'dark' ? '#fff' : '#000' }}  // 根據模式改變刻度線顏色
+                                                        axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
+                                                        tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
                                                     />
                                                     <RechartsTooltip
                                                         contentStyle={{
                                                             backgroundColor: theme === 'dark' ? '#333' : '#fff', // 深色模式背景為深灰色，淺色模式為白色
-                                                            color: theme === 'dark' ? '#fff' : '#000', // 文字顏色根據模式變化
+                                                            color: theme === 'dark' ? '#fff' : '#333', // 文字顏色根據模式變化
                                                             border: '1px solid', // 可以添加邊框以增強可視化效果
                                                             borderColor: theme === 'dark' ? '#444' : '#ccc', // 邊框顏色
                                                         }}

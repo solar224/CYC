@@ -7,6 +7,8 @@ import Contactme from "./components/Contactme";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FloatingCircle from "./components/FloatingCircle";
+import DynamicBackground from "./components/DynamicBackground";
+
 import "./components/css/App.css";
 
 export const ThemeContext = createContext();
@@ -31,24 +33,11 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("language", language);
   }, [language]);
-  // useEffect(() => {
-  //   const handleBeforeUnload = () => {
-  //     // 清除 localStorage
-  //     localStorage.clear();
-  //   };
-
-  //   // 監聽 beforeunload 事件
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
-
-  //   // 清理事件監聽器
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, []);
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <LanguageContext.Provider value={{ language, toggleLanguage }}>
-        <div className={`app ${theme}`}>
+        <div className={`app`}>
+          <DynamicBackground theme={theme} />
           <Router>
             <Header />
             <Routes>
