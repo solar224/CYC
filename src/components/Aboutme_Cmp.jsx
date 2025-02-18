@@ -298,7 +298,7 @@ const About = () => {
         <Box sx={{ maxWidth: "1100px", margin: "0 auto", padding: 5 }}>
             {/* 個人介紹 */}
             <ThemeProvider theme={ThemeProviderTheme}>
-                <Paper elevation={(theme == 'light' ? 3 : 3)} sx={{ padding: 2, marginBottom: 2 }}>
+                <Paper elevation={(theme == 'light' ? 3 : 3)} sx={{ padding: 2, marginBottom: 2, backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}>
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={4} style={{ padding: "3em", paddingBottom: "1em" }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <img
@@ -415,6 +415,7 @@ const About = () => {
                         <Paper
                             elevation={(theme == 'light' ? 1 : 12)}
                             sx={{
+                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
                                 padding: 0,
                                 marginBottom: 2,
                                 textAlign: "",
@@ -478,10 +479,13 @@ const About = () => {
                 {/* 右側內容 */}
                 <Grid item xs={12} md={9.5}>
                     <ThemeProvider theme={ThemeProviderTheme}>
-
                         <Paper
                             elevation={(theme == 'light' ? 1 : 12)}
-                            sx={{ padding: 2, marginBottom: 2 }}
+                            sx={{
+                                padding: 2,
+                                marginBottom: 2,
+                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
+                            }}
                             id="學歷"
                             onMouseEnter={() => setActiveSection("學歷")}
                         >
@@ -506,7 +510,11 @@ const About = () => {
 
                         <Paper
                             elevation={(theme === 'light' ? 1 : 12)}
-                            sx={{ padding: 2, marginBottom: 2 }}
+                            sx={{
+                                padding: 2,
+                                marginBottom: 2,
+                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
+                            }}
                             id="教學經驗"
                             onMouseEnter={() => setActiveSection("教學經驗")}
                         >
@@ -569,7 +577,11 @@ const About = () => {
 
                         <Paper
                             elevation={(theme == 'light' ? 1 : 12)}
-                            sx={{ padding: 2, marginBottom: 2 }}
+                            sx={{
+                                padding: 2,
+                                marginBottom: 2,
+                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
+                            }}
                             id="專案"
                             onMouseEnter={() => setActiveSection("專案")}
                         >
@@ -584,7 +596,7 @@ const About = () => {
                                 /> 專案
                             </Typography>
                             <Box sx={{ marginBottom: 2 }}>
-                                <Typography variant="h6">自我創作</Typography>
+                                <Typography variant="h6">test</Typography>
                                 <Typography variant="subtitle1">January 1880 - July 1890</Typography>
                                 <Typography variant="body1" gutterBottom>
                                     <strong>Artist</strong>
@@ -598,7 +610,11 @@ const About = () => {
                     <ThemeProvider theme={ThemeProviderTheme}>
                         <Paper
                             elevation={(theme == 'light' ? 1 : 12)}
-                            sx={{ padding: 2, marginBottom: 2 }}
+                            sx={{
+                                padding: 2,
+                                marginBottom: 2,
+                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
+                            }}
                             id="學業表現"
                             onMouseEnter={() => setActiveSection("學業表現")}
                         >

@@ -1,0 +1,18 @@
+#dynamic-background {
+    position: fixed;
+    /* 改為 absolute 以便完全覆蓋視窗 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* 填滿全螢幕 */
+    height: 100%;
+    /* 填滿全螢幕 */
+    z-index: -1;
+    /* 保證在所有內容之下 */
+    pointer-events: none;
+    /* 防止點擊干擾 */
+    background: var(--background-light);
+    /* 為 light 主題設定默認背景色 */
+    transition: background-color 0.3s ease;
+    /* 增加背景平滑過渡 */
+}

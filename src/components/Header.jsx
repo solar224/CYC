@@ -36,8 +36,7 @@ import "./css/Header.css";
 import ycChanImage from "../images/YC-Chan_image.jpg";
 
 const API = "http://localhost:5000/api";
-const options = ["About", "Projects", "Contact", "Settings", "Help"]; // for Header [Autocomplete]
-const els = ["歡", "迎", "來", "到", "我", "的", "網", "站"];
+const options = ["首頁", "關於我", "設定", "幫助"]; // for Header [Autocomplete]
 const Search = styled("div")(({ theme }) => ({
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -95,7 +94,6 @@ function ElevationScroll(props) {
 const Header = () => {
     const location = useLocation();
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [isClicked, setIsClicked] = useState(false);
     const isMobile = useMediaQuery("(max-width: 900px)");
     const isMobile_els = useMediaQuery("(max-width: 1250px)");
     const [activePage, setActivePage] = useState(() => {
@@ -106,17 +104,6 @@ const Header = () => {
         setActivePage(location.pathname);
     }, [location.pathname]);
     // 當點擊事件發生時，讓正方形隨機移動與旋轉
-    const handleClick = () => {
-        anime({
-            targets: ".el",
-            translateX: () => anime.random(15, 285),
-            translateY: () => anime.random(15, 35),
-            rotate: () => anime.random(0, 360),
-            duration: 1000,
-            easing: "easeInOutQuad",
-        });
-        setIsClicked(!isClicked); // 切換點擊狀態
-    };
     const toggleDrawer = (open) => (event) => {
         if (
             event.type === "keydown" &&
@@ -196,36 +183,6 @@ const Header = () => {
                                     YC-Chan websites
                                 </a>
                             </Typography>
-                            {!isMobile_els && (
-                                <Box
-                                    sx={{
-                                        position: "relative",
-                                        width: "300px",
-                                        height: "50px",
-                                        border: "0px solid #000",
-                                        overflow: "hidden",
-                                    }}
-                                    onClick={handleClick}
-                                >
-                                    {/* 創建三個小正方形 */}
-                                    {Array(8)
-                                        .fill()
-                                        .map((_, index) => (
-                                            <Tooltip key={index} title={els[index]} arrow>
-                                                <div
-                                                    className="el"
-                                                    style={{
-                                                        position: "absolute",
-                                                        width: "10px",
-                                                        height: "10px",
-                                                        backgroundColor: "green",
-                                                    }}
-                                                ></div>
-                                            </Tooltip>
-                                        ))}
-                                </Box>
-                            )}
-
                             {!isMobile && (
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                     <Button
@@ -290,7 +247,7 @@ const Header = () => {
                                             <TextField
                                                 {...params}
                                                 placeholder="Search..."
-                                                label="網站資訊"
+                                                label="資訊查詢"
                                             />
                                         )}
                                     />
