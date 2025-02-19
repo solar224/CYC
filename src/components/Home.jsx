@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { ThemeContext, LanguageContext } from "../App";
 import axios from 'axios';
-
 function Home() {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const { theme, toggleTheme } = useContext(ThemeContext);
+    const { language, toggleLanguage } = useContext(LanguageContext); // 主題狀態
     useEffect(() => {
-        // 設定 News API 的請求
+        // 設定 Currents API 的請求
         const fetchNews = async () => {
             try {
-                const response = await axios.get('https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/everything', {
+                const response = await axios.get('https://api.currentsapi.services/v1/latest-news', {
                     params: {
-                        q: 'edge technology', // 搜尋關鍵字
-                        apiKey: '6c2bf51ed7ee4b3585d9b3807b4aeb99', // 你的 News API 密鑰
-                        pageSize: 5, // 顯示的新聞數量
-                        language: 'en', // 語言設置為英文
+                        apiKey: '0pOJgEUfwU5VO1JXtMdxDeNyfFmdn8uJ0ZN40I5umIHJ4PSe', // 你的 Currents API 密鑰
+                        language: language == 'zh' ? 'zh' : 'en',
+                        category: 'technology', // 這裡可以設定為技術類新聞
                     },
                 });
-                setNews(response.data.articles); // 更新新聞列表
+                setNews(response.data.news); // 更新新聞列表
                 setLoading(false); // 結束加載
             } catch (error) {
                 setError('Failed to fetch news'); // 如果請求失敗，顯示錯誤信息
