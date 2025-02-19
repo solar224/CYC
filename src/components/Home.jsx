@@ -10,7 +10,7 @@ function Home() {
         // 設定 News API 的請求
         const fetchNews = async () => {
             try {
-                const response = await axios.get('https://newsapi.org/v2/everything', {
+                const response = await axios.get('https://cors-anywhere.herokuapp.com/https://newsapi.org/v2/everything', {
                     params: {
                         q: 'edge technology', // 搜尋關鍵字
                         apiKey: '6c2bf51ed7ee4b3585d9b3807b4aeb99', // 你的 News API 密鑰
@@ -25,7 +25,6 @@ function Home() {
                 setLoading(false);
             }
         };
-
         fetchNews();
     }, []);
 
