@@ -6,7 +6,7 @@ import { Card, CardContent, CardMedia, Typography, Button, Grid, Container, Box,
 function Home() {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedCategory, setSelectedCategory] = useState('technology'); // 預設為科技類別
+    const [selectedCategory, setSelectedCategory] = useState('general'); // 預設為科技類別
     const { language } = useContext(LanguageContext); // 主題狀態
     const { theme } = useContext(ThemeContext); // 主題狀態
     const [color, setColor] = useState(theme === 'light' ? "black" : "white");
@@ -26,11 +26,13 @@ function Home() {
                 //     },
                 // });
                 // setNews(response.data.news); // 更新新聞列表
-                // // console.log(news);
-                setLoading(false);
-                const response = await fetch("https://ycchan.c110110157.workers.dev");
-                const newsList = await response.json();
-                console.log(newsList);
+                const response = await fetch(`https://ycchan.c110110157.workers.dev?category=${selectedCategory}`);
+                if (response.ok) {
+                    setLoading(false);
+                }
+                const news = await response.json();
+                console.log(news);
+                setNews(news);
             } catch (error) {
                 console.log(error);
             }
@@ -54,25 +56,28 @@ function Home() {
                 </Typography>
                 {/* 動態分類按鈕 */}
                 <ButtonGroup variant="outlined" color="primary" aria-label="category button group" sx={{ mt: 2 }}>
+                    <Button onClick={() => handleCategoryChange('general')} variant={selectedCategory === 'general' ? 'contained' : 'outlined'}>
+                        {language === 'zh' ? '綜合' : 'general'}
+                    </Button>
                     <Button onClick={() => handleCategoryChange('technology')} variant={selectedCategory === 'technology' ? 'contained' : 'outlined'}>
                         {language === 'zh' ? '科技' : 'technology'}
-
+                    </Button>
+                    <Button onClick={() => handleCategoryChange('science')} variant={selectedCategory === 'science' ? 'contained' : 'outlined'}>
+                        {language === 'zh' ? '科學' : 'science'}
                     </Button>
                     <Button onClick={() => handleCategoryChange('business')} variant={selectedCategory === 'business' ? 'contained' : 'outlined'}>
                         {language === 'zh' ? '商業' : 'business'}
-
                     </Button>
-                    <Button onClick={() => handleCategoryChange('programming')} variant={selectedCategory === 'programming' ? 'contained' : 'outlined'}>
-                        {language === 'zh' ? '軟體' : 'programming'}
-
+                    <Button onClick={() => handleCategoryChange('sports')} variant={selectedCategory === 'sports' ? 'contained' : 'outlined'}>
+                        {language === 'zh' ? '商業' : 'sports'}
                     </Button>
                 </ButtonGroup>
             </Box>
             {/* 加載狀態與新聞列表 */}
             {loading ? (
                 <Grid container spacing={3} justifyContent="center">
-                    {[...Array(4)].map((_, index) => (
-                        <Grid item xs={12} sm={4} md={3} key={index} display="flex" justifyContent="center">
+                    {[...Array(9)].map((_, index) => (
+                        <Grid item xs={12} sm={6} md={4} key={index} display="flex" justifyContent="center">
                             <Card sx={{
                                 width: 600, borderRadius: 2, boxShadow: 3, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
                             }}>
@@ -95,35 +100,38 @@ function Home() {
                                     width: 600,
                                     borderRadius: 2,
                                     boxShadow: 3,
-                                    backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
-                                    color: theme === 'light' ? "black" : "white" // 設置 Card 內的主要文字顏色
+                                    backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.65)",
+                                    color: theme === 'light' ? "black" : "white",
+                                    position: "relative" // 讓內部元素可以使用絕對定位
                                 }}
                             >
-                                <CardMedia component="img" height="180" image={article.image} alt={article.title} />
-                                <CardContent>
+                                <CardMedia component="img" height="180" image={article.urlToImage} alt={article.title} />
+                                <CardContent sx={{ paddingBottom: '50px' }}> {/* 預留底部空間，避免文字被遮住 */}
                                     <Typography gutterBottom variant="h6" component="div" sx={{ color: theme === 'light' ? "black" : "white" }}>
                                         {article.title}
                                     </Typography>
-                                    <Typography variant="body2" sx={{ color: theme === 'light' ? "black" : "rgba(200, 200, 200, 0.85)" }}>
+                                    <Typography variant="body2" sx={{ color: theme === 'light' ? "black" : "rgba(200, 200, 200, 0.65)" }}>
                                         {article.description}
                                     </Typography>
-                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
-                                        <Button
-                                            size="small"
-                                            href={article.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            variant="outlined"
-                                            color="primary"
-                                        >
-                                            Read More
-                                        </Button>
-                                    </Box>
                                 </CardContent>
+                                {/* 讓 Read More 固定在右下角 */}
+                                <Box sx={{ position: "absolute", bottom: 10, right: 10 }}>
+                                    <Button
+                                        size="small"
+                                        href={article.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        variant="outlined"
+                                        color="primary"
+                                    >
+                                        Read More
+                                    </Button>
+                                </Box>
                             </Card>
                         </Grid>
                     ))}
                 </Grid>
+
 
             )}
 
