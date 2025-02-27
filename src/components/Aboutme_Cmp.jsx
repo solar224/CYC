@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { styled, alpha, ThemeProvider, createTheme } from "@mui/material/styles";
-import { Tooltip, ButtonGroup } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
+import { ButtonGroup } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -43,7 +41,6 @@ import {
     PolarGrid,
     PolarAngleAxis,
     PolarRadiusAxis,
-    BarChart,
 } from "recharts";
 // 引入圖片
 import ycChanImage from "../images/YC-Chan_image.jpg";
@@ -56,22 +53,7 @@ import project from "../images/project.png";
 import score from "../images/score.png";
 import algorithms from "../images/algorithms.png";
 
-const options = ["About", "Projects", "Contact", "Settings", "Help"]; // for Header [Autocomplete]
-const els = ["歡", "迎", "來", "到", "我", "的", "網", "站"];
-const Search = styled("div")(({ theme }) => ({
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-        marginLeft: theme.spacing(1),
-        width: "auto",
-    },
-}));
+
 
 
 const Section = ({ id, title, children }) => {
@@ -145,9 +127,9 @@ function createData(subject, credits, score) {
 }
 // ---------------------------------------------------------------------------
 const About = () => {
-    const { theme, toggleTheme } = useContext(ThemeContext);
-    const { language, toggleLanguage } = useContext(LanguageContext); // 主題狀態
-    const ThemeProviderTheme = createTheme({ palette: { mode: (theme == 'light' ? 'light' : 'dark') } });
+    const { theme } = useContext(ThemeContext);
+    const { language } = useContext(LanguageContext); // 主題狀態
+    const ThemeProviderTheme = createTheme({ palette: { mode: (theme === 'light' ? 'light' : 'dark') } });
     const [activeSection, setActiveSection] = useState("學歷");
     const [showUndergrad, setShowUndergrad] = useState(true); // 控制顯示狀態 (true=大學, false=研究所)
     const [value, setValue] = useState(0);
@@ -298,7 +280,7 @@ const About = () => {
         <Box sx={{ maxWidth: "1100px", margin: "0 auto", padding: 5 }}>
             {/* 個人介紹 */}
             <ThemeProvider theme={ThemeProviderTheme}>
-                <Paper elevation={(theme == 'light' ? 3 : 3)} sx={{ padding: 2, marginBottom: 2, backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}>
+                <Paper elevation={(theme === 'light' ? 3 : 3)} sx={{ padding: 2, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}>
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={4} style={{ padding: "3em", paddingBottom: "1em" }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <img
@@ -321,20 +303,20 @@ const About = () => {
                             <Typography gutterBottom>
                                 我是<strong>詹宇宸</strong>，目前就讀於
                                 <a href="https://www.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme == 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
+                                    style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
                                     國立高雄科技大學 (NKUST)
                                 </a> 的
                                 <a href="https://ccee.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme == 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
+                                    style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
                                     電腦與通訊工程系 (CCE)
                                 </a>。
                                 在今年暑假，我將會前往
                                 <a href="https://www.nycu.edu.tw/nycu/ch/index" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme == 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
+                                    style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
                                     國立陽明交通大學 (NYCU)
                                 </a> 的
                                 <a href="https://www.cs.nycu.edu.tw/intro/organization/data" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme == 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
+                                    style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
                                     數據科學與工程研究所 (DSIE)
                                 </a> 攻讀碩士學位。
                             </Typography>
@@ -413,9 +395,9 @@ const About = () => {
                 <Grid item xs={12} md={2.5}>
                     <ThemeProvider theme={ThemeProviderTheme}>
                         <Paper
-                            elevation={(theme == 'light' ? 1 : 12)}
+                            elevation={(theme === 'light' ? 1 : 12)}
                             sx={{
-                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
+                                backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
                                 padding: 0,
                                 marginBottom: 2,
                                 textAlign: "",
@@ -480,11 +462,11 @@ const About = () => {
                 <Grid item xs={12} md={9.5}>
                     <ThemeProvider theme={ThemeProviderTheme}>
                         <Paper
-                            elevation={(theme == 'light' ? 1 : 12)}
+                            elevation={(theme === 'light' ? 1 : 12)}
                             sx={{
                                 padding: 2,
                                 marginBottom: 2,
-                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
+                                backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
                             }}
                             id="學歷"
                             onMouseEnter={() => setActiveSection("學歷")}
@@ -513,7 +495,7 @@ const About = () => {
                             sx={{
                                 padding: 2,
                                 marginBottom: 2,
-                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
+                                backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
                             }}
                             id="教學經驗"
                             onMouseEnter={() => setActiveSection("教學經驗")}
@@ -576,11 +558,11 @@ const About = () => {
                     <ThemeProvider theme={ThemeProviderTheme}>
 
                         <Paper
-                            elevation={(theme == 'light' ? 1 : 12)}
+                            elevation={(theme === 'light' ? 1 : 12)}
                             sx={{
                                 padding: 2,
                                 marginBottom: 2,
-                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
+                                backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
                             }}
                             id="專案"
                             onMouseEnter={() => setActiveSection("專案")}
@@ -609,11 +591,11 @@ const About = () => {
                     </ThemeProvider>
                     <ThemeProvider theme={ThemeProviderTheme}>
                         <Paper
-                            elevation={(theme == 'light' ? 1 : 12)}
+                            elevation={(theme === 'light' ? 1 : 12)}
                             sx={{
                                 padding: 2,
                                 marginBottom: 2,
-                                backgroundColor: theme == 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
+                                backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
                             }}
                             id="學業表現"
                             onMouseEnter={() => setActiveSection("學業表現")}
