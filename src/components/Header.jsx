@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { ThemeContext, LanguageContext } from "../App";
 import { useLocation } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import { Tooltip } from "@mui/material";
@@ -28,54 +29,14 @@ import { Card, CardMedia, CardContent } from "@mui/material";
 import { CardHeader, CardActions, Collapse } from "@mui/material";
 import { Link } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 // 確保引入了相應的 CSS 文件
 import "./css/Header.css";
 
 // 引入圖片
 import ycChanImage from "../images/YC-Chan_image.jpg";
-
-const API = "http://localhost:5000/api";
 const options = ["首頁", "關於我", "設定", "幫助"]; // for Header [Autocomplete]
-const Search = styled("div")(({ theme }) => ({
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-        marginLeft: theme.spacing(1),
-        width: "auto",
-    },
-}));
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-}));
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "inherit",
-    width: "100%",
-    "& .MuiInputBase-input": {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create("width"),
-        [theme.breakpoints.up("sm")]: {
-            width: "12ch",
-            "&:focus": {
-                width: "20ch",
-            },
-        },
-    },
-}));
 function ElevationScroll(props) {
     const { children } = props;
     const trigger = useScrollTrigger({
@@ -90,15 +51,20 @@ function ElevationScroll(props) {
         },
     });
 }
-
 const Header = () => {
     const location = useLocation();
+    const { theme } = useContext(ThemeContext);
+    const { language } = useContext(LanguageContext); // 主題狀態
     const [drawerOpen, setDrawerOpen] = useState(false);
     const isMobile = useMediaQuery("(max-width: 900px)");
     const isMobile_els = useMediaQuery("(max-width: 1250px)");
     const [activePage, setActivePage] = useState(() => {
         return location.pathname;
     });
+    const handleClickAway = () => setSearchopen(false);
+    const handleFocus = () => setSearchopen(true);
+    const [Searchopen, setSearchopen] = useState(false);
+
     // 設置當前選中的頁面
     useEffect(() => {
         setActivePage(location.pathname);
@@ -114,36 +80,120 @@ const Header = () => {
         setDrawerOpen(open);
     };
 
+    const Search = styled('div')(({ theme, open }) => ({
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        border: '1px solid #333333', // 外圍增加黑色邊框
+        backgroundColor: alpha(theme.palette.common.white, 0.15),
+        '&:hover': {
+            backgroundColor: alpha(theme.palette.common.white, 0.25),
+        },
+        width: open ? '100%' : '40px', // 未點擊時顯示圖示，點擊後展開
+        display: 'flex',
+        alignItems: 'center',
+        transition: theme.transitions.create('width', {
+            duration: '500ms', // 延長動畫持續時間
+            easing: theme.transitions.easing.easeInOut, // 設置動畫緩和效果
+        }),
+    }));
+
+    const SearchIconWrapper = styled('div')({
+        padding: '0 10px',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer', // 讓搜尋圖示可點擊
+    });
+
+    const StyledInputBase = styled(InputBase)(({ theme, open }) => ({
+        color: 'inherit',
+        width: open ? '100%' : '0', // 點擊時展開，未點擊時隱藏
+        opacity: open ? 1 : 0, // 未點擊時輸入框透明
+        transition: theme.transitions.create(['width', 'opacity'], {
+            duration: '500ms', // 延長動畫持續時間
+            easing: theme.transitions.easing.easeInOut, // 設置動畫緩和效果
+        }),
+        '& .MuiInputBase-input': {
+            padding: theme.spacing(1, 1, 1, 0),
+            paddingLeft: open ? theme.spacing(1) : 0, // 確保 padding 在展開時生效
+        },
+    }));
+
     const drawerContent = (
         <Box
-            sx={{ width: 250 }}
+            sx={{
+                width: 250,
+                backgroundColor: theme === "light" ? "#ffffff" : "#333333", // 根據theme設置背景顏色
+                color: theme === 'light' ? 'black' : 'white', // 根據theme設置文字顏色
+            }}
             role="presentation"
         >
-            {/* 搜尋 */}
-            <Search>
-                <SearchIconWrapper>
-                    <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ "aria-label": "search" }}
-                />
-            </Search>
-            {/* 列表 */}
-            <List>
-                {["首頁", "關於我", "聯絡我"].map((text, index) => (
-                    <ListItem key={index} disablePadding>
+            <Box sx={{ paddingTop: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
+                <ClickAwayListener onClickAway={handleClickAway}>
+                    <Search open={Searchopen}>
+                        <SearchIconWrapper onClick={handleFocus}>
+                            <SearchIcon />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            open={Searchopen}
+                            placeholder="Search…"
+                            inputProps={{ 'aria-label': 'search' }}
+                            onFocus={handleFocus}
+                        />
+                    </Search>
+                </ClickAwayListener>
+            </Box>
+            <Box onClick={toggleDrawer(false)}>
+                <List>
+                    <ListItem disablePadding>
                         <ListItemButton
                             component={Link}
-                            to={text === "首頁" ? "" : (text === "關於我" ? "/Aboutme" : "/Contactme")}>
-                            <ListItemText primary={text} />
+                            to=""
+                            sx={{
+                                color: theme === 'light' ? 'black' : 'white',
+                                '&:hover': {
+                                    backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
+                                },
+                            }}
+                        >
+                            <ListItemText primary="首頁" />
                         </ListItemButton>
                     </ListItem>
-                ))}
-            </List>
-            <Divider />
-        </Box>
+                    <ListItem disablePadding>
+                        <ListItemButton
+                            component={Link}
+                            to="/Aboutme"
+                            sx={{
+                                color: theme === 'light' ? 'black' : 'white',
+                                '&:hover': {
+                                    backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
+                                },
+                            }}
+                        >
+                            <ListItemText primary="關於我" />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton
+                            component={Link}
+                            to="/Contactme"
+                            sx={{
+                                color: theme === 'light' ? 'black' : 'white',
+                                '&:hover': {
+                                    backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
+                                },
+                            }}
+                        >
+                            <ListItemText primary="聯絡我" />
+                        </ListItemButton>
+                    </ListItem>
+                </List>
+                <Divider sx={{ backgroundColor: theme === 'light' ? 'black' : 'white' }} /> {/* 根據theme設置分隔線顏色 */}
+            </Box>
+        </Box >
     );
+
     useEffect(() => {
         // 初始隨機設置三個小正方形的位置與角度
         anime.set(".el", {
@@ -283,9 +333,20 @@ const Header = () => {
                 </AppBar>
             </ElevationScroll>
             {/* 手機板未完成 */}
-            <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+            <Drawer
+                anchor="left"
+                open={drawerOpen}
+                onClose={toggleDrawer(false)}
+                sx={{
+                    "& .MuiDrawer-paper": {
+                        backgroundColor: theme === "light" ? "#ffffff" : "#333333", // 根據 theme 設置背景色
+                        color: theme === "light" ? "#000000" : "#ffffff", // 設置文字顏色
+                    },
+                }}
+            >
                 {drawerContent}
             </Drawer>
+
         </div >
     );
 };

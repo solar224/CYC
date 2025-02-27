@@ -18,6 +18,8 @@ export default function FloatingCircle() {
     const { theme, toggleTheme } = useContext(ThemeContext);
     const { language, toggleLanguage } = useContext(LanguageContext);
 
+
+
     useEffect(() => {
         // 當 activePage 變化時，將其儲存到 localStorage
         localStorage.setItem("isOpen", isOpen);
