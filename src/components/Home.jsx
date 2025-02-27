@@ -18,16 +18,19 @@ function Home() {
         const fetchNews = async () => {
             setLoading(true); // 每次分類切換時重新加載
             try {
-                const response = await axios.get('https://api.currentsapi.services/v1/latest-news', {
-                    params: {
-                        apiKey: 'i4q6Mw5KibidFe1XOmF5Rocoo2UIypmIqpC4X9htds0U3Lkf',
-                        language: language === 'zh' ? 'zh' : 'en',
-                        category: selectedCategory, // 根據選擇的分類請求新聞
-                    },
-                });
-                setNews(response.data.news); // 更新新聞列表
-                // console.log(news);
+                // const response = await axios.get('https://api.currentsapi.services/v1/latest-news', {
+                //     params: {
+                //         apiKey: 'i4q6Mw5KibidFe1XOmF5Rocoo2UIypmIqpC4X9htds0U3Lkf',
+                //         language: language === 'zh' ? 'zh' : 'en',
+                //         category: selectedCategory, // 根據選擇的分類請求新聞
+                //     },
+                // });
+                // setNews(response.data.news); // 更新新聞列表
+                // // console.log(news);
                 setLoading(false);
+                const response = await fetch("https://ycchan.c110110157.workers.dev");
+                const newsList = await response.json();
+                console.log(newsList);
             } catch (error) {
                 console.log(error);
             }
@@ -87,17 +90,32 @@ function Home() {
                 <Grid container spacing={3} justifyContent="center">
                     {news.map((article, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index} display="flex" justifyContent="center">
-                            <Card sx={{ width: 600, borderRadius: 2, boxShadow: 3, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}>
+                            <Card
+                                sx={{
+                                    width: 600,
+                                    borderRadius: 2,
+                                    boxShadow: 3,
+                                    backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
+                                    color: theme === 'light' ? "black" : "white" // 設置 Card 內的主要文字顏色
+                                }}
+                            >
                                 <CardMedia component="img" height="180" image={article.image} alt={article.title} />
                                 <CardContent>
-                                    <Typography gutterBottom variant="h6" component="div">
+                                    <Typography gutterBottom variant="h6" component="div" sx={{ color: theme === 'light' ? "black" : "white" }}>
                                         {article.title}
                                     </Typography>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" sx={{ color: theme === 'light' ? "black" : "rgba(200, 200, 200, 0.85)" }}>
                                         {article.description}
                                     </Typography>
                                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
-                                        <Button size="small" href={article.url} target="_blank" rel="noopener noreferrer" variant="outlined" color="primary">
+                                        <Button
+                                            size="small"
+                                            href={article.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            variant="outlined"
+                                            color="primary"
+                                        >
                                             Read More
                                         </Button>
                                     </Box>
