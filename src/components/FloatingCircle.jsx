@@ -17,9 +17,19 @@ export default function FloatingCircle() {
     const [isClosing, setIsClosing] = useState(false); // 用於追踪收起動畫
     const { theme, toggleTheme } = useContext(ThemeContext);
     const { language, toggleLanguage } = useContext(LanguageContext);
-
-
-
+    const handleScrollToTop = () => { window.scrollTo({ top: 0, behavior: "smooth" }); };
+    const toggleSettings = () => {
+        if (isOpen === 1) {
+            // 先觸發收起動畫
+            setIsClosing(true);
+            setTimeout(() => {
+                setIsOpen(0); // 在動畫結束後實際關閉
+                setIsClosing(false);
+            }, 300); // 與動畫時長一致
+        } else {
+            setIsOpen(1);
+        }
+    };
     useEffect(() => {
         // 當 activePage 變化時，將其儲存到 localStorage
         localStorage.setItem("isOpen", isOpen);
@@ -36,7 +46,6 @@ export default function FloatingCircle() {
             } else {
                 setBottomOffset(20); // 否則，保持默認偏移量
             }
-
             // 判斷是否顯示 "返回頂部" 按鈕（當滾動超過 50px 才顯示）
             setShowScrollToTop(currentScrollY > 50);
         };
@@ -44,23 +53,6 @@ export default function FloatingCircle() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
-
-    const handleScrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-    const toggleSettings = () => {
-        if (isOpen == 1) {
-            // 先觸發收起動畫
-            setIsClosing(true);
-            setTimeout(() => {
-                setIsOpen(0); // 在動畫結束後實際關閉
-                setIsClosing(false);
-            }, 300); // 與動畫時長一致
-        } else {
-            setIsOpen(1);
-        }
-    };
-
     return (
         <div
             className="floating-circle-container"
@@ -74,7 +66,7 @@ export default function FloatingCircle() {
                     style={{
                         transform: showScrollToTop
                             ? "translateY(0px)" // 從第二顆圓圈向上滑出
-                            : "translateY(500px)", // 回到第二顆圓圈位置
+                            : "translateY(70px)", // 回到第二顆圓圈位置
                         opacity: showScrollToTop ? 1 : 0, // 控制透明度
                     }}
                     onClick={handleScrollToTop}
@@ -87,11 +79,11 @@ export default function FloatingCircle() {
                     className={`floating-circle settings-circle ${isClosing ? "closing" : ""}`}
                     onClick={toggleSettings}
                 >
-                    {isOpen == 1 ? <KeyboardDoubleArrowDownIcon className="icon" /> : <SettingsIcon className="icon" />}
+                    {isOpen === 1 ? <KeyboardDoubleArrowDownIcon className="icon" /> : <SettingsIcon className="icon" />}
                 </div>
             </Tooltip>
             {/* 展開的圓圈，根據 isOpen 狀態顯示 */}
-            {isOpen == 1 ? (
+            {isOpen === 1 ? (
                 <div className={`expanded-circles ${isClosing ? "closing" : ""}`}>
                     {/* 控制語言 (中、英) */}
                     <div className="floating-circle extra-circle">

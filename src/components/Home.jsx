@@ -23,9 +23,11 @@ function Home() {
                 const news = filteredNews.filter(article => article.content && article.content.trim() !== '');
 
                 if (response.ok) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
                     setLoading(false);
                 }
                 // console.log(news);
+
                 setNews(news);
             } catch (error) {
                 console.log(error);

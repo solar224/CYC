@@ -9,8 +9,6 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -21,17 +19,29 @@ import Drawer from "@mui/material/Drawer";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import anime from "animejs/lib/anime.es.js";
 import axios from "axios";
-import { Card, CardMedia, CardContent } from "@mui/material";
-import { CardHeader, CardActions, Collapse } from "@mui/material";
 import { Link } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-
-// 確保引入了相應的 CSS 文件
+import { Menu, MenuItem, ListItemIcon, Collapse } from '@mui/material';
+// icon
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import SearchIcon from "@mui/icons-material/Search";
+import MenuIcon from "@mui/icons-material/Menu";
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import HomeIcon from '@mui/icons-material/Home';
+import InfoIcon from '@mui/icons-material/Info';
+import MailIcon from '@mui/icons-material/Mail';
+import BookIcon from '@mui/icons-material/Book';
+import CodeIcon from '@mui/icons-material/Code';
+import LanguageIcon from '@mui/icons-material/Language';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import SchoolIcon from '@mui/icons-material/School';
+import CloseIcon from '@mui/icons-material/Close';
+// CSS 
 import "./css/Header.css";
 
 // 引入圖片
@@ -58,17 +68,16 @@ const Header = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const isMobile = useMediaQuery("(max-width: 900px)");
     const isMobile_els = useMediaQuery("(max-width: 1250px)");
-    const [activePage, setActivePage] = useState(() => {
-        return location.pathname;
-    });
     const handleClickAway = () => setSearchopen(false);
     const handleFocus = () => setSearchopen(true);
     const [Searchopen, setSearchopen] = useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const anchorElopen = Boolean(anchorEl);
+    const [openNote, setOpenNote] = useState(false);
+    const handleNoteClick = () => { setOpenNote((prev) => !prev); };
+    const [activePage, setActivePage] = useState(() => { return location.pathname; });
+    const handleClose = () => { setAnchorEl(null); };
 
-    // 設置當前選中的頁面
-    useEffect(() => {
-        setActivePage(location.pathname);
-    }, [location.pathname]);
     // 當點擊事件發生時，讓正方形隨機移動與旋轉
     const toggleDrawer = (open) => (event) => {
         if (
@@ -79,7 +88,11 @@ const Header = () => {
         }
         setDrawerOpen(open);
     };
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
+    // 選單項目或空白區域點擊時，關閉選單
     const Search = styled('div')(({ theme, open }) => ({
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
@@ -129,7 +142,7 @@ const Header = () => {
             }}
             role="presentation"
         >
-            <Box sx={{ paddingTop: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
+            <Box sx={{ paddingTop: '20px', paddingLeft: '10px', paddingRight: '10px', paddingBottom: '20px' }}>
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Search open={Searchopen}>
                         <SearchIconWrapper onClick={handleFocus}>
@@ -144,64 +157,153 @@ const Header = () => {
                     </Search>
                 </ClickAwayListener>
             </Box>
-            <Box onClick={toggleDrawer(false)}>
-                <List>
-                    <ListItem disablePadding>
+            <Divider sx={{ backgroundColor: theme === 'light' ? 'black' : 'white' }} /> {/* 根據theme設置分隔線顏色 */}
+            <List>
+                <ListItem disablePadding>
+                    <ListItemButton
+                        onClick={toggleDrawer(false)}
+                        component={Link}
+                        to="/"
+                        sx={{
+                            color: theme === 'light' ? 'black' : 'white',
+                            '&:hover': {
+                                backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
+                            },
+                            // 增加過渡動畫
+                            transition: 'background-color 0.2s ease-in-out',
+                        }}
+                    >
+                        <ListItemIcon sx={{ color: 'inherit' }}>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="首頁" />
+                    </ListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding>
+                    <ListItemButton
+                        onClick={toggleDrawer(false)}
+                        component={Link}
+                        to="/about-me"
+                        sx={{
+                            color: theme === 'light' ? 'black' : 'white',
+                            '&:hover': {
+                                backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
+                            },
+                            transition: 'background-color 0.2s ease-in-out',
+                        }}
+                    >
+                        <ListItemIcon sx={{ color: 'inherit' }}>
+                            <InfoIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="關於我" />
+                    </ListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding>
+                    <ListItemButton
+                        onClick={toggleDrawer(false)}
+                        component={Link}
+                        to="/contact-me"
+                        sx={{
+                            color: theme === 'light' ? 'black' : 'white',
+                            '&:hover': {
+                                backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
+                            },
+                            transition: 'background-color 0.2s ease-in-out',
+                        }}
+                    >
+                        <ListItemIcon sx={{ color: 'inherit' }}>
+                            <MailIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="聯絡我" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton
+                        onClick={handleNoteClick}
+                        sx={{
+                            color: theme === 'light' ? 'black' : 'white',
+                            '&:hover': {
+                                backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
+                            },
+                            transition: 'background-color 0.2s ease-in-out',
+                        }}
+                    >
+                        <ListItemIcon sx={{ color: 'inherit' }}>
+                            <BookIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="筆記" />
+                        {openNote ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                </ListItem>
+                <Collapse in={openNote} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
                         <ListItemButton
+                            onClick={toggleDrawer(false)}
                             component={Link}
-                            to=""
+                            to="/school-curriculum"
                             sx={{
+                                pl: 4,
                                 color: theme === 'light' ? 'black' : 'white',
                                 '&:hover': {
                                     backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
                                 },
+                                transition: 'background-color 0.2s ease-in-out',
                             }}
                         >
-                            <ListItemText primary="首頁" />
+                            <ListItemIcon sx={{ color: 'inherit' }}>
+                                <SchoolIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="學校課程" />
                         </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
+
                         <ListItemButton
+                            onClick={toggleDrawer(false)}
                             component={Link}
-                            to="/Aboutme"
+                            to="/procedural-exercises"
                             sx={{
+                                pl: 4,
                                 color: theme === 'light' ? 'black' : 'white',
                                 '&:hover': {
                                     backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
                                 },
+                                transition: 'background-color 0.2s ease-in-out',
                             }}
                         >
-                            <ListItemText primary="關於我" />
+                            <ListItemIcon sx={{ color: 'inherit' }}>
+                                <CodeIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="程式練習" />
                         </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
+
                         <ListItemButton
+                            onClick={toggleDrawer(false)}
                             component={Link}
-                            to="/Contactme"
+                            to="/english-practice"
                             sx={{
+                                pl: 4,
                                 color: theme === 'light' ? 'black' : 'white',
                                 '&:hover': {
                                     backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
                                 },
+                                transition: 'background-color 0.2s ease-in-out',
                             }}
                         >
-                            <ListItemText primary="聯絡我" />
+                            <ListItemIcon sx={{ color: 'inherit' }}>
+                                <LanguageIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="英文練習" />
                         </ListItemButton>
-                    </ListItem>
-                </List>
-                <Divider sx={{ backgroundColor: theme === 'light' ? 'black' : 'white' }} /> {/* 根據theme設置分隔線顏色 */}
-            </Box>
+                    </List>
+                </Collapse>
+            </List>
         </Box >
     );
-
+    // 設置當前選中的頁面
     useEffect(() => {
-        // 初始隨機設置三個小正方形的位置與角度
-        anime.set(".el", {
-            translateX: () => anime.random(15, 285), // 隨機生成 X 軸位置
-            translateY: () => anime.random(15, 35), // 隨機生成 Y 軸位置
-            rotate: () => anime.random(0, 360), // 隨機角度
-        });
-    }, [isMobile_els]);
+        setActivePage(location.pathname);
+    }, [location.pathname]);
     return (
         <div >
             <ElevationScroll>
@@ -237,43 +339,108 @@ const Header = () => {
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                     <Button
                                         color="inherit"
+                                        variant={activePage === "/" ? "outlined" : "text"}
                                         component={Link}
                                         to=""
                                         sx={{
                                             textTransform: "none",
-                                            color: activePage === "/" ? "yellow" : "white",
+                                            minWidth: 70,         // 固定最小寬度
+                                            // color: activePage === "/" ? "yellow" : "white",
                                             fontWeight: activePage === "/" ? "bold" : "",
-                                            fontSize: activePage === "/" ? "1.02rem" : "1rem",
                                         }}
                                     >
                                         首頁
                                     </Button>
                                     <Button
                                         color="inherit"
+                                        variant={activePage === "/about-me" ? "outlined" : "text"}
+
                                         component={Link}
-                                        to="/Aboutme"
+                                        to="/about-me"
                                         sx={{
                                             textTransform: "none",
-                                            color: activePage === "/Aboutme" ? "yellow" : "white",
-                                            fontWeight: activePage === "/Aboutme" ? "bold" : "",
-                                            fontSize: activePage === "/Aboutme" ? "1.02rem" : "1rem",
+                                            minWidth: 75,         // 固定最小寬度
+                                            // color: activePage === "/about-me" ? "yellow" : "white",
+                                            fontWeight: activePage === "/about-me" ? "bold" : "",
                                         }}
                                     >
                                         關於我
                                     </Button>
                                     <Button
                                         color="inherit"
+                                        variant={activePage === "/contact-me" ? "outlined" : "text"}
+
                                         component={Link}
-                                        to="/Contactme"
+                                        to="/contact-me"
                                         sx={{
                                             textTransform: "none",
-                                            color: activePage === "/Contactme" ? "yellow" : "white",
-                                            fontWeight: activePage === "/Contactme" ? "bold" : "",
-                                            fontSize: activePage === "/Contactme" ? "1.02rem" : "1rem",
+                                            minWidth: 70,         // 固定最小寬度
+                                            // color: activePage === "/contact-me" ? "yellow" : "white",
+                                            fontWeight: activePage === "/contact-me" ? "bold" : "",
                                         }}
                                     >
                                         聯絡
                                     </Button>
+                                    <Button
+                                        color="inherit"
+                                        variant={!(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "outlined" : "text"}
+
+                                        sx={{
+                                            minWidth: 85,         // 固定最小寬度
+                                            textTransform: 'none',
+                                            // color: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "yellow" : "white",
+                                            fontWeight: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "bold" : "",
+                                        }}
+                                        aria-controls={anchorElopen ? 'contact-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={anchorElopen ? 'true' : undefined}
+                                        onClick={handleClick}
+                                    >
+                                        筆記
+                                        {
+                                            anchorElopen
+                                                ? <ArrowDropUpIcon sx={{ ml: 0 }} /> : <ArrowDropDownIcon sx={{ ml: 0 }} />
+                                        }
+                                    </Button>
+                                    <Menu
+                                        id="contact-menu"
+                                        anchorEl={anchorEl}
+                                        open={anchorElopen}
+                                        onClose={handleClose}
+                                        disableScrollLock
+                                        anchorOrigin={{
+                                            vertical: 'bottom',
+                                            horizontal: 'center',
+                                        }}
+                                        transformOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'center',
+                                        }}
+                                        PaperProps={{
+                                            sx: {
+                                                mt: 0.1  // -1, -2, -4... 依需求微調
+                                            },
+                                        }}
+                                        sx={{
+                                            // 針對 Menu 彈出的紙張 (Paper) 做樣式覆寫
+                                            "& .MuiPaper-root": {
+                                                backgroundColor: theme === "light" ? "#ffffff" : "#333333",
+                                                color: theme === "light" ? "#000000" : "#ffffff",
+                                            }
+                                        }}
+                                    >
+                                        <MenuItem onClick={handleClose} component={Link} to="/school-curriculum">
+                                            學校課程
+                                        </MenuItem>
+                                        <MenuItem onClick={handleClose} component={Link} to="/procedural-exercises">
+                                            程式練習
+                                        </MenuItem>
+                                        <MenuItem onClick={handleClose} component={Link} to="/english-practice">
+                                            英文練習
+                                        </MenuItem>
+
+
+                                    </Menu>
                                     <Autocomplete
                                         size="small"
                                         disablePortal
@@ -286,9 +453,6 @@ const Header = () => {
                                             ".MuiInputLabel-root": {
                                                 color: "white", // 修改標籤顏色為白色
                                             },
-                                            // ".MuiOutlinedInput-notchedOutline": {
-                                            //   borderColor: "gray", // 修改輸入框外框顏色為白色
-                                            // },
                                             "&:hover .MuiOutlinedInput-notchedOutline": {
                                                 borderColor: "white", // 滑鼠懸停時外框保持白色
                                             },
@@ -334,6 +498,7 @@ const Header = () => {
             </ElevationScroll>
             {/* 手機板未完成 */}
             <Drawer
+                disableScrollLock
                 anchor="left"
                 open={drawerOpen}
                 onClose={toggleDrawer(false)}

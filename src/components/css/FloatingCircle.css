@@ -28,6 +28,8 @@
     /* 起初隱藏 */
     opacity: 0;
     transform: translateY(0px);
+    /* z-index: -1; */
+
 }
 
 /* 第一顆圓圈顯示時的動畫 */

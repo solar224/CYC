@@ -8,6 +8,9 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FloatingCircle from "./components/FloatingCircle";
 import DynamicBackground from "./components/DynamicBackground";
+import Schoolcurriculum from "./components/notes/Schoolcurriculum";
+import Proceduralexercises from "./components/notes/Proceduralexercises";
+import Englishpractice from "./components/notes/Englishpractice";
 
 import "./components/css/App.css";
 
@@ -42,8 +45,12 @@ export default function App() {
             <Header />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/Aboutme" element={<Aboutme />} />
-              <Route path="/Contactme" element={<Contactme />} />
+              <Route path="/about-me" element={<Aboutme />} />
+              <Route path="/contact-me" element={<Contactme />} />
+              <Route path="/school-curriculum" element={<Schoolcurriculum />} />
+              <Route path="/procedural-exercises" element={<Proceduralexercises />} />
+              <Route path="/english-practice" element={<Englishpractice />} />
+
             </Routes>
             <FloatingCircle />
             <Footer />
