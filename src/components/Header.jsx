@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { ThemeContext, LanguageContext } from "../App";
 import { useLocation } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
-import { Tooltip } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -20,12 +19,10 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import InputBase from "@mui/material/InputBase";
-import anime from "animejs/lib/anime.es.js";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { Menu, MenuItem, ListItemIcon, Collapse } from '@mui/material';
+import { Menu, MenuItem, ListItemIcon, Collapse, Breadcrumbs } from '@mui/material';
 // icon
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SearchIcon from "@mui/icons-material/Search";
@@ -46,6 +43,10 @@ import "./css/Header.css";
 
 // 引入圖片
 import ycChanImage from "../images/YC-Chan_image.jpg";
+// 
+import DynamicBreadcrumbs from "./DynamicBreadcrumbs"
+
+
 const options = ["首頁", "關於我", "設定", "幫助"]; // for Header [Autocomplete]
 function ElevationScroll(props) {
     const { children } = props;
@@ -66,8 +67,7 @@ const Header = () => {
     const { theme } = useContext(ThemeContext);
     const { language } = useContext(LanguageContext); // 主題狀態
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const isMobile = useMediaQuery("(max-width: 900px)");
-    const isMobile_els = useMediaQuery("(max-width: 1250px)");
+    const isMobile = useMediaQuery("(max-width: 920px)");
     const handleClickAway = () => setSearchopen(false);
     const handleFocus = () => setSearchopen(true);
     const [Searchopen, setSearchopen] = useState(false);
@@ -77,8 +77,6 @@ const Header = () => {
     const handleNoteClick = () => { setOpenNote((prev) => !prev); };
     const [activePage, setActivePage] = useState(() => { return location.pathname; });
     const handleClose = () => { setAnchorEl(null); };
-
-    // 當點擊事件發生時，讓正方形隨機移動與旋轉
     const toggleDrawer = (open) => (event) => {
         if (
             event.type === "keydown" &&
@@ -159,13 +157,17 @@ const Header = () => {
             </Box>
             <Divider sx={{ backgroundColor: theme === 'light' ? 'black' : 'white' }} /> {/* 根據theme設置分隔線顏色 */}
             <List>
-                <ListItem disablePadding>
+                <ListItem disablePadding sx={{ paddingTop: '2px', paddingLeft: '5px', paddingRight: '5px', paddingBottom: '2px' }}>
                     <ListItemButton
                         onClick={toggleDrawer(false)}
                         component={Link}
                         to="/"
                         sx={{
                             color: theme === 'light' ? 'black' : 'white',
+                            bgcolor: activePage === "/" ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
+                            border: activePage === "/" ? '1px solid' : 'none',
+                            borderColor: activePage === "/" ? (theme === 'light' ? '#888' : '#aaa') : 'none',
+                            borderRadius: activePage === "/" ? '8px' : '0',
                             '&:hover': {
                                 backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
                             },
@@ -180,13 +182,17 @@ const Header = () => {
                     </ListItemButton>
                 </ListItem>
 
-                <ListItem disablePadding>
+                <ListItem disablePadding sx={{ paddingTop: '2px', paddingLeft: '5px', paddingRight: '5px', paddingBottom: '2px' }}>
                     <ListItemButton
                         onClick={toggleDrawer(false)}
                         component={Link}
                         to="/about-me"
                         sx={{
                             color: theme === 'light' ? 'black' : 'white',
+                            bgcolor: activePage === "/about-me" ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
+                            border: activePage === "/about-me" ? '1px solid' : 'none',
+                            borderColor: activePage === "/about-me" ? (theme === 'light' ? '#888' : '#aaa') : 'none',
+                            borderRadius: activePage === "/about-me" ? '8px' : '0',
                             '&:hover': {
                                 backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
                             },
@@ -200,13 +206,17 @@ const Header = () => {
                     </ListItemButton>
                 </ListItem>
 
-                <ListItem disablePadding>
+                <ListItem disablePadding sx={{ paddingTop: '2px', paddingLeft: '5px', paddingRight: '5px', paddingBottom: '2px' }}>
                     <ListItemButton
                         onClick={toggleDrawer(false)}
                         component={Link}
                         to="/contact-me"
                         sx={{
                             color: theme === 'light' ? 'black' : 'white',
+                            bgcolor: activePage === "/contact-me" ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
+                            border: activePage === "/contact-me" ? '1px solid' : 'none',
+                            borderColor: activePage === "/contact-me" ? (theme === 'light' ? '#888' : '#aaa') : 'none',
+                            borderRadius: activePage === "/contact-me" ? '8px' : '0',
                             '&:hover': {
                                 backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
                             },
@@ -219,7 +229,7 @@ const Header = () => {
                         <ListItemText primary="聯絡我" />
                     </ListItemButton>
                 </ListItem>
-                <ListItem disablePadding>
+                <ListItem disablePadding sx={{ paddingTop: '2px', paddingLeft: '5px', paddingRight: '5px', paddingBottom: '2px' }}>
                     <ListItemButton
                         onClick={handleNoteClick}
                         sx={{
@@ -238,12 +248,18 @@ const Header = () => {
                     </ListItemButton>
                 </ListItem>
                 <Collapse in={openNote} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
+                    <List component="div" disablePadding sx={{
+                        paddingTop: '2px', paddingLeft: '5px', paddingRight: '5px', paddingBottom: '2px',
+                    }}>
                         <ListItemButton
                             onClick={toggleDrawer(false)}
                             component={Link}
                             to="/school-curriculum"
                             sx={{
+                                bgcolor: activePage === "/school-curriculum" ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
+                                border: activePage === "/school-curriculum" ? '1px solid' : 'none',
+                                borderColor: activePage === "/school-curriculum" ? (theme === 'light' ? '#888' : '#aaa') : 'none',
+                                borderRadius: activePage === "/school-curriculum" ? '8px' : '0',
                                 pl: 4,
                                 color: theme === 'light' ? 'black' : 'white',
                                 '&:hover': {
@@ -263,6 +279,10 @@ const Header = () => {
                             component={Link}
                             to="/procedural-exercises"
                             sx={{
+                                bgcolor: activePage === "/procedural-exercises" ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
+                                border: activePage === "/procedural-exercises" ? '1px solid' : 'none',
+                                borderColor: activePage === "/procedural-exercises" ? (theme === 'light' ? '#888' : '#aaa') : 'none',
+                                borderRadius: activePage === "/procedural-exercises" ? '8px' : '0',
                                 pl: 4,
                                 color: theme === 'light' ? 'black' : 'white',
                                 '&:hover': {
@@ -282,6 +302,10 @@ const Header = () => {
                             component={Link}
                             to="/english-practice"
                             sx={{
+                                bgcolor: activePage === "/english-practice" ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
+                                border: activePage === "/english-practice" ? '1px solid' : 'none',
+                                borderColor: activePage === "/english-practice" ? (theme === 'light' ? '#888' : '#aaa') : 'none',
+                                borderRadius: activePage === "/english-practice" ? '8px' : '0',
                                 pl: 4,
                                 color: theme === 'light' ? 'black' : 'white',
                                 '&:hover': {
@@ -310,31 +334,38 @@ const Header = () => {
                 <AppBar position="fixed">
                     <Container maxWidth='1'>
                         <Toolbar >
-                            <IconButton
-                                edge="start"
-                                color="inherit"
-                                sx={{
-                                    mr: 2,
-                                    display: { xs: "block", md: "none" }, // 小螢幕顯示，桌機隱藏
-                                }}
-                                onClick={toggleDrawer(true)}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-
-                            <Typography
-                                variant="h6"
-                                component="div"
-                                sx={{
-                                    flexGrow: 1,
-                                    fontWeight: "bold",
-                                    textAlign: isMobile ? "center" : "left",
-                                }}
-                            >
-                                <a href="https://solar224.github.io/CYC/#/" style={{ textDecoration: "none", color: "inherit" }}>
-                                    YC-Chan websites
-                                </a>
-                            </Typography>
+                            {isMobile && (
+                                <IconButton
+                                    edge="start"
+                                    color="inherit"
+                                    sx={{
+                                        mr: 2,
+                                        display: { xs: "block" }, // 小螢幕顯示，桌機隱藏
+                                    }}
+                                    onClick={toggleDrawer(true)}
+                                >
+                                    {drawerOpen ? <CloseIcon /> : <MenuIcon />}
+                                </IconButton>
+                            )}
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, flexGrow: 1 }}>
+                                <Typography
+                                    variant="h6"
+                                    component="div"
+                                    sx={{
+                                        fontWeight: "bold",
+                                        textAlign: isMobile ? "center" : "left",
+                                    }}
+                                >
+                                    <a
+                                        href="https://solar224.github.io/CYC/#/"
+                                        style={{ textDecoration: "none", color: "inherit" }}
+                                    >
+                                        YC-Chan
+                                    </a>
+                                </Typography>
+                                {/* 網址 -縮放未處理*/}
+                                <DynamicBreadcrumbs activePage={activePage} />
+                            </Box>
                             {!isMobile && (
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                     <Button
@@ -397,10 +428,7 @@ const Header = () => {
                                         onClick={handleClick}
                                     >
                                         筆記
-                                        {
-                                            anchorElopen
-                                                ? <ArrowDropUpIcon sx={{ ml: 0 }} /> : <ArrowDropDownIcon sx={{ ml: 0 }} />
-                                        }
+                                        {anchorElopen ? <ArrowDropUpIcon sx={{ ml: 0 }} /> : <ArrowDropDownIcon sx={{ ml: 0 }} />}
                                     </Button>
                                     <Menu
                                         id="contact-menu"
@@ -496,7 +524,7 @@ const Header = () => {
                     </Container>
                 </AppBar>
             </ElevationScroll>
-            {/* 手機板未完成 */}
+            {/* 手機 */}
             <Drawer
                 disableScrollLock
                 anchor="left"

@@ -43,6 +43,7 @@ function Home() {
 
     return (
         <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+            {/* 條例 */}
             <Box sx={{ textAlign: 'center', my: 4 }}>
                 <Typography variant="h4" gutterBottom color={color}>
                     {language === 'zh' ? '新聞' : 'news'}
@@ -97,7 +98,7 @@ function Home() {
                         <Grid item xs={12} sm={6} md={4} key={index} display="flex" justifyContent="center">
                             <Card
                                 sx={{
-                                    width: 600,
+                                    width: "100%",
                                     borderRadius: 2,
                                     boxShadow: 3,
                                     backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.65)",

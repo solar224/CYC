@@ -4,12 +4,11 @@ import { ButtonGroup } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import anime from "animejs/lib/anime.es.js";
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ThemeContext, LanguageContext } from "../App";
 import Accordion from '@mui/material/Accordion';
@@ -277,10 +276,10 @@ const About = () => {
         ],
     };
     return (
-        <Box sx={{ maxWidth: "1100px", margin: "0 auto", padding: 5 }}>
+        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
             {/* 個人介紹 */}
             <ThemeProvider theme={ThemeProviderTheme}>
-                <Paper elevation={(theme === 'light' ? 3 : 3)} sx={{ padding: 2, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}>
+                <Paper elevation={(theme === 'light' ? 3 : 3)} sx={{ my: 4, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}>
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={4} style={{ padding: "3em", paddingBottom: "1em" }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <img
@@ -387,13 +386,11 @@ const About = () => {
                         </Grid>
                     </Grid>
                 </Paper>
-            </ThemeProvider>
-            {/* 下方資訊 */}
+                {/* 下方資訊 */}
 
-            <Grid container spacing={4}>
-                {/* 左側內容 */}
-                <Grid item xs={12} md={2.5}>
-                    <ThemeProvider theme={ThemeProviderTheme}>
+                <Grid container spacing={4}>
+                    {/* 左側內容 */}
+                    <Grid item xs={12} md={2.5}>
                         <Paper
                             elevation={(theme === 'light' ? 1 : 12)}
                             sx={{
@@ -454,13 +451,12 @@ const About = () => {
                                 </AccordionDetails>
                             </Accordion>
                         </Paper>
-                    </ThemeProvider>
 
-                </Grid>
 
-                {/* 右側內容 */}
-                <Grid item xs={12} md={9.5}>
-                    <ThemeProvider theme={ThemeProviderTheme}>
+                    </Grid>
+
+                    {/* 右側內容 */}
+                    <Grid item xs={12} md={9.5}>
                         <Paper
                             elevation={(theme === 'light' ? 1 : 12)}
                             sx={{
@@ -487,8 +483,6 @@ const About = () => {
                                 <li>國立彰師附工 控制科 (110 畢業)</li>
                             </ul>
                         </Paper>
-                    </ThemeProvider>
-                    <ThemeProvider theme={ThemeProviderTheme}>
 
                         <Paper
                             elevation={(theme === 'light' ? 1 : 12)}
@@ -554,8 +548,6 @@ const About = () => {
                             </Box>
 
                         </Paper>
-                    </ThemeProvider>
-                    <ThemeProvider theme={ThemeProviderTheme}>
 
                         <Paper
                             elevation={(theme === 'light' ? 1 : 12)}
@@ -588,8 +580,6 @@ const About = () => {
                                 </Typography>
                             </Box>
                         </Paper>
-                    </ThemeProvider>
-                    <ThemeProvider theme={ThemeProviderTheme}>
                         <Paper
                             elevation={(theme === 'light' ? 1 : 12)}
                             sx={{
@@ -917,14 +907,12 @@ const About = () => {
                                         </Grid>
                                     </>
                                 )}
-
                             </Grid>
                         </Paper>
-                    </ThemeProvider>
-
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Box >
+            </ThemeProvider>
+        </Container >
     );
 };
 
