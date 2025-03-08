@@ -253,8 +253,8 @@ const About = () => {
             createData('微積分(一)', 3, 87),
             createData('微積分(二)', 3, 92),
             createData('微分方程', 3, 97),
-            createData('計算機程式設計(一)', 3, 81),
-            createData('計算機程式設計(二)', 3, 87),
+            createData('程式設計(一)', 3, 81),
+            createData('程式設計(二)', 3, 87),
             createData('機率', 3, 99),
             createData('線性代數', 3, 99),
             createData('數值方法', 3, 88),
@@ -280,27 +280,25 @@ const About = () => {
             {/* 個人介紹 */}
             <ThemeProvider theme={ThemeProviderTheme}>
                 <Paper elevation={(theme === 'light' ? 3 : 3)} sx={{ my: 4, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} md={4} style={{ padding: "3em", paddingBottom: "1em" }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Grid container justifyContent="center" alignItems='center'>
+                        <Grid item xs={12} md={4} style={{ padding: "1em" }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <img
                                 src={ycChanImage}
                                 alt="詹宇宸"
                                 style={{
                                     maxWidth: "200px", // 最大寬度限制
                                     width: "100%",
-                                    borderRadius: "",
+                                    borderRadius: "10px",
                                 }}
                             />
-
-                            {/* <Typography variant="h5" gutterBottom>
-                            {language == 'zh' ? '詹宇宸' : 'CHAN,YU-CHEN'}
-                        </Typography> */}
                         </Grid>
-                        <Grid item xs={12} md={8} style={{ padding: "2em" }}>
-                            <br />
-                            {/* gutterBottom */}
+                        <Grid item xs={12} md={8} style={{ padding: "1em" }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 2 }}>
+                                <Typography variant="h4">關於我</Typography>
+                                <Button variant="outlined">CV</Button>
+                            </Box>
                             <Typography gutterBottom>
-                                我是<strong>詹宇宸</strong>，目前就讀於
+                                我是<strong>詹宇宸</strong>，大學就讀
                                 <a href="https://www.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
                                     style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
                                     國立高雄科技大學 (NKUST)
@@ -308,23 +306,14 @@ const About = () => {
                                 <a href="https://ccee.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
                                     style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
                                     電腦與通訊工程系 (CCE)
-                                </a>。
-                                在今年暑假，我將會前往
-                                <a href="https://www.nycu.edu.tw/nycu/ch/index" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
-                                    國立陽明交通大學 (NYCU)
-                                </a> 的
-                                <a href="https://www.cs.nycu.edu.tw/intro/organization/data" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
-                                    數據科學與工程研究所 (DSIE)
-                                </a> 攻讀碩士學位。
+                                </a>。在學期間有幸接觸到競程，在教授與學長的指導下多次參加程式相關競賽。除了競程，我對於電子通訊技術也非常有興趣~歡迎指導交流~
                             </Typography>
                             <Typography gutterBottom >
                                 我的研究興趣：
                             </Typography>
                             <br />
                             <Grid container sx={{ width: "100%" }} justifyContent="space-between">
-                                <Grid item xs={6} md={3} display="flex" flexDirection="column" alignItems="center" >
+                                <Grid item xs={3} md={3} display="flex" flexDirection="column" alignItems="center" >
                                     <img
                                         src={exploration}
                                         alt="exploration"
@@ -338,7 +327,7 @@ const About = () => {
                                         <strong>資料分析</strong>
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={6} md={3} display="flex" flexDirection="column" alignItems="center">
+                                <Grid item xs={3} md={3} display="flex" flexDirection="column" alignItems="center">
                                     <img
                                         src={algorithms}
                                         alt="algorithms"
@@ -352,7 +341,7 @@ const About = () => {
                                         <strong>程式撰寫</strong>
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={6} md={3} display="flex" flexDirection="column" alignItems="center">
+                                <Grid item xs={3} md={3} display="flex" flexDirection="column" alignItems="center">
                                     <img
                                         src={communication}
                                         alt="communication"
@@ -366,7 +355,7 @@ const About = () => {
                                         <strong>通訊設計</strong>
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={6} md={3} display="flex" flexDirection="column" alignItems="center">
+                                <Grid item xs={3} md={3} display="flex" flexDirection="column" alignItems="center">
                                     <img
                                         src={cpu}
                                         alt="cpu"

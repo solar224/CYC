@@ -36,24 +36,7 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("language", language);
   }, [language]);
-  useEffect(() => {
-    const lockOrientation = async () => {
-      if (window.screen && window.screen.orientation && window.screen.orientation.lock) {
-        try {
-          // 嘗試鎖定為豎屏模式
-          await window.screen.orientation.lock('portrait');
-        } catch (error) {
-          console.error('鎖定失敗:', error);
-        }
-      }
-    };
-    lockOrientation();
-    // 可選：在螢幕方向變更時再次嘗試鎖定
-    window.addEventListener('orientationchange', lockOrientation);
-    return () => {
-      window.removeEventListener('orientationchange', lockOrientation);
-    };
-  }, []);
+
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <LanguageContext.Provider value={{ language, toggleLanguage }}>
@@ -62,6 +45,7 @@ export default function App() {
           <Router>
             <Header />
             <Routes>
+
               <Route path="/" element={<Home />} />
               <Route path="/about-me" element={<Aboutme />} />
               <Route path="/contact-me" element={<Contactme />} />
