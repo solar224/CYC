@@ -22,7 +22,7 @@ import InputBase from "@mui/material/InputBase";
 import { Link } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { Menu, MenuItem, ListItemIcon, Collapse, Breadcrumbs } from '@mui/material';
+import { Menu, MenuItem, ListItemIcon, Collapse, Tooltip } from '@mui/material';
 // icon
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SearchIcon from "@mui/icons-material/Search";
@@ -42,8 +42,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import "./css/Header.css";
 
 // 引入圖片
-import ycChanImage from "../images/YC-Chan_image.jpg";
-// 
+import ycChanImage from "../images/person.png";
+// 動態
 import DynamicBreadcrumbs from "./DynamicBreadcrumbs"
 
 
@@ -419,7 +419,6 @@ const Header = () => {
                                         sx={{
                                             minWidth: 85,         // 固定最小寬度
                                             textTransform: 'none',
-                                            // color: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "yellow" : "white",
                                             fontWeight: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "bold" : "",
                                         }}
                                         aria-controls={anchorElopen ? 'contact-menu' : undefined}
@@ -438,11 +437,11 @@ const Header = () => {
                                         disableScrollLock
                                         anchorOrigin={{
                                             vertical: 'bottom',
-                                            horizontal: 'center',
+                                            horizontal: 'left',
                                         }}
                                         transformOrigin={{
                                             vertical: 'top',
-                                            horizontal: 'center',
+                                            horizontal: 'left',
                                         }}
                                         PaperProps={{
                                             sx: {
@@ -505,16 +504,17 @@ const Header = () => {
                                             overflow: "hidden", // 確保圖片不超出邊框
                                             backgroundColor: "gray", // 圓框背景顏色（無圖片時）
                                         }}
-                                    >
-                                        <img
-                                            src={ycChanImage} // 自定義圖片 URL
-                                            style={{
-                                                width: "100%", // 圖片寬度填滿框
-                                                height: "100%", // 圖片高度填滿框
-                                                objectFit: "cover", // 確保圖片比例正確
-                                            }}
-                                            alt=""
-                                        />
+                                    ><Tooltip title={(language === "zh" ? "詹宇宸" : "YC-chen")} placement="bottom">
+                                            <img
+                                                src={ycChanImage} // 自定義圖片 URL
+                                                style={{
+                                                    width: "100%", // 圖片寬度填滿框
+                                                    height: "100%", // 圖片高度填滿框
+                                                    objectFit: "cover", // 確保圖片比例正確
+                                                }}
+                                                alt=""
+                                            />
+                                        </Tooltip>
                                     </Box>
                                     {/* <Avatar alt="Remy Sharp" src={ycChanImage} /> */}
 
@@ -534,6 +534,9 @@ const Header = () => {
                     "& .MuiDrawer-paper": {
                         backgroundColor: theme === "light" ? "#ffffff" : "#333333", // 根據 theme 設置背景色
                         color: theme === "light" ? "#000000" : "#ffffff", // 設置文字顏色
+                        top: "64px", // 讓 Drawer 從 80px 開始，而不是從最頂端開始
+                        height: "calc(100% - 64px)", // 調整 Drawer 高度，避免超出視窗
+                        // borderTopRightRadius: "10px", // 圓角效果，讓 UI 更柔和
                     },
                 }}
             >

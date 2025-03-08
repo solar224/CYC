@@ -8,7 +8,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import anime from "animejs/lib/anime.es.js";
-import { Grid, Paper, Container } from "@mui/material";
+import { Grid, Paper, Container, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ThemeContext, LanguageContext } from "../App";
 import Accordion from '@mui/material/Accordion';
@@ -41,6 +41,7 @@ import {
     PolarAngleAxis,
     PolarRadiusAxis,
 } from "recharts";
+
 // 引入圖片
 import ycChanImage from "../images/YC-Chan_image.jpg";
 import exploration from "../images/exploration.png";
@@ -52,6 +53,8 @@ import project from "../images/project.png";
 import score from "../images/score.png";
 import algorithms from "../images/algorithms.png";
 
+// 動態
+import Mimictypingeffects from "./effects/Mimictypingeffects"
 
 
 
@@ -279,39 +282,59 @@ const About = () => {
         <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
             {/* 個人介紹 */}
             <ThemeProvider theme={ThemeProviderTheme}>
-                <Paper elevation={(theme === 'light' ? 3 : 3)} sx={{ my: 4, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}>
-                    <Grid container justifyContent="center" alignItems='center'>
-                        <Grid item xs={12} md={4} style={{ padding: "1em" }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <img
-                                src={ycChanImage}
-                                alt="詹宇宸"
-                                style={{
-                                    maxWidth: "200px", // 最大寬度限制
-                                    width: "100%",
-                                    borderRadius: "10px",
-                                }}
-                            />
+                <Paper
+                    id="關於我"
+                    elevation={(theme === 'light' ? 3 : 3)}
+                    onMouseEnter={() => setActiveSection("關於我")}
+
+                    sx={{ width: "100%", my: 4, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}
+                >
+                    <Grid
+                        container
+                        justifyContent="center"
+                        alignItems='center'
+                    >
+                        <Grid
+                            item
+                            xs={12} md={4}
+                            style={{ padding: "1em" }}
+                            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                        >
+                            <Tooltip title={(language === "zh" ? "AI 生圖" : "AI Generating Graphs")} placement="bottom">
+                                <img
+                                    src={ycChanImage}
+                                    alt="詹宇宸"
+                                    style={{
+                                        maxWidth: "200px", // 最大寬度限制
+                                        width: "100%",
+                                        borderRadius: "10px",
+                                    }}
+                                />
+                            </Tooltip>
                         </Grid>
                         <Grid item xs={12} md={8} style={{ padding: "1em" }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 2 }}>
+                                {/* <Mimictypingeffects text="關於我" speed={0} variant="h4" /> */}
                                 <Typography variant="h4">關於我</Typography>
-                                <Button variant="outlined">CV</Button>
+                                <Tooltip title={(language === "zh" ? "履歷表" : "curriculum vitae")} placement="left">
+                                    <Button variant="outlined">CV</Button>
+                                </Tooltip>
                             </Box>
-                            <Typography gutterBottom>
-                                我是<strong>詹宇宸</strong>，大學就讀
-                                <a href="https://www.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
-                                    國立高雄科技大學 (NKUST)
-                                </a> 的
-                                <a href="https://ccee.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme === 'light' ? "rgb(0, 26, 194)" : "rgba(246, 255, 0, 0.82)") }}>
-                                    電腦與通訊工程系 (CCE)
-                                </a>。在學期間有幸接觸到競程，在教授與學長的指導下多次參加程式相關競賽。除了競程，我對於電子通訊技術也非常有興趣~歡迎指導交流~
+                            <Typography
+                                gutterBottom
+                                sx={{
+                                    minHeight: "100px", // 設定最小寬度，確保顯示區塊穩定
+                                    display: "inline-block", // 避免 Typography 收縮
+                                    marginBottom: 2,
+                                }}>
+                                <Mimictypingeffects
+                                    text="我是詹宇宸，大學就讀國立高雄科技大學 (NKUST) 的電腦與通訊工程系 (CCE)。
+                                    在學期間有幸接觸到競程，在教授與學長的指導下多次參加程式相關競賽。
+                                    除了競程，我對於電子通訊技術也非常有興趣~歡迎指導交流~
+                                    我的研究興趣：資料分析、程式撰寫、通訊設計、電路設計!"
+                                    speed={0}
+                                    variant="body" />
                             </Typography>
-                            <Typography gutterBottom >
-                                我的研究興趣：
-                            </Typography>
-                            <br />
                             <Grid container sx={{ width: "100%" }} justifyContent="space-between">
                                 <Grid item xs={3} md={3} display="flex" flexDirection="column" alignItems="center" >
                                     <img
@@ -377,7 +400,7 @@ const About = () => {
                 </Paper>
                 {/* 下方資訊 */}
 
-                <Grid container spacing={4}>
+                <Grid container spacing={{ xs: 1, sm: 2 }}>
                     {/* 左側內容 */}
                     <Grid item xs={12} md={2.5}>
                         <Paper
@@ -385,7 +408,6 @@ const About = () => {
                             sx={{
                                 backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
                                 padding: 0,
-                                marginBottom: 2,
                                 textAlign: "",
                                 position: "sticky", // 固定位置
                                 top: 80,           // 距離視窗頂部 10px，可根據需求調整
@@ -401,42 +423,58 @@ const About = () => {
                                     <Typography variant="h6">目錄</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <Typography>
-                                        <Button
-                                            variant={activeSection === "學歷" ? "contained" : "outlined"}
-                                            sx={{ width: "100%", marginBottom: 0.5 }}
-                                            onClick={() => handleScrollTo("學歷")}
-                                        >
-                                            教育學歷
-                                        </Button>
-                                    </Typography>
-                                    <Typography>
-                                        <Button
-                                            variant={activeSection === "教學經驗" ? "contained" : "outlined"}
-                                            sx={{ width: "100%", marginBottom: 0.5 }}
-                                            onClick={() => handleScrollTo("教學經驗")}
-                                        >
-                                            教學經驗
-                                        </Button>
-                                    </Typography>
-                                    <Typography>
-                                        <Button
-                                            variant={activeSection === "專案" ? "contained" : "outlined"}
-                                            sx={{ width: "100%", marginBottom: 0.5 }}
-                                            onClick={() => handleScrollTo("專案")}
-                                        >
-                                            專案計畫
-                                        </Button>
-                                    </Typography>
-                                    <Typography>
-                                        <Button
-                                            variant={activeSection === "學業表現" ? "contained" : "outlined"}
-                                            sx={{ width: "100%", marginBottom: 0.5 }}
-                                            onClick={() => handleScrollTo("學業表現")}
-                                        >
-                                            學業表現
-                                        </Button>
-                                    </Typography>
+                                    <AccordionDetails>
+                                        {[
+                                            "關於我",
+                                            "教育學歷",
+                                            "教學經驗",
+                                            "專案計畫",
+                                            "學業表現",
+                                        ].map((section) => (
+                                            <Typography key={section}>
+                                                <Button
+                                                    variant={activeSection === section ? "contained" : "outlined"}
+                                                    sx={{
+                                                        width: "100%",
+                                                        marginBottom: 0.5,
+                                                        color:
+                                                            theme === "dark"
+                                                                ? activeSection === section
+                                                                    ? "#333333"
+                                                                    : "#ffffff"
+                                                                : activeSection === section
+                                                                    ? "#ffffff"
+                                                                    : "#333333",
+                                                        backgroundColor:
+                                                            theme === "dark"
+                                                                ? activeSection === section
+                                                                    ? "#ffffff"
+                                                                    : "#333333"
+                                                                : activeSection === section
+                                                                    ? "#333333"
+                                                                    : "#ffffff",
+                                                        border: `1px solid ${theme === "dark" || activeSection === section
+                                                            ? "#ffffff"
+                                                            : "#333333"
+                                                            }`,
+                                                        "&:hover": {
+                                                            backgroundColor:
+                                                                theme === "dark"
+                                                                    ? activeSection === section
+                                                                        ? "#e0e0e0"
+                                                                        : "#555555"
+                                                                    : activeSection === section
+                                                                        ? "#222222"
+                                                                        : "#aaaaaa",
+                                                        },
+                                                    }}
+                                                    onClick={() => handleScrollTo(section)}
+                                                >
+                                                    {section}
+                                                </Button>
+                                            </Typography>
+                                        ))}
+                                    </AccordionDetails>
                                 </AccordionDetails>
                             </Accordion>
                         </Paper>
@@ -453,8 +491,8 @@ const About = () => {
                                 marginBottom: 2,
                                 backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
                             }}
-                            id="學歷"
-                            onMouseEnter={() => setActiveSection("學歷")}
+                            id="教育學歷"
+                            onMouseEnter={() => setActiveSection("教育學歷")}
                         >
                             <Typography variant="h5" gutterBottom>
                                 <img
@@ -467,9 +505,35 @@ const About = () => {
                                 /> 教育學歷
                             </Typography>
                             <ul>
-                                <li>國立陽明交通大學 數據科學與工程研究所 (未來)</li>
-                                <li>國立高雄科技大學 電腦與通訊工程系 (在讀中)</li>
-                                <li>國立彰師附工 控制科 (110 畢業)</li>
+                                <a href="https://www.cs.nycu.edu.tw/intro/organization/cybersecurity" target="_blank" rel="noopener noreferrer"
+                                    style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
+                                    <li>
+                                        <Mimictypingeffects
+                                            text=" 2025 ~ 2027 | 國立陽明交通大學 數據科學與工程研究所 "
+                                            speed={20}
+                                            variant="body" />
+                                    </li>
+                                </a>
+                                <a href="https://ccee.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
+                                    style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
+                                    {/* <li> 2021 ~ 2025 | 國立高雄科技大學 電腦與通訊工程系</li> */}
+                                    <li>
+                                        <Mimictypingeffects
+                                            text=" 2021 ~ 2025 | 國立高雄科技大學 電腦與通訊工程系 "
+                                            speed={20}
+                                            variant="body" />
+                                    </li>
+                                </a>
+                                <a href="https://w3.sivs.chc.edu.tw/files/13-1000-15978.php" target="_blank" rel="noopener noreferrer"
+                                    style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
+                                    {/* <li> 2019 ~ 2021 | 國立彰師附工 控制科 </li> */}
+                                    <li>
+                                        <Mimictypingeffects
+                                            text=" 2019 ~ 2021 | 國立彰師附工 控制科 "
+                                            speed={20}
+                                            variant="body" />
+                                    </li>
+                                </a>
                             </ul>
                         </Paper>
 
@@ -545,8 +609,8 @@ const About = () => {
                                 marginBottom: 2,
                                 backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
                             }}
-                            id="專案"
-                            onMouseEnter={() => setActiveSection("專案")}
+                            id="專案計畫"
+                            onMouseEnter={() => setActiveSection("專案計畫")}
                         >
                             <Typography variant="h5" gutterBottom>
                                 <img
@@ -556,7 +620,7 @@ const About = () => {
                                         maxWidth: "20px",
                                         width: "100%",
                                     }}
-                                /> 專案
+                                /> 專案計畫
                             </Typography>
                             <Box sx={{ marginBottom: 2 }}>
                                 <Typography variant="h6">test</Typography>
