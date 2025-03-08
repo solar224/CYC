@@ -507,32 +507,15 @@ const About = () => {
                             <ul>
                                 <a href="https://www.cs.nycu.edu.tw/intro/organization/cybersecurity" target="_blank" rel="noopener noreferrer"
                                     style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
-                                    <li>
-                                        <Mimictypingeffects
-                                            text=" 2025 ~ 2027 | 國立陽明交通大學 數據科學與工程研究所 "
-                                            speed={20}
-                                            variant="body" />
-                                    </li>
+                                    <li> 2025 ~ 2027 | 國立陽明交通大學 數據科學與工程研究所 </li>
                                 </a>
                                 <a href="https://ccee.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
                                     style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
-                                    {/* <li> 2021 ~ 2025 | 國立高雄科技大學 電腦與通訊工程系</li> */}
-                                    <li>
-                                        <Mimictypingeffects
-                                            text=" 2021 ~ 2025 | 國立高雄科技大學 電腦與通訊工程系 "
-                                            speed={20}
-                                            variant="body" />
-                                    </li>
+                                    <li> 2021 ~ 2025 | 國立高雄科技大學 電腦與通訊工程系</li>
                                 </a>
                                 <a href="https://w3.sivs.chc.edu.tw/files/13-1000-15978.php" target="_blank" rel="noopener noreferrer"
                                     style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
-                                    {/* <li> 2019 ~ 2021 | 國立彰師附工 控制科 </li> */}
-                                    <li>
-                                        <Mimictypingeffects
-                                            text=" 2019 ~ 2021 | 國立彰師附工 控制科 "
-                                            speed={20}
-                                            variant="body" />
-                                    </li>
+                                    <li>2019 ~ 2021 | 國立彰師附工 控制科 </li>
                                 </a>
                             </ul>
                         </Paper>
