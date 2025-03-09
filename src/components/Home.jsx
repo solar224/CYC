@@ -66,7 +66,7 @@ function Home() {
                         {language === 'zh' ? '商業' : 'business'}
                     </Button>
                     <Button onClick={() => handleCategoryChange('sports')} variant={selectedCategory === 'sports' ? 'contained' : 'outlined'}>
-                        {language === 'zh' ? '商業' : 'sports'}
+                        {language === 'zh' ? '運動' : 'sports'}
                     </Button>
                 </ButtonGroup>
             </Box>

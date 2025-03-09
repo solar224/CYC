@@ -7,6 +7,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Breadcrumbs, Typography, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+
 
 export default function DynamicBreadcrumbs({ activePage }) {
     const pathnames = activePage.split('/').filter(x => x);
@@ -18,8 +20,10 @@ export default function DynamicBreadcrumbs({ activePage }) {
         "english-practice": "英文練習",
     };
     return (
-        <Breadcrumbs aria-label="breadcrumb" >
-            {/* 在這裡增加一個 "/" */}
+        <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" sx={{ color: '#AAAAAA', margin: "0px" }} // 這裡設定顏色
+            />}
+            aria-label="breadcrumb" >
             <Button component={RouterLink} underline="hover" color="inherit" to="/" sx={{ color: '#AAAAAA', minWidth: '0px' }}>
                 首頁
             </Button>
@@ -28,11 +32,24 @@ export default function DynamicBreadcrumbs({ activePage }) {
                     const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
                     const isLast = index === pathnames.length - 1;
                     return isLast ? (
-                        <Typography key={routeTo} underline="hover" sx={{ color: '#28a745', minWidth: '0px' }}>
+                        <Button
+                            key={routeTo}
+                            underline="hover"
+                            sx={{
+                                color: '#28a745',
+                            }}>
                             {nameMap[name] || name}
-                        </Typography>
+                        </Button>
                     ) : (
-                        <Button component={RouterLink} underline="hover" color="inherit" to={routeTo} key={routeTo} sx={{ color: '#AAAAAA', minWidth: '0px' }}>
+                        <Button
+                            component={RouterLink}
+                            underline="hover"
+                            to={routeTo}
+                            key={routeTo}
+                            sx={{
+                                color: '#AAAAAA',
+                                margin: "0px",
+                            }}>
                             {nameMap[name] || name}
                         </Button>
                     );

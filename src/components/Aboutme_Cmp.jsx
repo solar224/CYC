@@ -172,6 +172,12 @@ const About = () => {
             behavior: "smooth",
         });
     };
+    const handleTeachButtonClick = (title) => {
+        alert(`你點擊了教學經驗 ${title}`);
+    }
+    const handleProjectButtonClick = (title) => {
+        alert(`你點擊了專案計畫 ${title}`);
+    }
     const College_Fractions = [
         {
             name: '資工',
@@ -317,13 +323,24 @@ const About = () => {
                                 {/* <Mimictypingeffects text="關於我" speed={0} variant="h4" /> */}
                                 <Typography variant="h4">關於我</Typography>
                                 <Tooltip title={(language === "zh" ? "履歷表" : "curriculum vitae")} placement="left">
-                                    <Button variant="outlined">CV</Button>
+                                    <Button
+                                        variant="outlined"
+                                        sx={{
+                                            color: "#28a745", // 綠色文字
+                                            borderColor: "#28a745", // 綠色邊框
+                                            "&:hover": {
+                                                backgroundColor: "rgba(40, 167, 69, 0.1)", // 綠色背景 (淡淡的)
+                                                borderColor: "#218838", // 深綠色邊框
+                                            },
+                                        }}>
+                                        CV
+                                    </Button>
                                 </Tooltip>
                             </Box>
                             <Typography
                                 gutterBottom
                                 sx={{
-                                    minHeight: "100px", // 設定最小寬度，確保顯示區塊穩定
+                                    minHeight: { xs: "168px", sm: "130px", md: "100px" }, // 設定最小寬度，確保顯示區塊穩定
                                     display: "inline-block", // 避免 Typography 收縮
                                     marginBottom: 2,
                                 }}>
@@ -358,8 +375,7 @@ const About = () => {
                                             maxWidth: "70px",
                                             width: "100%",
                                             height: "100%",
-                                        }}
-                                    />
+                                        }} />
                                     <Typography gutterBottom variant="body2" sx={{ marginTop: 1, textAlign: "center" }}>
                                         <strong>程式撰寫</strong>
                                     </Typography>
@@ -372,8 +388,7 @@ const About = () => {
                                             maxWidth: "70px",
                                             width: "100%",
                                             height: "100%",
-                                        }}
-                                    />
+                                        }} />
                                     <Typography gutterBottom variant="body2" sx={{ marginTop: 1, textAlign: "center" }}>
                                         <strong>通訊設計</strong>
                                     </Typography>
@@ -386,8 +401,7 @@ const About = () => {
                                             maxWidth: "70px",
                                             width: "100%",
                                             height: "100%",
-                                        }}
-                                    />
+                                        }} />
                                     <Typography gutterBottom variant="body2" sx={{ marginTop: 1, textAlign: "center" }}>
                                         <strong>電路設計</strong>
                                     </Typography>
@@ -403,83 +417,76 @@ const About = () => {
                 <Grid container spacing={{ xs: 1, sm: 2 }}>
                     {/* 左側內容 */}
                     <Grid item xs={12} md={2.5}>
-                        <Paper
-                            elevation={(theme === 'light' ? 1 : 12)}
+                        <Accordion
+                            defaultExpanded
                             sx={{
-                                backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
-                                padding: 0,
-                                textAlign: "",
                                 position: "sticky", // 固定位置
                                 top: 80,           // 距離視窗頂部 10px，可根據需求調整
                                 // zIndex: 1,         // 確保優先於其他元素顯示
-                            }}
-                        >
-                            <Accordion defaultExpanded>
-                                <AccordionSummary
-                                    expandIcon={<ArrowDropDownIcon />}
-                                    aria-controls="panel2-content"
-                                    id="panel2-header"
-                                >
-                                    <Typography variant="h6">目錄</Typography>
-                                </AccordionSummary>
+                                backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(20, 20, 20, 0.50)",
+                            }}>
+                            <AccordionSummary
+                                expandIcon={<ArrowDropDownIcon />}
+                                aria-controls="panel2-content"
+                                id="panel2-header"
+                            >
+                                <Typography variant="h6">目錄</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <AccordionDetails>
-                                    <AccordionDetails>
-                                        {[
-                                            "關於我",
-                                            "教育學歷",
-                                            "教學經驗",
-                                            "專案計畫",
-                                            "學業表現",
-                                        ].map((section) => (
-                                            <Typography key={section}>
-                                                <Button
-                                                    variant={activeSection === section ? "contained" : "outlined"}
-                                                    sx={{
-                                                        width: "100%",
-                                                        marginBottom: 0.5,
-                                                        color:
-                                                            theme === "dark"
-                                                                ? activeSection === section
-                                                                    ? "#333333"
-                                                                    : "#ffffff"
-                                                                : activeSection === section
-                                                                    ? "#ffffff"
-                                                                    : "#333333",
+                                    {[
+                                        "關於我",
+                                        "教育學歷",
+                                        "教學經驗",
+                                        "專案計畫",
+                                        "學業表現",
+                                    ].map((section) => (
+                                        <Typography key={section}>
+                                            <Button
+                                                variant={activeSection === section ? "contained" : "outlined"}
+                                                sx={{
+                                                    width: "100%",
+                                                    marginBottom: 0.5,
+                                                    color:
+                                                        theme === "dark"
+                                                            ? activeSection === section
+                                                                ? "#333333"
+                                                                : "#ffffff"
+                                                            : activeSection === section
+                                                                ? "#ffffff"
+                                                                : "#333333",
+                                                    backgroundColor:
+                                                        theme === "dark"
+                                                            ? activeSection === section
+                                                                ? "#ffffff"
+                                                                : "#333333"
+                                                            : activeSection === section
+                                                                ? "#333333"
+                                                                : "#ffffff",
+                                                    border: `1px solid ${theme === "dark" || activeSection === section
+                                                        ? "#ffffff"
+                                                        : "#333333"
+                                                        }`,
+                                                    "&:hover": {
                                                         backgroundColor:
                                                             theme === "dark"
                                                                 ? activeSection === section
-                                                                    ? "#ffffff"
-                                                                    : "#333333"
+                                                                    ? "#e0e0e0"
+                                                                    : "#555555"
                                                                 : activeSection === section
-                                                                    ? "#333333"
-                                                                    : "#ffffff",
-                                                        border: `1px solid ${theme === "dark" || activeSection === section
-                                                            ? "#ffffff"
-                                                            : "#333333"
-                                                            }`,
-                                                        "&:hover": {
-                                                            backgroundColor:
-                                                                theme === "dark"
-                                                                    ? activeSection === section
-                                                                        ? "#e0e0e0"
-                                                                        : "#555555"
-                                                                    : activeSection === section
-                                                                        ? "#222222"
-                                                                        : "#aaaaaa",
-                                                        },
-                                                    }}
-                                                    onClick={() => handleScrollTo(section)}
-                                                >
-                                                    {section}
-                                                </Button>
-                                            </Typography>
-                                        ))}
-                                    </AccordionDetails>
+                                                                    ? "#222222"
+                                                                    : "#aaaaaa",
+                                                    },
+                                                }}
+                                                onClick={() => handleScrollTo(section)}
+                                            >
+                                                {section}
+                                            </Button>
+                                        </Typography>
+                                    ))}
                                 </AccordionDetails>
-                            </Accordion>
-                        </Paper>
-
-
+                            </AccordionDetails>
+                        </Accordion>
                     </Grid>
 
                     {/* 右側內容 */}
@@ -505,18 +512,37 @@ const About = () => {
                                 /> 教育學歷
                             </Typography>
                             <ul>
-                                <a href="https://www.cs.nycu.edu.tw/intro/organization/cybersecurity" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
-                                    <li> 2025 ~ 2027 | 國立陽明交通大學 數據科學與工程研究所 </li>
-                                </a>
-                                <a href="https://ccee.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
-                                    <li> 2021 ~ 2025 | 國立高雄科技大學 電腦與通訊工程系</li>
-                                </a>
-                                <a href="https://w3.sivs.chc.edu.tw/files/13-1000-15978.php" target="_blank" rel="noopener noreferrer"
-                                    style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
-                                    <li>2019 ~ 2021 | 國立彰師附工 控制科 </li>
-                                </a>
+                                <Typography variant="body1" gutterBottom>
+                                    <li>
+                                        <Tooltip title={(language === "zh" ? "進入官網" : "Go to the official website")} placement="right">
+                                            <a href="https://www.cs.nycu.edu.tw/intro/organization/cybersecurity" target="_blank" rel="noopener noreferrer"
+                                                style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
+                                                2025 ~ 2027 | 國立陽明交通大學 數據科學與工程研究所
+                                            </a>
+                                        </Tooltip>
+                                    </li>
+                                </Typography>
+                                <Typography variant="body1" gutterBottom>
+                                    <li>
+                                        <Tooltip title={(language === "zh" ? "進入官網" : "Go to the official website")} placement="right">
+                                            <a href="https://ccee.nkust.edu.tw/" target="_blank" rel="noopener noreferrer"
+                                                style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
+                                                2021 ~ 2025 | 國立高雄科技大學 電腦與通訊工程系
+                                            </a>
+                                        </Tooltip>
+                                    </li>
+                                </Typography>
+
+                                <Typography variant="body1" gutterBottom>
+                                    <li>
+                                        <Tooltip title={(language === "zh" ? "進入官網" : "Go to the official website")} placement="right">
+                                            <a href="https://w3.sivs.chc.edu.tw/files/13-1000-15978.php" target="_blank" rel="noopener noreferrer"
+                                                style={{ textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
+                                                2019 ~ 2021 | 國立彰師附工 控制科
+                                            </a>
+                                        </Tooltip>
+                                    </li>
+                                </Typography>
                             </ul>
                         </Paper>
 
@@ -540,48 +566,40 @@ const About = () => {
                                     }}
                                 /> 教學經驗
                             </Typography>
-                            <Box sx={{ marginBottom: 2 }}>
-                                <Typography variant="body1" gutterBottom>
-                                    <strong>暑期教師 [小學]</strong>
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>工作時間：</strong>2024年7月 - 2024年8月
-                                </Typography>
-                                <Typography variant="body2" >
-                                    <strong>工作內容：</strong>教授講解國小課程內容，陪同學生寫作業。
-                                </Typography>
-                                <Typography variant="body2" >
-                                    <strong>工作資料:</strong>
-                                </Typography>
-                            </Box>
-                            <Box sx={{ marginBottom: 2 }}>
-                                <Typography variant="body1" gutterBottom>
-                                    <strong>機率助教 [大學]</strong>
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>工作時間：</strong>2024年2月 - 2024年6月
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>工作內容:</strong> 協助教授講解機率課程內容，解答學生疑問，並提供課後輔導。
-                                </Typography>
-                                <Typography variant="body2" >
-                                    <strong>工作資料:</strong>
-                                </Typography>
-                            </Box>
-                            <Box sx={{ marginBottom: 2 }}>
-                                <Typography variant="body1" gutterBottom>
-                                    <strong>線性代數助教 [大學]</strong>
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>工作時間：</strong>2023年9月 - 2024年1月
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>工作內容:</strong> 協助教授講解線性代數課程內容，解答學生疑問，並提供課後輔導。
-                                </Typography>
-                                <Typography variant="body2" >
-                                    <strong>工作資料:</strong>
-                                </Typography>
-                            </Box>
+                            <ul>
+                                {[
+                                    { id: 1, date: "2024/7 ~ 2024/8", title: "暑期教師", titleen: "Summer Teacher", level: "小學" },
+                                    { id: 2, date: "2024/2 ~ 2024/6", title: "機率助教", titleen: "Chance Teaching Assistant", level: "大學", },
+                                    { id: 3, date: "2023/9 ~ 2024/1", title: "線性代數助教", titleen: "Teaching assistant in linear algebra", level: "大學" },
+                                ].map((item) => (
+                                    <Box
+                                        key={item.id}
+                                        sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2px" }}
+                                    >
+                                        <Typography variant="body1" >
+                                            <li>{item.date} | {item.title} - {item.level}</li>
+                                        </Typography>
+                                        <Tooltip title={(language === "zh" ? item.title : item.titleen)} placement="left">
+                                            <Button
+                                                variant="outlined"
+                                                size="small"
+                                                onClick={() => handleTeachButtonClick(item.id)}
+                                                sx={{
+                                                    color: "#28a745", // 綠色文字
+                                                    borderColor: "#28a745", // 綠色邊框
+                                                    "&:hover": {
+                                                        backgroundColor: "rgba(40, 167, 69, 0.1)", // 綠色背景 (淡淡的)
+                                                        borderColor: "#218838", // 深綠色邊框
+                                                    },
+                                                }}
+                                            >
+                                                教學資料
+                                            </Button>
+                                        </Tooltip>
+                                    </Box>
+                                ))}
+                            </ul>
+
 
                         </Paper>
 
@@ -605,17 +623,42 @@ const About = () => {
                                     }}
                                 /> 專案計畫
                             </Typography>
-                            <Box sx={{ marginBottom: 2 }}>
-                                <Typography variant="h6">test</Typography>
-                                <Typography variant="subtitle1">January 1880 - July 1890</Typography>
-                                <Typography variant="body1" gutterBottom>
-                                    <strong>Artist</strong>
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>Summary:</strong> Independent artist specializing in emotive, vibrant works.
-                                </Typography>
-                            </Box>
+                            <ul>
+                                {[
+                                    { id: 1, date: "2024/7 ~ 2024/8", title: "專題", level: "nan", description: "test1" },
+                                    { id: 2, date: "2024/2 ~ 2024/6", title: "課堂專題1", level: "大學", description: "test2" },
+                                    { id: 3, date: "2023/9 ~ 2024/1", title: "課堂專題2", level: "大學", description: "test3" },
+                                ].map((item) => (
+                                    <>
+                                        <Box
+                                            key={item.id}
+                                            sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2px" }}
+                                        >
+                                            <Typography variant="body1" >
+                                                <li>{item.date} | {item.title} - {item.level}</li>
+                                            </Typography>
+                                            <Button
+                                                variant="outlined"
+                                                size="small"
+                                                onClick={() => handleProjectButtonClick(item.id)}
+                                                sx={{
+                                                    color: "#28a745", // 綠色文字
+                                                    borderColor: "#28a745", // 綠色邊框
+                                                    "&:hover": {
+                                                        backgroundColor: "rgba(40, 167, 69, 0.1)", // 綠色背景 (淡淡的)
+                                                        borderColor: "#218838", // 深綠色邊框
+                                                    },
+                                                }}
+                                            >
+                                                相關資料
+                                            </Button>
+                                        </Box>
+                                        <Box><Typography variant="body1" > {item.description}</Typography></Box>
+                                    </>
+                                ))}
+                            </ul>
                         </Paper>
+
                         <Paper
                             elevation={(theme === 'light' ? 1 : 12)}
                             sx={{
@@ -644,17 +687,24 @@ const About = () => {
                                     <ButtonGroup variant="text">
                                         <Button
                                             onClick={() => setShowUndergrad(true)}
-                                            color={showUndergrad ? "primary" : "inherit"}
+                                            sx={{
+                                                color: showUndergrad ? "#28a745" : "inherit", // 選中時變綠色
+                                                "&:hover": { color: "#218838" }, // 滑鼠懸停時變深綠色
+                                            }}
                                         >
                                             大學
                                         </Button>
                                         <Button
                                             onClick={() => setShowUndergrad(false)}
-                                            color={!showUndergrad ? "primary" : "inherit"}
+                                            sx={{
+                                                color: !showUndergrad ? "#28a745" : "inherit", // 選中時變綠色
+                                                "&:hover": { color: "#218838" }, // 滑鼠懸停時變深綠色
+                                            }}
                                         >
                                             研究所
                                         </Button>
                                     </ButtonGroup>
+
                                 </Grid>
                             </Grid>
                             <br />

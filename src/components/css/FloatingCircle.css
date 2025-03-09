@@ -45,9 +45,6 @@
 }
 
 
-
-
-
 /* 展開圓圈樣式 */
 .expanded-circles {
     display: flex;
@@ -86,32 +83,27 @@
 
 /* Icon 樣式 */
 .icon {
-    font-size: 200%;
     /* 根據需求調整圖示大小 */
     color: #fff;
     /* 設置圖示顏色 */
 }
 
 .icon-LightModeIcon {
-    font-size: 200%;
     /* 根據需求調整圖示大小 */
     color: #ffea008b;
 }
 
 .icon-NightlightIcon {
-    font-size: 200%;
     /* 根據需求調整圖示大小 */
     color: #ffea008b;
 }
 
 .icon-AbcIconIcon {
-    font-size: 200%;
     /* 根據需求調整圖示大小 */
     color: #ffea008b;
 }
 
 .icon-GTranslateIcon {
-    font-size: 200%;
     /* 根據需求調整圖示大小 */
     color: #ffea008b;
 }

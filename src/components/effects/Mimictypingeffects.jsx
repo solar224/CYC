@@ -37,6 +37,6 @@ const TypingEffect = ({ text, speed, variant }) => {
         }
     }, [index, text, speed]); // 監聽 index 變化來觸發下一個字元
 
-    return <Typography variant={variant}>{displayedText}<span style={{ color: "#f39212" }}>{showCursor ? "｜" : ""}</span> </Typography>;
+    return <Typography variant={variant}>{displayedText}<span style={{ color: "#f39212", userSelect: "none" }}>{showCursor ? "｜" : ""}</span> </Typography>;
 };
 export default TypingEffect;
