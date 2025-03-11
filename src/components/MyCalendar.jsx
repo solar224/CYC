@@ -19,7 +19,8 @@ const MyCalendar = () => {
                 borderRadius: 2,
                 backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
                 overflow: "hidden",
-                position: "relative" // 讓 Skeleton 可以絕對定位覆蓋 iframe
+                position: "relative", // 讓 Skeleton 可以絕對定位覆蓋 iframe
+                p: 0
             }}
         >
             {/* iframe 行事曆 */}
@@ -55,12 +56,14 @@ const MyCalendar = () => {
                         pointerEvents: "none" // 避免影響 iframe 操作
                     }}
                 >
-                    <CardContent sx={{ width: "95%" }}>
+                    <CardContent sx={{ width: "98%", marginTop: '0px' }}>
                         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                             <Skeleton animation="wave" variant="text" height={60} width="25%" sx={{ bgcolor: theme === "dark" ? "grey.800" : undefined }} />
                             <Skeleton animation="wave" variant="text" height={60} width="12%" sx={{ bgcolor: theme === "dark" ? "grey.800" : undefined }} />
                         </Box>
-                        <Skeleton animation="wave" variant="rectangular" height={500} sx={{ bgcolor: theme === "dark" ? "grey.800" : undefined }} />
+                        <Skeleton animation="wave" variant="rectangular" height={465} sx={{ bgcolor: theme === "dark" ? "grey.800" : undefined }} />
+                        <Skeleton animation="wave" variant="text" height={70} sx={{ bgcolor: theme === "dark" ? "grey.800" : undefined }} />
+
                     </CardContent>
                 </Box>
             )}
