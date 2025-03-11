@@ -285,14 +285,13 @@ const About = () => {
         ],
     };
     return (
-        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', my: 4 }}>
             {/* 個人介紹 */}
             <ThemeProvider theme={ThemeProviderTheme}>
                 <Paper
                     id="關於我"
                     elevation={(theme === 'light' ? 3 : 3)}
                     onMouseEnter={() => setActiveSection("關於我")}
-
                     sx={{ width: "100%", my: 4, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}
                 >
                     <Grid
@@ -344,13 +343,16 @@ const About = () => {
                                     display: "inline-block", // 避免 Typography 收縮
                                     marginBottom: 2,
                                 }}>
+                                我是詹宇宸，大學就讀國立高雄科技大學 (NKUST) 的電腦與通訊工程系 (CCE)。
+                                在學期間有幸接觸到競程，在教授與學長的指導下多次參加程式相關競賽。
+                                除了競程，我對於電子通訊技術也非常有興趣~歡迎指導交流~
+                                我的研究興趣：
                                 <Mimictypingeffects
-                                    text="我是詹宇宸，大學就讀國立高雄科技大學 (NKUST) 的電腦與通訊工程系 (CCE)。
-                                    在學期間有幸接觸到競程，在教授與學長的指導下多次參加程式相關競賽。
-                                    除了競程，我對於電子通訊技術也非常有興趣~歡迎指導交流~
-                                    我的研究興趣：資料分析、程式撰寫、通訊設計、電路設計!"
-                                    speed={0}
-                                    variant="body" />
+                                    textList={["資料分析", "程式撰寫", "通訊設計", "電路設計"]}
+                                    speed={50}
+                                    variant="body"
+                                    repeat={1}
+                                />
                             </Typography>
                             <Grid container sx={{ width: "100%" }} justifyContent="space-between">
                                 <Grid item xs={3} md={3} display="flex" flexDirection="column" alignItems="center" >

@@ -1,56 +1,70 @@
-import React, { useState } from "react";
-import FullCalendar from "@fullcalendar/react"; // 主組件
-import dayGridPlugin from "@fullcalendar/daygrid"; // 月視圖
-import timeGridPlugin from "@fullcalendar/timegrid"; // 時間軸視圖
-import interactionPlugin from "@fullcalendar/interaction"; // 點擊與拖放互動
+import React, { useState, useContext } from "react";
+import { Card, CardContent, Skeleton, Box } from "@mui/material";
+import { ThemeContext } from "../App"; // 確保你的 ThemeContext 正確導入
 
 const MyCalendar = () => {
-    const [events, setEvents] = useState([
-        // 全天事件
-        { title: "公司年度聚餐", start: "2025-01-15", allDay: true },
+    const { theme } = useContext(ThemeContext); // 取得當前主題
+    const [loading, setLoading] = useState(true); // 控制載入狀態
 
-        // 特定時間段事件
-        { title: "產品會議", start: "2025-01-20T10:00:00", end: "2025-01-20T11:30:00" },
-        { title: "運動時間", start: "2025-01-20T18:00:00", end: "2025-01-20T19:00:00" },
-
-        // 不同背景顏色（自定義分類）
-        { title: "專案截止日期", start: "2025-01-22", allDay: true, color: "red" },
-        { title: "線上會議", start: "2025-01-23T14:00:00", end: "2025-01-23T15:30:00", color: "green" },
-
-        // 跨多日的事件
-        { title: "出差（上海）", start: "2025-01-25", end: "2025-01-28", allDay: true },
-
-        // 重複事件（模擬每周會議）
-        { title: "每周團隊會議", start: "2025-01-16T09:00:00", end: "2025-01-16T10:00:00", daysOfWeek: [4] },
-
-        // 個人備註
-        { title: "牙醫預約", start: "2025-01-19T15:00:00", end: "2025-01-19T15:30:00", color: "blue" },
-
-        // 帶有說明的事件
-        { title: "年度規劃報告", start: "2025-01-30T09:00:00", end: "2025-01-30T11:00:00", description: "提交年度規劃報告" },
-
-        // 無特定結束時間的事件
-        { title: "閱讀時間", start: "2025-01-20T20:00:00" },
-    ]);
-
-
-    const handleDateClick = (info) => {
-        alert(`您點擊了日期：${info.dateStr}`);
+    // 當 iframe 載入完成，觸發 Skeleton 消失
+    const handleIframeLoad = () => {
+        setLoading(false);
     };
+
     return (
-        <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth" // 初始視圖 (月視圖)
-            events={events} // 傳遞事件
-            editable={true} // 啟用事件的拖放編輯
-            selectable={true} // 啟用點擊選取
-            dateClick={handleDateClick} // 日期點擊事件
-            headerToolbar={{
-                left: "prev,next today", // 左側按鈕
-                center: "title", // 中間標題
-                right: "dayGridMonth,timeGridWeek,timeGridDay", // 右側按鈕
+        <Card
+            sx={{
+                width: "100%",
+                height: "600px",
+                borderRadius: 2,
+                backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
+                overflow: "hidden",
+                position: "relative" // 讓 Skeleton 可以絕對定位覆蓋 iframe
             }}
-        />
+        >
+            {/* iframe 行事曆 */}
+            <iframe
+                src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FTaipei&showPrint=0&hl=zh_TW&showCalendars=0&src=YzExMDExMDE1N0Bua3VzdC5lZHUudHc&color=%23039BE5"
+                style={{
+                    width: "100%",
+                    height: "600px",
+                    borderRadius: "10px",
+                    filter: theme === "dark" ? "invert(1) hue-rotate(180deg)" : "none"
+                }}
+                frameBorder="0"
+                scrolling="no"
+                onLoad={handleIframeLoad} // 觸發載入完成
+            />
+
+            {/* Skeleton 加載動畫，疊加在 `iframe` 上 */}
+            {loading && (
+                <Box
+                    sx={{
+                        position: "absolute", // 完全覆蓋 iframe
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        transition: "opacity 0.5s ease-out", // 添加淡出效果
+                        opacity: loading ? 1 : 0, // 讓 Skeleton 淡出
+                        pointerEvents: "none" // 避免影響 iframe 操作
+                    }}
+                >
+                    <CardContent sx={{ width: "95%" }}>
+                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                            <Skeleton animation="wave" variant="text" height={60} width="25%" sx={{ bgcolor: theme === "dark" ? "grey.800" : undefined }} />
+                            <Skeleton animation="wave" variant="text" height={60} width="12%" sx={{ bgcolor: theme === "dark" ? "grey.800" : undefined }} />
+                        </Box>
+                        <Skeleton animation="wave" variant="rectangular" height={500} sx={{ bgcolor: theme === "dark" ? "grey.800" : undefined }} />
+                    </CardContent>
+                </Box>
+            )}
+        </Card>
     );
 };
 

@@ -7,9 +7,7 @@ const Contactme = () => {
             className="Contactme"
             style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
         >
-            <main style={{ minHeight: "400px", flexGrow: 1 }}>
-                <Contact />
-            </main>
+            <Contact />
         </div>
     );
 };

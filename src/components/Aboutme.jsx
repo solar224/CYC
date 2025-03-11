@@ -7,11 +7,9 @@ const Aboutme = () => {
             className="Aboutme"
             style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
         >
-            <main style={{ minHeight: "400px", flexGrow: 1 }}>
-                <About />
-                {/* <Projects />
+            <About />
+            {/* <Projects />
                 <Contact /> */}
-            </main>
         </div>
     );
 };

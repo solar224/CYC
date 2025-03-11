@@ -1,42 +1,66 @@
-//***********************************************************************
-// Header: 
-// TypingEffect Component - Simulates a typing effect for displaying text character by character.
-//
-// Parameters:
-// @param {string} text - The full text to be displayed with the typing effect.
-// @param {number} [speed=100] - The interval speed (in milliseconds) for typing each character.
-// @param {string} [variant="body1"] - The typography variant for styling the displayed text.
-//
-// Usage Example:
-// <TypingEffect text="Hello, world!" speed={50} variant="h6" />
-//
-//***********************************************************************
+/**
+ * AnimatedTypingText - Simulates a typing effect for displaying text character by character.
+ *
+ * @param {Array<string>} phrases - The list of texts to be displayed with the typing effect.
+ * @param {number} [speed=100] - The interval speed (in milliseconds) for typing each character.
+ * @param {string} [variant="body1"] - The typography variant for styling the displayed text.
+ * @param {boolean} [loop=true] - If true, the text cycles through continuously; if false, it plays once.
+ * @returns {JSX.Element} A React component that animates typing effect.
+ *
+ * @example
+ * <AnimatedTypingText phrases={["Hello", "Welcome", "Enjoy!"]} speed={50} variant="h6" loop={false} />
+ */
+
 import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 
-
-const TypingEffect = ({ text, speed, variant }) => {
-    const [displayedText, setDisplayedText] = useState(""); // 初始為空字串
-    const [index, setIndex] = useState(0); // 追蹤目前的字元索引
+const TypingEffect = ({ textList, speed = 100, variant = "h6", repeat = 1 }) => {
+    const [textIndex, setTextIndex] = useState(0); // 追蹤目前顯示的文字
+    const [displayedText, setDisplayedText] = useState(""); // 當前顯示的字
+    const [index, setIndex] = useState(0); // 追蹤打字進度
     const [showCursor, setShowCursor] = useState(true);
+    const [completed, setCompleted] = useState(false); // 控制非循環模式下的結束狀態
+
     useEffect(() => {
-        const interval = setInterval(() => {
-            setShowCursor((prev) => !prev); // 每隔500ms 切換游標顯示/隱藏
+        // 控制光標閃爍
+        const cursorInterval = setInterval(() => {
+            setShowCursor((prev) => !prev);
         }, 500);
-        return () => clearInterval(interval); // 清除計時器避免記憶體洩漏
+        return () => clearInterval(cursorInterval);
     }, []);
 
     useEffect(() => {
-        if (index < text.length) {
-            const randomSpeed = Math.floor(Math.random() * 50) + speed; // 隨機 50ms ~ 150ms
-            const timeout = setTimeout(() => {
-                setDisplayedText((prev) => prev + text[index]); // 遞增顯示的文字
-                setIndex((prevIndex) => prevIndex + 1); // 更新索引
-            }, randomSpeed);
-            return () => clearTimeout(timeout); // 清除 timeout 避免重複觸發
-        }
-    }, [index, text, speed]); // 監聽 index 變化來觸發下一個字元
+        if (completed) return; // 如果不循環，打完一次就停住
 
-    return <Typography variant={variant}>{displayedText}<span style={{ color: "#f39212", userSelect: "none" }}>{showCursor ? "｜" : ""}</span> </Typography>;
+        if (index < textList[textIndex].length) {
+            // 隨機打字速度 (speed ± 50ms)
+            const randomSpeed = Math.floor(Math.random() * 50) + speed;
+            const timeout = setTimeout(() => {
+                setDisplayedText((prev) => prev + textList[textIndex][index]); // 逐字顯示
+                setIndex((prevIndex) => prevIndex + 1);
+            }, randomSpeed);
+            return () => clearTimeout(timeout);
+        } else {
+            // 完成後等待 1.5 秒再切換下一個字
+            const waitTimeout = setTimeout(() => {
+                if (repeat === 0 && textIndex === textList.length - 1) {
+                    setCompleted(true); // 停止變更
+                    return;
+                }
+                setIndex(0); // 重置字元索引
+                setDisplayedText(""); // 清空顯示文字
+                setTextIndex((prev) => (prev + 1) % textList.length); // 切換下一個字
+            }, 1500);
+            return () => clearTimeout(waitTimeout);
+        }
+    }, [index, textIndex, speed, repeat, completed]);
+
+    return (
+        <Typography variant={variant}>
+            {displayedText}
+            <span style={{ color: "#f39212", userSelect: "none" }}>{showCursor ? "｜" : ""}</span>
+        </Typography>
+    );
 };
+
 export default TypingEffect;
