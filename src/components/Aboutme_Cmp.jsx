@@ -43,7 +43,6 @@ import {
 } from "recharts";
 
 // 引入圖片
-import ycChanImage from "../images/YC-Chan_image.jpg";
 import exploration from "../images/exploration.png";
 import cpu from "../images/cpu.png";
 import communication from "../images/communication.png";
@@ -307,7 +306,7 @@ const About = () => {
                         >
                             <Tooltip title={(language === "zh" ? "AI 生圖" : "AI Generating Graphs")} placement="bottom">
                                 <img
-                                    src={ycChanImage}
+                                    src={`${process.env.PUBLIC_URL}/YC-Chan_image.jpg`}
                                     alt="詹宇宸"
                                     style={{
                                         maxWidth: "200px", // 最大寬度限制
