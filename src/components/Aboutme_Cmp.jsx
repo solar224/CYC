@@ -53,7 +53,7 @@ import score from "../images/score.png";
 import algorithms from "../images/algorithms.png";
 
 // 動態
-import Mimictypingeffects from "./effects/Mimictypingeffects"
+import Mimictypingeffects from "./effects/Mimictypingeffects";
 
 
 
@@ -307,6 +307,7 @@ const About = () => {
                             <Tooltip title={(language === "zh" ? "AI 生圖" : "AI Generating Graphs")} placement="bottom">
                                 <img
                                     src={`${process.env.PUBLIC_URL}/YC-Chan_image.jpg`}
+                                    // 判斷是否要加入
                                     alt="詹宇宸"
                                     style={{
                                         maxWidth: "200px", // 最大寬度限制

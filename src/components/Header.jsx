@@ -56,7 +56,7 @@ function ElevationScroll(props) {
 
     return React.cloneElement(children, {
         sx: {
-            backgroundColor: "#24292e",
+            backgroundColor: "#222222", //控制 Header 背景顏色
             opacity: trigger ? 0.85 : 1, // 根據滾動位置改變透明度
             transition: "opacity 0.3s", // 平滑過渡效果
         },
@@ -328,10 +328,11 @@ const Header = () => {
     useEffect(() => {
         setActivePage(location.pathname);
     }, [location.pathname]);
+
     return (
         <div >
             <ElevationScroll>
-                <AppBar position="fixed">
+                <AppBar position="fixed" >
                     <Container maxWidth='1'>
                         <Toolbar >
                             {isMobile && (
@@ -374,52 +375,61 @@ const Header = () => {
                                         component={Link}
                                         to=""
                                         sx={{
+                                            color: activePage === "/" ? "white" : "rgba(255, 255, 255, 0.8)",
                                             textTransform: "none",
-                                            minWidth: 70,         // 固定最小寬度
-                                            // color: activePage === "/" ? "yellow" : "white",
-                                            fontWeight: activePage === "/" ? "bold" : "",
+                                            minWidth: 70,
+                                            "&:hover": {
+                                                bgcolor: "rgba(255,255,255,0.1)",
+                                            },
                                         }}
                                     >
                                         首頁
                                     </Button>
+
                                     <Button
                                         color="inherit"
                                         variant={activePage === "/about-me" ? "outlined" : "text"}
-
                                         component={Link}
                                         to="/about-me"
                                         sx={{
+                                            color: activePage === "/about-me" ? "white" : "rgba(255, 255, 255, 0.8)",
                                             textTransform: "none",
-                                            minWidth: 75,         // 固定最小寬度
-                                            // color: activePage === "/about-me" ? "yellow" : "white",
-                                            fontWeight: activePage === "/about-me" ? "bold" : "",
+                                            minWidth: 75,
+                                            "&:hover": {
+                                                bgcolor: "rgba(255,255,255,0.1)",
+                                            },
                                         }}
                                     >
                                         關於我
                                     </Button>
+
                                     <Button
                                         color="inherit"
                                         variant={activePage === "/contact-me" ? "outlined" : "text"}
-
                                         component={Link}
                                         to="/contact-me"
                                         sx={{
+                                            color: activePage === "/contact-me" ? "white" : "rgba(255, 255, 255, 0.8)",
                                             textTransform: "none",
-                                            minWidth: 70,         // 固定最小寬度
-                                            // color: activePage === "/contact-me" ? "yellow" : "white",
-                                            fontWeight: activePage === "/contact-me" ? "bold" : "",
+                                            minWidth: 70,
+                                            "&:hover": {
+                                                bgcolor: "rgba(255,255,255,0.1)",
+                                            },
                                         }}
                                     >
                                         聯絡
                                     </Button>
+
                                     <Button
                                         color="inherit"
                                         variant={!(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "outlined" : "text"}
-
                                         sx={{
-                                            minWidth: 85,         // 固定最小寬度
-                                            textTransform: 'none',
-                                            fontWeight: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "bold" : "",
+                                            color: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "white" : "rgba(255, 255, 255, 0.8)",
+                                            minWidth: 85,
+                                            textTransform: "none",
+                                            "&:hover": {
+                                                bgcolor: "rgba(255,255,255,0.1)",
+                                            },
                                         }}
                                         aria-controls={anchorElopen ? 'contact-menu' : undefined}
                                         aria-haspopup="true"
@@ -456,14 +466,53 @@ const Header = () => {
                                             }
                                         }}
                                     >
-                                        <MenuItem onClick={handleClose} component={Link} to="/school-curriculum">
-                                            學校課程
+                                        <MenuItem
+                                            sx={{
+                                                mx: 1, // 左右增加margin
+                                                borderRadius: 1, // 增加圓角
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 1, // 調整圖示與文字的間隔
+                                                "&:hover": {
+                                                    backgroundColor: theme === "light" ? "rgba(3, 3, 3, 0.1)" : "rgba(255,255,255,0.1)",
+                                                },
+                                            }}
+                                            onClick={handleClose}
+                                            component={Link}
+                                            to="/school-curriculum">
+                                            <SchoolIcon />學校課程
                                         </MenuItem>
-                                        <MenuItem onClick={handleClose} component={Link} to="/procedural-exercises">
-                                            程式練習
+                                        <MenuItem
+                                            sx={{
+                                                mx: 1, // 左右增加margin
+                                                borderRadius: 1, // 增加圓角
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 1, // 調整圖示與文字的間隔
+                                                "&:hover": {
+                                                    backgroundColor: theme === "light" ? "rgba(3, 3, 3, 0.1)" : "rgba(255,255,255,0.1)",
+                                                },
+                                            }}
+                                            onClick={handleClose}
+                                            component={Link}
+                                            to="/procedural-exercises">
+                                            <CodeIcon />程式練習
                                         </MenuItem>
-                                        <MenuItem onClick={handleClose} component={Link} to="/english-practice">
-                                            英文練習
+                                        <MenuItem
+                                            sx={{
+                                                mx: 1, // 左右增加margin
+                                                borderRadius: 1, // 增加圓角
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 1, // 調整圖示與文字的間隔
+                                                "&:hover": {
+                                                    backgroundColor: theme === "light" ? "rgba(3, 3, 3, 0.1)" : "rgba(255,255,255,0.1)",
+                                                },
+                                            }}
+                                            onClick={handleClose}
+                                            component={Link}
+                                            to="/english-practice">
+                                            <LanguageIcon />英文練習
                                         </MenuItem>
 
 
@@ -474,14 +523,28 @@ const Header = () => {
                                         options={options}
                                         sx={{
                                             width: 300,
-                                            ".MuiInputBase-input": {
-                                                color: "white", // 修改輸入框文字顏色為白色
+                                            "& .MuiOutlinedInput-root": {
+                                                // "& fieldset": {
+                                                //     borderColor: "white",
+                                                // },
+                                                "&:hover fieldset": {
+                                                    borderColor: "white",
+                                                },
+                                                "&.Mui-focused fieldset": {
+                                                    borderColor: "white",
+                                                },
                                             },
-                                            ".MuiInputLabel-root": {
-                                                color: "white", // 修改標籤顏色為白色
+                                            "& .MuiInputBase-input": {
+                                                color: "white",
                                             },
-                                            "&:hover .MuiOutlinedInput-notchedOutline": {
-                                                borderColor: "white", // 滑鼠懸停時外框保持白色
+                                            "& .MuiInputLabel-root": {
+                                                color: "white", // 未上移時半透明白色
+                                            },
+                                            "& .MuiInputLabel-root.Mui-focused": {
+                                                color: "white", // 聚焦時label白色
+                                            },
+                                            "& .MuiInputLabel-root.MuiInputLabel-shrink": {
+                                                color: "rgba(255,255,255,0.7)", // 上移後固定白色
                                             },
                                         }}
                                         renderInput={(params) => (
@@ -504,7 +567,8 @@ const Header = () => {
                                             overflow: "hidden", // 確保圖片不超出邊框
                                             backgroundColor: "gray", // 圓框背景顏色（無圖片時）
                                         }}
-                                    ><Tooltip title={(language === "zh" ? "詹宇宸" : "YC-chen")} placement="bottom">
+                                    >
+                                        <Tooltip title={(language === "zh" ? "詹宇宸" : "YC-chen")} placement="bottom">
                                             <img
                                                 src={ycChanImage} // 自定義圖片 URL
                                                 style={{
