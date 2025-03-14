@@ -67,7 +67,7 @@ const Header = () => {
     const { theme } = useContext(ThemeContext);
     const { language } = useContext(LanguageContext); // 主題狀態
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const isMobile = useMediaQuery("(max-width: 920px)");
+    const isMobile = useMediaQuery("(max-width: 965px)");
     const handleClickAway = () => setSearchopen(false);
     const handleFocus = () => setSearchopen(true);
     const [Searchopen, setSearchopen] = useState(false);
@@ -348,24 +348,45 @@ const Header = () => {
                                     {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                                 </IconButton>
                             )}
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, flexGrow: 1 }}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-start',
+                                    gap: 2,
+                                    flexGrow: 1,
+                                }}
+                            >
                                 <Typography
                                     variant="h6"
                                     component="div"
                                     sx={{
-                                        fontWeight: "bold",
-                                        textAlign: isMobile ? "center" : "left",
+                                        fontWeight: 'bold',
+                                        textAlign: isMobile ? 'center' : 'left',
                                     }}
                                 >
                                     <a
                                         href="https://solar224.github.io/CYC/#/"
-                                        style={{ textDecoration: "none", color: "inherit" }}
+                                        style={{
+                                            textDecoration: 'none',
+                                            color: 'inherit',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        }}
                                     >
+                                        <img
+                                            src={`${process.env.PUBLIC_URL}/logo.png`}
+                                            alt="詹宇宸"
+                                            style={{
+                                                maxWidth: '50px',
+                                                width: '50px',
+                                                borderRadius: "10px"
+
+                                            }}
+                                        />
                                         YC-Chan
                                     </a>
                                 </Typography>
-                                {/* 網址 -縮放未處理*/}
-                                <DynamicBreadcrumbs activePage={activePage} />
                             </Box>
                             {!isMobile && (
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -589,6 +610,24 @@ const Header = () => {
                 </AppBar>
             </ElevationScroll>
             {/* 手機 */}
+            <div>
+                {/* 你的頁面其他內容 */}
+
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 70,
+                        left: 5,
+                        marginRight: 5,
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        padding: '4px 8px',
+                        borderRadius: "10px",
+                        zIndex: 1,
+                    }}
+                >
+                    <DynamicBreadcrumbs activePage={activePage} />
+                </div>
+            </div>
             <Drawer
                 disableScrollLock
                 anchor="left"

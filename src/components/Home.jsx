@@ -45,11 +45,12 @@ function Home() {
     };
 
     return (
-        <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", my: 4 }}>
-            <Grid container spacing={3}>
+        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', my: 4 }}>
+
+            <Grid container spacing={3} sx={{ my: 4 }}>
                 {/* 標題與描述 */}
                 <Grid item xs={12}>
-                    <Typography variant="h4" sx={{ textAlign: "left", mb: 2, color: themeObject.palette.text.primary }}>
+                    <Typography variant="h4" sx={{ textAlign: "left", color: themeObject.palette.text.primary }}>
                         {language === "zh" ? "新聞" : "News"}
                     </Typography>
                     <Typography variant="subtitle1" color={color}>

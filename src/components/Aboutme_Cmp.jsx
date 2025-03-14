@@ -307,7 +307,6 @@ const About = () => {
                             <Tooltip title={(language === "zh" ? "AI 生圖" : "AI Generating Graphs")} placement="bottom">
                                 <img
                                     src={`${process.env.PUBLIC_URL}/YC-Chan_image.jpg`}
-                                    // 判斷是否要加入
                                     alt="詹宇宸"
                                     style={{
                                         maxWidth: "200px", // 最大寬度限制
@@ -423,7 +422,7 @@ const About = () => {
                             defaultExpanded
                             sx={{
                                 position: "sticky", // 固定位置
-                                top: 80,           // 距離視窗頂部 10px，可根據需求調整
+                                top: 70,           // 距離視窗頂部
                                 // zIndex: 1,         // 確保優先於其他元素顯示
                                 backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(20, 20, 20, 0.50)",
                             }}>
