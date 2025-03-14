@@ -619,7 +619,7 @@ const Header = () => {
                         top: 70,
                         left: 5,
                         marginRight: 5,
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        backgroundColor: theme === "dark" ? 'rgba(255, 255, 255, 0.1)' : 'rgba(243, 146, 18, 0.3)',
                         padding: '4px 8px',
                         borderRadius: "10px",
                         zIndex: 1,

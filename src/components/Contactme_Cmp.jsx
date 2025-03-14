@@ -15,7 +15,7 @@ const Contact = () => {
         <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
 
             <ThemeProvider theme={themeObject}> {/* 將 ThemeProvider 包裹住組件 */}
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{ my: 4 }}>
                     <ThemeProvider theme={ThemeProviderTheme}>
                         {/* 左邊日曆區域 */}
                         <Grid item xs={12} sm={12} md={12} >

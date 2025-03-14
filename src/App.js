@@ -18,7 +18,7 @@ export const ThemeContext = createContext();
 export const LanguageContext = createContext();
 
 export default function App() {
-  const [theme, setTheme] = useState(() => { return localStorage.getItem('theme') || "light" }); // 主題狀態
+  const [theme, setTheme] = useState(() => { return localStorage.getItem('theme') || "dark" }); // 主題狀態
   const [language, setLanguage] = useState(() => { return localStorage.getItem('language') || "zh" }); // 語言狀態
 
   const toggleTheme = () => {

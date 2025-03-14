@@ -45,9 +45,9 @@ function Home() {
     };
 
     return (
-        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', my: 4 }}>
+        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
 
-            <Grid container spacing={3} sx={{ my: 4 }}>
+            <Grid container spacing={3} sx={{ mt: 4 }}>
                 {/* 標題與描述 */}
                 <Grid item xs={12}>
                     <Typography variant="h4" sx={{ textAlign: "left", color: themeObject.palette.text.primary }}>
@@ -137,7 +137,6 @@ function Home() {
                                         {language === "zh" ? "閱讀更多" : "Read More"}
                                     </Button>
                                 </Box>
-
                                 {/* 作者 & 日期 */}
                                 <Box sx={{ position: "absolute", bottom: 10, left: 10, fontSize: "12px", color: theme === "light" ? "black" : "white" }}>
                                     <Typography variant="body2">

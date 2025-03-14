@@ -137,8 +137,6 @@ const About = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
-
     // Table 調色
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -284,14 +282,14 @@ const About = () => {
         ],
     };
     return (
-        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', my: 4 }}>
+        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
             {/* 個人介紹 */}
             <ThemeProvider theme={ThemeProviderTheme}>
                 <Paper
                     id="關於我"
                     elevation={(theme === 'light' ? 3 : 3)}
                     onMouseEnter={() => setActiveSection("關於我")}
-                    sx={{ width: "100%", my: 4, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}
+                    sx={{ width: "100%", mt: 4, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}
                 >
                     <Grid
                         container
@@ -569,12 +567,12 @@ const About = () => {
                             </Typography>
                             <ul>
                                 {[
-                                    { id: 1, date: "2024/7 ~ 2024/8", title: "暑期教師", titleen: "Summer Teacher", level: "小學" },
-                                    { id: 2, date: "2024/2 ~ 2024/6", title: "機率助教", titleen: "Chance Teaching Assistant", level: "大學", },
-                                    { id: 3, date: "2023/9 ~ 2024/1", title: "線性代數助教", titleen: "Teaching assistant in linear algebra", level: "大學" },
-                                ].map((item) => (
+                                    { date: "2024/7 ~ 2024/8", title: "暑期教師", titleen: "Summer Teacher", level: "小學" },
+                                    { date: "2024/2 ~ 2024/6", title: "機率助教", titleen: "Chance Teaching Assistant", level: "大學", },
+                                    { date: "2023/9 ~ 2024/1", title: "線性代數助教", titleen: "Teaching assistant in linear algebra", level: "大學" },
+                                ].map((item, id) => (
                                     <Box
-                                        key={item.id}
+                                        key={`teach-${id}`}
                                         sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2px" }}
                                     >
                                         <Typography variant="body1" >
@@ -626,13 +624,12 @@ const About = () => {
                             </Typography>
                             <ul>
                                 {[
-                                    { id: 1, date: "2024/7 ~ 2024/8", title: "專題", level: "nan", description: "test1" },
-                                    { id: 2, date: "2024/2 ~ 2024/6", title: "課堂專題1", level: "大學", description: "test2" },
-                                    { id: 3, date: "2023/9 ~ 2024/1", title: "課堂專題2", level: "大學", description: "test3" },
-                                ].map((item) => (
-                                    <>
+                                    { date: "2024/7 ~ 2024/8", title: "專題", level: "nan", description: "衝線咖丁車test" },
+                                    { date: "2024/2 ~ 2024/6", title: "課堂專題1", level: "大學", description: "test2" },
+                                    { date: "2023/9 ~ 2024/1", title: "課堂專題2", level: "大學", description: "test3" },
+                                ].map((item, id) => (
+                                    <React.Fragment key={`project-${id}`}>
                                         <Box
-                                            key={item.id}
                                             sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2px" }}
                                         >
                                             <Typography variant="body1" >
@@ -655,7 +652,7 @@ const About = () => {
                                             </Button>
                                         </Box>
                                         <Box><Typography variant="body1" > {item.description}</Typography></Box>
-                                    </>
+                                    </React.Fragment>
                                 ))}
                             </ul>
                         </Paper>

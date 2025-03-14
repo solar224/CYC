@@ -1,21 +1,16 @@
 .floating-circle-container {
-    position: fixed;
-    right: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    transition: bottom 0.6s ease-in-out;
+    /* align-items: right; */
     z-index: 1;
-
+    align-items: flex-end;
 }
 
 /* 圓圈基礎樣式 */
 .floating-circle {
     width: 60px;
     height: 60px;
-    background-color: #cdcdcd;
     border-radius: 50%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     margin-bottom: 10px;
     transition: transform 0.6s ease, opacity 0.6s ease;
@@ -50,25 +45,14 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    animation: expand 0.3s ease-in-out;
 }
 
 .settings-circles {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    animation: expandButton 10s ease-in-out;
 }
 
-/* 收起圓圈樣式 */
-.expanded-circles.closing {
-    animation: collapse 0.6s ease-in-out;
-}
-
-.settings-circle.closing {
-    animation: collapseButton 0.6s ease-in-out;
-    /* 改為 0.6s */
-}
 
 .extra-circle {
     width: 50px;
@@ -81,32 +65,6 @@
     justify-content: center;
 }
 
-/* Icon 樣式 */
-.icon {
-    /* 根據需求調整圖示大小 */
-    color: #fff;
-    /* 設置圖示顏色 */
-}
-
-.icon-LightModeIcon {
-    /* 根據需求調整圖示大小 */
-    color: #ffea008b;
-}
-
-.icon-NightlightIcon {
-    /* 根據需求調整圖示大小 */
-    color: #ffea008b;
-}
-
-.icon-AbcIconIcon {
-    /* 根據需求調整圖示大小 */
-    color: #ffea008b;
-}
-
-.icon-GTranslateIcon {
-    /* 根據需求調整圖示大小 */
-    color: #ffea008b;
-}
 
 
 /* 展開動畫 */
@@ -155,4 +113,33 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+
+
+/* Icon 樣式 */
+.icon {
+    /* 根據需求調整圖示大小 */
+    color: #fff;
+    /* 設置圖示顏色 */
+}
+
+.icon-LightModeIcon {
+    /* 根據需求調整圖示大小 */
+    color: #ffea008b;
+}
+
+.icon-NightlightIcon {
+    /* 根據需求調整圖示大小 */
+    color: #ffea008b;
+}
+
+.icon-AbcIconIcon {
+    /* 根據需求調整圖示大小 */
+    color: #ffea008b;
+}
+
+.icon-GTranslateIcon {
+    /* 根據需求調整圖示大小 */
+    color: #ffea008b;
 }
