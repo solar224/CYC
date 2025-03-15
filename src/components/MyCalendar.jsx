@@ -25,13 +25,14 @@ const MyCalendar = () => {
         >
             {/* iframe 行事曆 */}
             <iframe
-                src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FTaipei&showPrint=0&hl=zh_TW&showCalendars=0&src=YzExMDExMDE1N0Bua3VzdC5lZHUudHc&color=%23039BE5"
+                src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FTaipei&showPrint=0&mode=WEEK&src=YzExMDExMDE1N0Bua3VzdC5lZHUudHc&color=%23039BE5"
                 style={{
                     width: "100%",
                     height: "600px",
                     borderRadius: "10px",
                     filter: theme === "dark" ? "invert(1) hue-rotate(180deg)" : "none"
                 }}
+
                 frameBorder="0"
                 scrolling="no"
                 onLoad={handleIframeLoad} // 觸發載入完成

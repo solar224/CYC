@@ -161,7 +161,7 @@ const About = () => {
     const handleScrollTo = (section) => {
         setActiveSection(section);
         const element = document.getElementById(section);
-        const headerOffset = 80; // 固定的 header 高度（單位：像素）
+        const headerOffset = 125; // 固定的 header 高度（單位：像素）
         const elementPosition = element.getBoundingClientRect().top; // 元素相對於視窗的距離
         const offsetPosition = elementPosition + window.scrollY - headerOffset;
         window.scrollTo({
@@ -281,6 +281,37 @@ const About = () => {
             createData('Physics', 89, 2),
         ],
     };
+
+    const GradesTable = ({ data }) => (
+        <TableContainer component={Paper} sx={{ backgroundColor: theme === "dark" ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.6)", boxShadow: "none" }} elevation={0}>
+            <Table size="small" aria-label="grades table">
+                <TableHead sx={{ backgroundColor: "rgba(0,0,0,0.2)", boxShadow: "none" }}>
+                    <TableRow sx={{ backgroundColor: "rgba(0,0,0,0)" }}>
+                        <StyledTableCell sx={{ backgroundColor: "rgba(0,0,0,0) !important" }}>
+                            課程名稱
+                        </StyledTableCell>
+                        <StyledTableCell sx={{ backgroundColor: "rgba(0,0,0,0) !important" }} align="right">
+                            學分
+                        </StyledTableCell>
+                        <StyledTableCell sx={{ backgroundColor: "rgba(0,0,0,0) !important" }} align="right">
+                            分數
+                        </StyledTableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {data.map((row, index) => (
+                        <StyledTableRow key={`${row.subject}-${index}`}>
+                            <TableCell component="th" scope="row">
+                                {row.subject}
+                            </TableCell>
+                            <TableCell align="right">{row.credits}</TableCell>
+                            <TableCell align="right">{row.score} 分</TableCell>
+                        </StyledTableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
     return (
         <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
             {/* 個人介紹 */}
@@ -768,79 +799,20 @@ const About = () => {
                                                         <Tab label="其他" {...a11yProps(2)} />
                                                     </Tabs>
                                                 </Box>
+
                                                 {/* 資工 */}
                                                 <CustomTabPanel value={value} index={0}>
-                                                    <TableContainer component={Paper}>
-                                                        <Table size="small" aria-label="grades table">
-                                                            <TableHead>
-                                                                <TableRow>
-                                                                    <StyledTableCell>課程名稱</StyledTableCell>
-                                                                    <StyledTableCell align="right">學分</StyledTableCell>
-                                                                    <StyledTableCell align="right">分數</StyledTableCell>
-                                                                </TableRow>
-                                                            </TableHead>
-                                                            <TableBody>
-                                                                {College_grades_Group["cs"].map((row, index) => (
-                                                                    <StyledTableRow key={`${row.name}-${index}`}>
-                                                                        <TableCell component="th" scope="row">
-                                                                            {row.subject}
-                                                                        </TableCell>
-                                                                        <TableCell align="right">{row.credits}</TableCell>
-                                                                        <TableCell align="right">{row.score} 分</TableCell>
-                                                                    </StyledTableRow>
-                                                                ))}
-                                                            </TableBody>
-                                                        </Table>
-                                                    </TableContainer>
+                                                    <GradesTable data={College_grades_Group["cs"]} />
                                                 </CustomTabPanel>
+
                                                 {/* 通訊 */}
                                                 <CustomTabPanel value={value} index={1}>
-                                                    <TableContainer component={Paper}>
-                                                        <Table size="small" aria-label="grades table">
-                                                            <TableHead>
-                                                                <TableRow>
-                                                                    <StyledTableCell>課程名稱</StyledTableCell>
-                                                                    <StyledTableCell align="right">學分</StyledTableCell>
-                                                                    <StyledTableCell align="right">分數</StyledTableCell>
-                                                                </TableRow>
-                                                            </TableHead>
-                                                            <TableBody>
-                                                                {College_grades_Group["communications"].map((row, index) => (
-                                                                    <StyledTableRow key={`${row.name}-${index}`}>
-                                                                        <TableCell component="th" scope="row">
-                                                                            {row.subject}
-                                                                        </TableCell>
-                                                                        <TableCell align="right">{row.credits}</TableCell>
-                                                                        <TableCell align="right">{row.score} 分</TableCell>
-                                                                    </StyledTableRow>
-                                                                ))}
-                                                            </TableBody>
-                                                        </Table>
-                                                    </TableContainer>
+                                                    <GradesTable data={College_grades_Group["communications"]} />
                                                 </CustomTabPanel>
+
+                                                {/* 其他 */}
                                                 <CustomTabPanel value={value} index={2}>
-                                                    <TableContainer component={Paper}>
-                                                        <Table size="small" aria-label="grades table">
-                                                            <TableHead>
-                                                                <TableRow>
-                                                                    <StyledTableCell>課程名稱</StyledTableCell>
-                                                                    <StyledTableCell align="right">學分</StyledTableCell>
-                                                                    <StyledTableCell align="right">分數</StyledTableCell>
-                                                                </TableRow>
-                                                            </TableHead>
-                                                            <TableBody>
-                                                                {College_grades_Group["others"].map((row, index) => (
-                                                                    <StyledTableRow key={`${row.name}-${index}`}>
-                                                                        <TableCell component="th" scope="row">
-                                                                            {row.subject}
-                                                                        </TableCell>
-                                                                        <TableCell align="right">{row.credits}</TableCell>
-                                                                        <TableCell align="right">{row.score} 分</TableCell>
-                                                                    </StyledTableRow>
-                                                                ))}
-                                                            </TableBody>
-                                                        </Table>
-                                                    </TableContainer>
+                                                    <GradesTable data={College_grades_Group["others"]} />
                                                 </CustomTabPanel>
                                             </Box>
                                         </Grid>

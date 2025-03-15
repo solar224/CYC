@@ -22,21 +22,14 @@ import InputBase from "@mui/material/InputBase";
 import { Link } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { Menu, MenuItem, ListItemIcon, Collapse, Tooltip } from '@mui/material';
+import { ListItemIcon, Tooltip, Slide } from '@mui/material';
 // icon
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import MailIcon from '@mui/icons-material/Mail';
 import BookIcon from '@mui/icons-material/Book';
-import CodeIcon from '@mui/icons-material/Code';
-import LanguageIcon from '@mui/icons-material/Language';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import SchoolIcon from '@mui/icons-material/School';
 import CloseIcon from '@mui/icons-material/Close';
 // CSS 
 import "./css/Header.css";
@@ -48,20 +41,7 @@ import DynamicBreadcrumbs from "./DynamicBreadcrumbs"
 
 
 const options = ["首頁", "關於我", "設定", "幫助"]; // for Header [Autocomplete]
-function ElevationScroll(props) {
-    const { children } = props;
-    const trigger = useScrollTrigger({
-        threshold: 0, // 在滾動多少像素後觸發
-    });
 
-    return React.cloneElement(children, {
-        sx: {
-            backgroundColor: "#222222", //控制 Header 背景顏色
-            opacity: trigger ? 0.85 : 1, // 根據滾動位置改變透明度
-            transition: "opacity 0.3s", // 平滑過渡效果
-        },
-    });
-}
 const Header = () => {
     const location = useLocation();
     const { theme } = useContext(ThemeContext);
@@ -71,11 +51,13 @@ const Header = () => {
     const handleClickAway = () => setSearchopen(false);
     const handleFocus = () => setSearchopen(true);
     const [Searchopen, setSearchopen] = useState(false);
+    const [dynamicBreadcrumbsOpen, setDynamicBreadcrumbsOpen] = useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const anchorElopen = Boolean(anchorEl);
     const [openNote, setOpenNote] = useState(false);
     const handleNoteClick = () => { setOpenNote((prev) => !prev); };
     const [activePage, setActivePage] = useState(() => { return location.pathname; });
+    // useEffect(() => { console.log(activePage) }, [activePage])
     const handleClose = () => { setAnchorEl(null); };
     const toggleDrawer = (open) => (event) => {
         if (
@@ -140,6 +122,46 @@ const Header = () => {
             }}
             role="presentation"
         >
+
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between", // 讓標題與關閉按鈕分開
+                    alignItems: "center",
+                    padding: "10px 15px",
+                    backgroundColor: theme === "light" ? "#f5f5f5" : "#222",
+                }}
+            >
+                <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{
+                        fontWeight: 'bold',
+                        textAlign: isMobile ? 'center' : 'left',
+                        alignItems: 'center',
+                        display: 'flex',
+                        gap: 1,
+                    }}
+                >
+
+                    <img
+                        src={`${process.env.PUBLIC_URL}/logo.png`}
+                        alt="詹宇宸"
+                        style={{
+                            maxWidth: '50px',
+                            width: '50px',
+                            borderRadius: "10px"
+
+                        }}
+                    />
+                    YC-Chan
+                </Typography>
+                <IconButton onClick={toggleDrawer(false)} sx={{ color: theme === "light" ? "#000" : "#fff" }}>
+                    <CloseIcon />
+                </IconButton>
+            </Box>
+            <Divider sx={{ backgroundColor: theme === "light" ? "black" : "white" }} />
+
             <Box sx={{ paddingTop: '20px', paddingLeft: '10px', paddingRight: '10px', paddingBottom: '20px' }}>
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <Search open={Searchopen}>
@@ -155,8 +177,8 @@ const Header = () => {
                     </Search>
                 </ClickAwayListener>
             </Box>
-            <Divider sx={{ backgroundColor: theme === 'light' ? 'black' : 'white' }} /> {/* 根據theme設置分隔線顏色 */}
             <List>
+
                 <ListItem disablePadding sx={{ paddingTop: '2px', paddingLeft: '5px', paddingRight: '5px', paddingBottom: '2px' }}>
                     <ListItemButton
                         onClick={toggleDrawer(false)}
@@ -231,9 +253,15 @@ const Header = () => {
                 </ListItem>
                 <ListItem disablePadding sx={{ paddingTop: '2px', paddingLeft: '5px', paddingRight: '5px', paddingBottom: '2px' }}>
                     <ListItemButton
-                        onClick={handleNoteClick}
+                        onClick={toggleDrawer(false)}
+                        component={Link}
+                        to="/note"
                         sx={{
                             color: theme === 'light' ? 'black' : 'white',
+                            bgcolor: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
+                            border: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? '1px solid' : 'none',
+                            borderColor: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? (theme === 'light' ? '#888' : '#aaa') : 'none',
+                            borderRadius: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? '8px' : '0',
                             '&:hover': {
                                 backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
                             },
@@ -244,91 +272,50 @@ const Header = () => {
                             <BookIcon />
                         </ListItemIcon>
                         <ListItemText primary="筆記" />
-                        {openNote ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
                 </ListItem>
-                <Collapse in={openNote} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding sx={{
-                        paddingTop: '2px', paddingLeft: '5px', paddingRight: '5px', paddingBottom: '2px',
-                    }}>
-                        <ListItemButton
-                            onClick={toggleDrawer(false)}
-                            component={Link}
-                            to="/school-curriculum"
-                            sx={{
-                                bgcolor: activePage === "/school-curriculum" ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
-                                border: activePage === "/school-curriculum" ? '1px solid' : 'none',
-                                borderColor: activePage === "/school-curriculum" ? (theme === 'light' ? '#888' : '#aaa') : 'none',
-                                borderRadius: activePage === "/school-curriculum" ? '8px' : '0',
-                                pl: 4,
-                                color: theme === 'light' ? 'black' : 'white',
-                                '&:hover': {
-                                    backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
-                                },
-                                transition: 'background-color 0.2s ease-in-out',
-                            }}
-                        >
-                            <ListItemIcon sx={{ color: 'inherit' }}>
-                                <SchoolIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="學校課程" />
-                        </ListItemButton>
-
-                        <ListItemButton
-                            onClick={toggleDrawer(false)}
-                            component={Link}
-                            to="/procedural-exercises"
-                            sx={{
-                                bgcolor: activePage === "/procedural-exercises" ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
-                                border: activePage === "/procedural-exercises" ? '1px solid' : 'none',
-                                borderColor: activePage === "/procedural-exercises" ? (theme === 'light' ? '#888' : '#aaa') : 'none',
-                                borderRadius: activePage === "/procedural-exercises" ? '8px' : '0',
-                                pl: 4,
-                                color: theme === 'light' ? 'black' : 'white',
-                                '&:hover': {
-                                    backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
-                                },
-                                transition: 'background-color 0.2s ease-in-out',
-                            }}
-                        >
-                            <ListItemIcon sx={{ color: 'inherit' }}>
-                                <CodeIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="程式練習" />
-                        </ListItemButton>
-
-                        <ListItemButton
-                            onClick={toggleDrawer(false)}
-                            component={Link}
-                            to="/english-practice"
-                            sx={{
-                                bgcolor: activePage === "/english-practice" ? (theme === 'light' ? '#e0e0e0' : '#555') : 'transparent',
-                                border: activePage === "/english-practice" ? '1px solid' : 'none',
-                                borderColor: activePage === "/english-practice" ? (theme === 'light' ? '#888' : '#aaa') : 'none',
-                                borderRadius: activePage === "/english-practice" ? '8px' : '0',
-                                pl: 4,
-                                color: theme === 'light' ? 'black' : 'white',
-                                '&:hover': {
-                                    backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
-                                },
-                                transition: 'background-color 0.2s ease-in-out',
-                            }}
-                        >
-                            <ListItemIcon sx={{ color: 'inherit' }}>
-                                <LanguageIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="英文練習" />
-                        </ListItemButton>
-                    </List>
-                </Collapse>
             </List>
         </Box >
     );
     // 設置當前選中的頁面
     useEffect(() => {
         setActivePage(location.pathname);
+        setDynamicBreadcrumbsOpen(true);
     }, [location.pathname]);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY === 0) {
+                setDynamicBreadcrumbsOpen(true); // 在頂部時始終顯示
+            } else if (currentScrollY < prevScrollY.current) {
+                setDynamicBreadcrumbsOpen(false); // 向上滾動，顯示
+            } else {
+                setDynamicBreadcrumbsOpen(true); // 向下滾動，隱藏
+            }
+            prevScrollY.current = currentScrollY;
+        };
+
+        const prevScrollY = { current: window.scrollY };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    function ElevationScroll(props) {
+        const { children } = props;
+        const trigger = useScrollTrigger({
+            threshold: 0, // 在滾動多少像素後觸發
+        });
+        return React.cloneElement(children, {
+            sx: {
+                backgroundColor: "#222222", //控制 Header 背景顏色
+                opacity: trigger ? 0.85 : 1, // 根據滾動位置改變透明度
+                transition: "opacity 0.3s", // 平滑過渡效果
+            },
+        });
+    }
     return (
         <div >
             <ElevationScroll>
@@ -446,98 +433,17 @@ const Header = () => {
                                         variant={!(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "outlined" : "text"}
                                         sx={{
                                             color: !(activePage === "/" || activePage === "/about-me" || activePage === "/contact-me") ? "white" : "rgba(255, 255, 255, 0.8)",
-                                            minWidth: 85,
+                                            minWidth: 70,
                                             textTransform: "none",
                                             "&:hover": {
                                                 bgcolor: "rgba(255,255,255,0.1)",
                                             },
                                         }}
-                                        aria-controls={anchorElopen ? 'contact-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={anchorElopen ? 'true' : undefined}
-                                        onClick={handleClick}
+                                        component={Link}
+                                        to="/note"
                                     >
                                         筆記
-                                        {anchorElopen ? <ArrowDropUpIcon sx={{ ml: 0 }} /> : <ArrowDropDownIcon sx={{ ml: 0 }} />}
                                     </Button>
-                                    <Menu
-                                        id="contact-menu"
-                                        anchorEl={anchorEl}
-                                        open={anchorElopen}
-                                        onClose={handleClose}
-                                        disableScrollLock
-                                        anchorOrigin={{
-                                            vertical: 'bottom',
-                                            horizontal: 'left',
-                                        }}
-                                        transformOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'left',
-                                        }}
-                                        PaperProps={{
-                                            sx: {
-                                                mt: 0.1  // -1, -2, -4... 依需求微調
-                                            },
-                                        }}
-                                        sx={{
-                                            // 針對 Menu 彈出的紙張 (Paper) 做樣式覆寫
-                                            "& .MuiPaper-root": {
-                                                backgroundColor: theme === "light" ? "#ffffff" : "#333333",
-                                                color: theme === "light" ? "#000000" : "#ffffff",
-                                            }
-                                        }}
-                                    >
-                                        <MenuItem
-                                            sx={{
-                                                mx: 1, // 左右增加margin
-                                                borderRadius: 1, // 增加圓角
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 1, // 調整圖示與文字的間隔
-                                                "&:hover": {
-                                                    backgroundColor: theme === "light" ? "rgba(3, 3, 3, 0.1)" : "rgba(255,255,255,0.1)",
-                                                },
-                                            }}
-                                            onClick={handleClose}
-                                            component={Link}
-                                            to="/school-curriculum">
-                                            <SchoolIcon />學校課程
-                                        </MenuItem>
-                                        <MenuItem
-                                            sx={{
-                                                mx: 1, // 左右增加margin
-                                                borderRadius: 1, // 增加圓角
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 1, // 調整圖示與文字的間隔
-                                                "&:hover": {
-                                                    backgroundColor: theme === "light" ? "rgba(3, 3, 3, 0.1)" : "rgba(255,255,255,0.1)",
-                                                },
-                                            }}
-                                            onClick={handleClose}
-                                            component={Link}
-                                            to="/procedural-exercises">
-                                            <CodeIcon />程式練習
-                                        </MenuItem>
-                                        <MenuItem
-                                            sx={{
-                                                mx: 1, // 左右增加margin
-                                                borderRadius: 1, // 增加圓角
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 1, // 調整圖示與文字的間隔
-                                                "&:hover": {
-                                                    backgroundColor: theme === "light" ? "rgba(3, 3, 3, 0.1)" : "rgba(255,255,255,0.1)",
-                                                },
-                                            }}
-                                            onClick={handleClose}
-                                            component={Link}
-                                            to="/english-practice">
-                                            <LanguageIcon />英文練習
-                                        </MenuItem>
-
-
-                                    </Menu>
                                     <Autocomplete
                                         size="small"
                                         disablePortal
@@ -610,26 +516,27 @@ const Header = () => {
                 </AppBar>
             </ElevationScroll>
             {/* 手機 */}
-            <div>
-                {/* 你的頁面其他內容 */}
+            <Slide direction="down" in={dynamicBreadcrumbsOpen} mountOnEnter unmountOnExit>
+                <Tooltip title="索引導覽" placement="bottom">
+                    <Box
+                        style={{
+                            position: 'fixed',
+                            top: 70,
+                            left: 2,
+                            marginRight: 5,
+                            backgroundColor: theme === "dark" ? 'rgba(40, 40, 40, 0.9)' : 'rgba(50, 50, 50, 0.9)',
+                            padding: '4px 8px',
+                            borderRadius: "10px",
+                            zIndex: 1,
+                        }}
+                    >
+                        <DynamicBreadcrumbs activePage={activePage} />
+                    </Box>
+                </Tooltip>
+            </Slide>
 
-                <div
-                    style={{
-                        position: 'fixed',
-                        top: 70,
-                        left: 5,
-                        marginRight: 5,
-                        backgroundColor: theme === "dark" ? 'rgba(255, 255, 255, 0.1)' : 'rgba(243, 146, 18, 0.3)',
-                        padding: '4px 8px',
-                        borderRadius: "10px",
-                        zIndex: 1,
-                    }}
-                >
-                    <DynamicBreadcrumbs activePage={activePage} />
-                </div>
-            </div>
+
             <Drawer
-                disableScrollLock
                 anchor="left"
                 open={drawerOpen}
                 onClose={toggleDrawer(false)}
@@ -637,9 +544,6 @@ const Header = () => {
                     "& .MuiDrawer-paper": {
                         backgroundColor: theme === "light" ? "#ffffff" : "#333333", // 根據 theme 設置背景色
                         color: theme === "light" ? "#000000" : "#ffffff", // 設置文字顏色
-                        top: "64px", // 讓 Drawer 從 80px 開始，而不是從最頂端開始
-                        height: "calc(100% - 64px)", // 調整 Drawer 高度，避免超出視窗
-                        // borderTopRightRadius: "10px", // 圓角效果，讓 UI 更柔和
                     },
                 }}
             >

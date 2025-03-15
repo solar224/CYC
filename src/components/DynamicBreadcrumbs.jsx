@@ -15,8 +15,10 @@ export default function DynamicBreadcrumbs({ activePage }) {
     const nameMap = {
         "about-me": "關於我",
         "contact-me": "聯絡",
+        "note": "筆記",
+
         "school-curriculum": "學校課程",
-        "procedural-exercises": "程式練習",
+        "coding-practice": "程式練習",
         "english-practice": "英文練習",
     };
     return (

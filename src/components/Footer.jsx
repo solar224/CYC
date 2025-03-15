@@ -2,6 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import Tooltip from '@mui/material/Tooltip';
 
 // icon
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -26,45 +27,51 @@ const Footer = () => (
                 mb: 1,
             }}
         >
-            <IconButton
-                href="https://github.com/solar224"
-                target="_blank"
-                rel="noopener"
-                sx={{
-                    color: "#ffffff",
-                    "&:hover": {
-                        color: "#61dafb",
-                    },
-                }}
-            >
-                <GitHubIcon fontSize="large" />
-            </IconButton>
-            <IconButton
-                href="https://www.linkedin.com/in/%E5%AE%87%E5%AE%B8-%E8%A9%B9-71211a347/"
-                target="_blank"
-                rel="noopener"
-                sx={{
-                    color: "#ffffff",
-                    "&:hover": {
-                        color: "#0e76a8",
-                    },
-                }}
-            >
-                <LinkedInIcon fontSize="large" />
-            </IconButton>
-            <IconButton
-                href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=C110110157@nkust.edu.tw"
-                target="_blank"
-                rel="noopener"
-                sx={{
-                    color: "#ffffff",
-                    "&:hover": {
-                        color: "#db4437",
-                    },
-                }}
-            >
-                <MailOutlineIcon fontSize="large" />
-            </IconButton>
+            <Tooltip title="github" placement="top">
+                <IconButton
+                    href="https://github.com/solar224"
+                    target="_blank"
+                    rel="noopener"
+                    sx={{
+                        color: "#ffffff",
+                        "&:hover": {
+                            color: "#61dafb",
+                        },
+                    }}
+                >
+                    <GitHubIcon fontSize="large" />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Linkedin" placement="top">
+                <IconButton
+                    href="https://www.linkedin.com/in/%E5%AE%87%E5%AE%B8-%E8%A9%B9-71211a347/"
+                    target="_blank"
+                    rel="noopener"
+                    sx={{
+                        color: "#ffffff",
+                        "&:hover": {
+                            color: "#0e76a8",
+                        },
+                    }}
+                >
+                    <LinkedInIcon fontSize="large" />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Gmail" placement="top">
+                <IconButton
+                    href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=C110110157@nkust.edu.tw"
+                    target="_blank"
+                    rel="noopener"
+                    sx={{
+                        color: "#ffffff",
+                        "&:hover": {
+                            color: "#db4437",
+                        },
+                    }}
+                >
+                    <MailOutlineIcon fontSize="large" />
+                </IconButton>
+            </Tooltip>
         </Box>
         <Typography variant="body2">
             © 2025 <strong>[YC-Chan]</strong>. All rights reserved.

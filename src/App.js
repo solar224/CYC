@@ -4,13 +4,16 @@ import { createContext, useState, useEffect } from "react";
 import Home from "./components/Home";
 import Aboutme from "./components/Aboutme";
 import Contactme from "./components/Contactme";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FloatingCircle from "./components/FloatingCircle";
 import DynamicBackground from "./components/DynamicBackground";
 import Schoolcurriculum from "./components/notes/Schoolcurriculum";
-import Proceduralexercises from "./components/notes/Proceduralexercises";
+import Proceduralexercises from "./components/notes/Codingpractice";
 import Englishpractice from "./components/notes/Englishpractice";
+import { SnackbarProvider } from "notistack";
+import Note from "./components/Note";
 
 import "./components/css/App.css";
 
@@ -38,27 +41,31 @@ export default function App() {
   }, [language]);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <LanguageContext.Provider value={{ language, toggleLanguage }}>
-        <div className={`app`}>
-          <DynamicBackground theme={theme} />
-          <Router>
-            <Header />
-            <Routes>
+    <SnackbarProvider maxSnack={3} autoHideDuration={800}>
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <LanguageContext.Provider value={{ language, toggleLanguage }}>
+          <div className={`app`}>
+            <DynamicBackground theme={theme} />
+            <Router>
+              <Header />
+              <Routes>
 
-              <Route path="/" element={<Home />} />
-              <Route path="/about-me" element={<Aboutme />} />
-              <Route path="/contact-me" element={<Contactme />} />
-              <Route path="/school-curriculum" element={<Schoolcurriculum />} />
-              <Route path="/procedural-exercises" element={<Proceduralexercises />} />
-              <Route path="/english-practice" element={<Englishpractice />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/about-me" element={<Aboutme />} />
+                <Route path="/note" element={<Note />} />
 
-            </Routes>
-            <FloatingCircle />
-            <Footer />
-          </Router>
-        </div>
-      </LanguageContext.Provider>
-    </ThemeContext.Provider>
+                <Route path="/contact-me" element={<Contactme />} />
+                <Route path="/note/school-curriculum" element={<Schoolcurriculum />} />
+                <Route path="/note/coding-practice" element={<Proceduralexercises />} />
+                <Route path="/note/english-practice" element={<Englishpractice />} />
+
+              </Routes>
+              <FloatingCircle />
+              <Footer />
+            </Router>
+          </div>
+        </LanguageContext.Provider>
+      </ThemeContext.Provider>
+    </SnackbarProvider>
   );
 }
