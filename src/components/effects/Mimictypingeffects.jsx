@@ -1,5 +1,5 @@
 /**
- * AnimatedTypingText - Simulates a typing effect for displaying text character by character.
+ * Mimictypingeffects - Simulates a typing effect for displaying text character by character.
  *
  * @param {Array<string>} phrases - The list of texts to be displayed with the typing effect.
  * @param {number} [speed=100] - The interval speed (in milliseconds) for typing each character.
@@ -8,13 +8,13 @@
  * @returns {JSX.Element} A React component that animates typing effect.
  *
  * @example
- * <AnimatedTypingText phrases={["Hello", "Welcome", "Enjoy!"]} speed={50} variant="h6" loop={false} />
+ * <Mimictypingeffects textList={["Hello", "Welcome", "Enjoy!"]} speed={50} variant="h6" repeat={false} />
  */
 
 import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 
-const TypingEffect = ({ textList, speed = 100, variant = "h6", repeat = 1 }) => {
+const TypingEffect = ({ textList, speed, variant = "h6", repeat }) => {
     const [textIndex, setTextIndex] = useState(0); // 追蹤目前顯示的文字
     const [displayedText, setDisplayedText] = useState(""); // 當前顯示的字
     const [index, setIndex] = useState(0); // 追蹤打字進度

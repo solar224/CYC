@@ -286,12 +286,10 @@ const Header = () => {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY === 0) {
-                setDynamicBreadcrumbsOpen(true); // 在頂部時始終顯示
-            } else if (currentScrollY < prevScrollY.current) {
-                setDynamicBreadcrumbsOpen(false); // 向上滾動，顯示
+            if (currentScrollY < prevScrollY.current) {
+                setDynamicBreadcrumbsOpen(true); // 向上滾動，顯示
             } else {
-                setDynamicBreadcrumbsOpen(true); // 向下滾動，隱藏
+                setDynamicBreadcrumbsOpen(false); // 向下滾動，隱藏
             }
             prevScrollY.current = currentScrollY;
         };
@@ -524,7 +522,7 @@ const Header = () => {
                             top: 70,
                             left: 2,
                             marginRight: 5,
-                            backgroundColor: theme === "dark" ? 'rgba(40, 40, 40, 0.9)' : 'rgba(50, 50, 50, 0.9)',
+                            backgroundColor: theme === "dark" ? 'rgba(34, 34, 34, 0.85)' : 'rgba(34, 34, 34, 0.85)',
                             padding: '4px 8px',
                             borderRadius: "10px",
                             zIndex: 1,

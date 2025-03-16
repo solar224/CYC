@@ -26,7 +26,7 @@ export default function DynamicBreadcrumbs({ activePage }) {
             separator={<NavigateNextIcon fontSize="small" sx={{ color: '#AAAAAA', margin: "0px" }} // 這裡設定顏色
             />}
             aria-label="breadcrumb" >
-            <Button component={RouterLink} underline="hover" color="inherit" to="/" sx={{ color: '#AAAAAA', minWidth: '0px' }}>
+            <Button component={RouterLink} underline="hover" color="inherit" to="/" sx={{ color: '#FFFFFF', minWidth: '0px' }}>
                 首頁
             </Button>
             {
@@ -38,7 +38,7 @@ export default function DynamicBreadcrumbs({ activePage }) {
                             key={routeTo}
                             underline="hover"
                             sx={{
-                                color: '#28a745',
+                                color: "#f39212",
                             }}>
                             {nameMap[name] || name}
                         </Button>
@@ -49,7 +49,7 @@ export default function DynamicBreadcrumbs({ activePage }) {
                             to={routeTo}
                             key={routeTo}
                             sx={{
-                                color: '#AAAAAA',
+                                color: '#FFFFFF',
                                 margin: "0px",
                             }}>
                             {nameMap[name] || name}

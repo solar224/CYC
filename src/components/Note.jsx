@@ -7,17 +7,17 @@ import { Link } from "react-router-dom";
 const notes = [
     {
         title: "學校課程",
-        image: "/images/school.jpg",
+        image: `${process.env.PUBLIC_URL}/coding.gif`,
         link: "./school-curriculum"
     },
     {
         title: "程式練習",
-        image: "/images/coding.jpg",
+        image: `${process.env.PUBLIC_URL}/coding.gif`,
         link: "./coding-practice"
     },
     {
         title: "英文練習",
-        image: "/images/english.jpg",
+        image: `${process.env.PUBLIC_URL}/coding.gif`,
         link: "./english-practice"
     }
 ];
