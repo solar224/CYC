@@ -52,13 +52,7 @@ const Header = () => {
     const handleFocus = () => setSearchopen(true);
     const [Searchopen, setSearchopen] = useState(false);
     const [dynamicBreadcrumbsOpen, setDynamicBreadcrumbsOpen] = useState(true);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const anchorElopen = Boolean(anchorEl);
-    const [openNote, setOpenNote] = useState(false);
-    const handleNoteClick = () => { setOpenNote((prev) => !prev); };
     const [activePage, setActivePage] = useState(() => { return location.pathname; });
-    // useEffect(() => { console.log(activePage) }, [activePage])
-    const handleClose = () => { setAnchorEl(null); };
     const toggleDrawer = (open) => (event) => {
         if (
             event.type === "keydown" &&
@@ -68,9 +62,7 @@ const Header = () => {
         }
         setDrawerOpen(open);
     };
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+
 
     // 選單項目或空白區域點擊時，關閉選單
     const Search = styled('div')(({ theme, open }) => ({
@@ -286,7 +278,9 @@ const Header = () => {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY < prevScrollY.current) {
+            if (currentScrollY === 0) {
+                setDynamicBreadcrumbsOpen(true); // 向上滾動，顯示
+            } else if (currentScrollY < prevScrollY.current) {
                 setDynamicBreadcrumbsOpen(true); // 向上滾動，顯示
             } else {
                 setDynamicBreadcrumbsOpen(false); // 向下滾動，隱藏
