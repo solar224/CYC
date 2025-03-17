@@ -167,10 +167,10 @@ export default function FloatingCircle() {
                                 }} >
                                 {language === "zh" ? "顯示語言：" : "顯示語言："}
                             </Typography>
-                            <Button color="success" onClick={() => handleClickLocLang('zh')} variant={loclang === "zh" ? "contained" : "outlined"} sx={{ mr: 1 }}>
+                            <Button onClick={() => handleClickLocLang('zh')} variant={loclang === "zh" ? "contained" : "outlined"} sx={{ mr: 1 }}>
                                 中文
                             </Button>
-                            <Button color="success" onClick={() => handleClickLocLang('en')} variant={loclang === "en" ? "contained" : "outlined"}  >
+                            <Button onClick={() => handleClickLocLang('en')} variant={loclang === "en" ? "contained" : "outlined"}  >
                                 English
                             </Button>
 
@@ -182,10 +182,10 @@ export default function FloatingCircle() {
                                 }}>
                                 {language === "zh" ? "背景顏色：" : "背景顏色："}
                             </Typography>
-                            <Button color="success" onClick={() => handClickloctheme('dark')} variant={loctheme === "dark" ? "contained" : "outlined"} sx={{ mr: 1 }}>
+                            <Button onClick={() => handClickloctheme('dark')} variant={loctheme === "dark" ? "contained" : "outlined"} sx={{ mr: 1 }}>
                                 深色
                             </Button>
-                            <Button color="success" onClick={() => handClickloctheme('light')} variant={loctheme === "light" ? "contained" : "outlined"} >
+                            <Button onClick={() => handClickloctheme('light')} variant={loctheme === "light" ? "contained" : "outlined"} >
                                 淺色
                             </Button>
                         </Box>
@@ -193,21 +193,21 @@ export default function FloatingCircle() {
                             <Typography variant="body1" sx={{ mr: 1, color: theme === 'dark' ? '#ffffff' : '#000000' }}>
                                 {language === "zh" ? "文字大小：" : "文字大小："}
                             </Typography>
-                            <Button color="success" variant="outlined" sx={{ mr: 1 }}>
+                            <Button variant="outlined" sx={{ mr: 1 }}>
                                 大
                             </Button>
-                            <Button color="success" variant="outlined" sx={{ mr: 1 }}>
+                            <Button variant="outlined" sx={{ mr: 1 }}>
                                 中
                             </Button>
-                            <Button color="success" variant="outlined">
+                            <Button variant="outlined">
                                 小
                             </Button>
                         </Box>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant={"outlined"} color="secondary" onClick={handleClose}>{language === 'en' ? "Cancel" : "取消"}</Button>
-                    <Button variant={"contained"} color="success" onClick={handSetting}>{language === 'en' ? "Agree" : "確認"}</Button>
+                    <Button variant={"outlined"} onClick={handleClose}>{language === 'en' ? "Cancel" : "取消"}</Button>
+                    <Button variant={"contained"} onClick={handSetting}>{language === 'en' ? "Agree" : "確認"}</Button>
                 </DialogActions>
             </Dialog>
         </div >

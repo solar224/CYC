@@ -4,8 +4,7 @@
 //parameter：activePage (URL strings)
 //
 //***********************************************************************
-import React, { useState, useEffect, useContext } from "react";
-import { Breadcrumbs, Typography, Button } from '@mui/material';
+import { Breadcrumbs, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 

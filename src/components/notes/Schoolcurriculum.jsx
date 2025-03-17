@@ -1,35 +1,28 @@
-import React from "react";
-import { Grid, Container, Button } from "@mui/material";
+import React, { useContext } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Container, Grid, Card, CardActionArea, CardMedia, CardContent, Typography, Button } from "@mui/material";
+import { ThemeContext, LanguageContext } from "../../App";
 import { Link } from "react-router-dom";
 
 const Schoolcurriculum = () => {
+    const { theme } = useContext(ThemeContext);
+    const themeObject = createTheme({ palette: { mode: theme === "light" ? "light" : "dark" } });
     return (
 
         <div
-            className="Schoolcurriculum"
+            className="Aboutme"
             style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
         >
-            <main style={{ minHeight: "400px", flexGrow: 1 }}>
-                <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+            <ThemeProvider theme={themeObject}>
+                <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
+                    <Grid container spacing={3} sx={{ my: 4 }}>
 
-                    {/* link test */}
-                    <Button
-                        color="inherit"
-                        component={Link}
-                        to="./language"
-                        sx={{
-                            textTransform: "none",
-                            minWidth: 75,         // 固定最小寬度
-                        }}
-                    >
-                        語文
-                    </Button>
+                        尚未建構
 
-
+                    </Grid>
 
                 </Container>
-
-            </main>
+            </ThemeProvider>
         </div>
     );
 };

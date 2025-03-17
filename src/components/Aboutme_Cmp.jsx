@@ -349,19 +349,11 @@ const About = () => {
                                 </Grid>
                                 <Grid item xs={12} md={8} style={{ padding: "1em" }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 2 }}>
-                                        {/* <Mimictypingeffects text="關於我" speed={0} variant="h4" /> */}
                                         <Typography variant="h4">關於我</Typography>
                                         <Tooltip title={(language === "zh" ? "履歷表" : "curriculum vitae")} placement="left">
                                             <Button
                                                 variant="outlined"
-                                                sx={{
-                                                    color: "#28a745", // 綠色文字
-                                                    borderColor: "#28a745", // 綠色邊框
-                                                    "&:hover": {
-                                                        backgroundColor: "rgba(40, 167, 69, 0.1)", // 綠色背景 (淡淡的)
-                                                        borderColor: "#218838", // 深綠色邊框
-                                                    },
-                                                }}>
+                                            >
                                                 CV
                                             </Button>
                                         </Tooltip>
@@ -471,7 +463,7 @@ const About = () => {
                                             {[
                                                 "關於我",
                                                 "教育學歷",
-                                                "教學經驗",
+                                                "學習經歷",
                                                 "專案計畫",
                                                 "學業表現",
                                             ].map((section) => (
@@ -547,7 +539,7 @@ const About = () => {
                                     </Typography>
                                     <ul>
                                         <Typography variant="body1" gutterBottom>
-                                            <li>
+                                            {/* <li>
                                                 <Tooltip title={(language === "zh" ? "進入官網" : "Go to the official website")} placement="right">
                                                     <a href="https://www.cs.nycu.edu.tw/intro/organization/cybersecurity"
                                                         target="_blank" rel="noopener noreferrer"
@@ -560,7 +552,7 @@ const About = () => {
                                                         2025 ~ 2027 | 國立陽明交通大學 數據科學與工程研究所
                                                     </a>
                                                 </Tooltip>
-                                            </li>
+                                            </li> */}
                                         </Typography>
                                         <Typography variant="body1" gutterBottom>
                                             <li>
@@ -573,7 +565,7 @@ const About = () => {
                                                             transition: "color 0.2s ease",
                                                             textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)")
                                                         }}>
-                                                        2021 ~ 2025 | 國立高雄科技大學 電腦與通訊工程系
+                                                        2021/9 ~ 2025/6 | 國立高雄科技大學 電腦與通訊工程系
                                                     </a>
                                                 </Tooltip>
                                             </li>
@@ -587,7 +579,7 @@ const About = () => {
                                                         onMouseEnter={(e) => e.target.style.color = "#f39212"}
                                                         onMouseLeave={(e) => e.target.style.color = theme === "light" ? "#333333" : "rgb(255, 255, 255)"}
                                                         style={{ transition: "color 0.2s ease", textDecoration: "none", color: (theme === 'light' ? "#333333" : "rgb(255, 255, 255)") }}>
-                                                        2019 ~ 2021 | 國立彰師附工 控制科
+                                                        2019/9 ~ 2021/6 | 國立彰師附工 控制科
                                                     </a>
                                                 </Tooltip>
                                             </li>
@@ -602,8 +594,8 @@ const About = () => {
                                         marginBottom: 2,
                                         backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)"
                                     }}
-                                    id="教學經驗"
-                                    onMouseEnter={() => setActiveSection("教學經驗")}
+                                    id="學習經歷"
+                                    onMouseEnter={() => setActiveSection("學習經歷")}
                                 >
                                     <Typography variant="h5" gutterBottom>
                                         <img
@@ -613,7 +605,8 @@ const About = () => {
                                                 maxWidth: "20px",
                                                 width: "100%",
                                             }}
-                                        /> 教學經驗
+                                        />
+                                        學習經歷
                                     </Typography>
                                     <ul>
                                         {[
@@ -633,14 +626,7 @@ const About = () => {
                                                         variant="outlined"
                                                         size="small"
                                                         onClick={() => handleTeachButtonClick(item.id)}
-                                                        sx={{
-                                                            color: "#28a745", // 綠色文字
-                                                            borderColor: "#28a745", // 綠色邊框
-                                                            "&:hover": {
-                                                                backgroundColor: "rgba(40, 167, 69, 0.1)", // 綠色背景 (淡淡的)
-                                                                borderColor: "#218838", // 深綠色邊框
-                                                            },
-                                                        }}
+
                                                     >
                                                         教學資料
                                                     </Button>
@@ -674,34 +660,30 @@ const About = () => {
                                     </Typography>
                                     <ul>
                                         {[
-                                            { date: "2024/7 ~ 2024/8", title: "專題", level: "nan", description: "衝線咖丁車test" },
-                                            { date: "2024/2 ~ 2024/6", title: "課堂專題1", level: "大學", description: "test2" },
-                                            { date: "2023/9 ~ 2024/1", title: "課堂專題2", level: "大學", description: "test3" },
+                                            { date: "2023/7 ~ 2024/6", title: "運算思維差異化教學平臺 ", author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸 " },
+                                            { date: "2024/2 ~ 2024/6", title: "基於禁忌搜索與模擬退火結合貪婪匹配最佳化方法以解決工作匹配與排程問題", author: "詹宇宸" },
+                                            { date: "2024/2 ~ 2024/6", title: "考量樂觀偏差現象的哈里斯鷹最佳化方法應用於手術時間預測之研究", author: "薛榆杰、詹宇宸" },
+                                            { date: "2023/9 ~ 2024/1", title: "超參數優化梯度提升樹解決手術時間預測問題", author: "詹宇宸", },
+
                                         ].map((item, id) => (
                                             <React.Fragment key={`project-${id}`}>
                                                 <Box
                                                     sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2px" }}
                                                 >
                                                     <Typography variant="body1" >
-                                                        <li>{item.date} | {item.title} - {item.level}</li>
+                                                        <li>{item.date} | {item.title}</li>
                                                     </Typography>
-                                                    <Button
+                                                    {/* <Button
                                                         variant="outlined"
                                                         size="small"
                                                         onClick={() => handleProjectButtonClick(item.id)}
-                                                        sx={{
-                                                            color: "#28a745", // 綠色文字
-                                                            borderColor: "#28a745", // 綠色邊框
-                                                            "&:hover": {
-                                                                backgroundColor: "rgba(40, 167, 69, 0.1)", // 綠色背景 (淡淡的)
-                                                                borderColor: "#218838", // 深綠色邊框
-                                                            },
-                                                        }}
                                                     >
                                                         相關資料
-                                                    </Button>
+                                                    </Button> */}
                                                 </Box>
-                                                <Box><Typography variant="body1" > {item.description}</Typography></Box>
+                                                <Box>
+                                                    <Typography variant="body1" > 參與成員：{item.author}</Typography>
+                                                </Box>
                                             </React.Fragment>
                                         ))}
                                     </ul>
@@ -735,19 +717,13 @@ const About = () => {
                                             <ButtonGroup variant="text">
                                                 <Button
                                                     onClick={() => setShowUndergrad(true)}
-                                                    sx={{
-                                                        color: showUndergrad ? "#28a745" : "inherit", // 選中時變綠色
-                                                        "&:hover": { color: "#218838" }, // 滑鼠懸停時變深綠色
-                                                    }}
+
                                                 >
                                                     大學
                                                 </Button>
                                                 <Button
                                                     onClick={() => setShowUndergrad(false)}
-                                                    sx={{
-                                                        color: !showUndergrad ? "#28a745" : "inherit", // 選中時變綠色
-                                                        "&:hover": { color: "#218838" }, // 滑鼠懸停時變深綠色
-                                                    }}
+
                                                 >
                                                     研究所
                                                 </Button>

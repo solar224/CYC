@@ -11,6 +11,7 @@
     "animejs": "^3.2.2",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
+    "firebase": "^11.4.0",
     "gh-pages": "^6.3.0",
     "notistack": "^3.0.2",
     "react": "^19.0.0",

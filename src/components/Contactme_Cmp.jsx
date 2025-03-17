@@ -2,9 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { styled, alpha, ThemeProvider, createTheme } from "@mui/material/styles";
 import { ThemeContext, LanguageContext } from "../App";
 
-import { Grid, Box, Typography, Container, Paper, } from "@mui/material";
+import { Grid, Box, Typography, Container, Paper, Button, Tooltip } from "@mui/material";
 import MyCalendar from "./MyCalendar";
 import Mimictypingeffects from "./effects/Mimictypingeffects";
+
+// icon
+import SendIcon from '@mui/icons-material/Send';
 const Contact = () => {
     const { language } = useContext(LanguageContext); // 主題狀態
     const { theme } = useContext(ThemeContext); // 主題狀態
@@ -12,10 +15,8 @@ const Contact = () => {
 
     return (
         <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
-
-            <ThemeProvider theme={themeObject}> {/* 將 ThemeProvider 包裹住組件 */}
+            <ThemeProvider theme={themeObject}>
                 <Grid container spacing={2} sx={{ my: 4 }}>
-                    {/* 左邊日曆區域 */}
                     <Grid item xs={12} sm={12} md={12} sx={{ display: "flex", justifyContent: "center" }}>
                         <Paper
                             elevation={(theme === 'light' ? 1 : 12)}
@@ -33,31 +34,54 @@ const Contact = () => {
                                 sx={{
                                     display: "flex",
                                     alignItems: "center",
-                                    justifyContent: "left",
-                                    gap: 1, // 設置間距
+                                    gap: 1,
                                     marginBottom: 1,
                                 }}
                             >
-                                <Typography
-                                    gutterBottom
-                                    variant="h4"
+                                <Box
                                     sx={{
-                                        color: themeObject.palette.text.primary,
-                                        whiteSpace: "nowrap", // 防止換行
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1,
                                     }}
                                 >
-                                    行事曆 /
-                                </Typography>
+                                    <Typography
+                                        gutterBottom
+                                        variant="h4"
+                                        sx={{
+                                            color: themeObject.palette.text.primary,
+                                            whiteSpace: "nowrap", // 防止換行
+                                        }}
+                                    >
+                                        行事曆 /
+                                    </Typography>
 
-                                <Mimictypingeffects
-                                    textList={["有事請寄信或下方留言"]}
-                                    speed={100}
-                                    variant="body1"
-                                    repeat={0}
-                                    sx={{
-                                        color: themeObject.palette.primary.main,
-                                    }}
-                                />
+                                    <Mimictypingeffects
+                                        textList={[
+                                            "以下為忙碌時間，有事請寄信。",
+                                            "繁忙的日子，會讓人無心空閑懊惱。",
+                                            "人生旅途中有陽光、也有風雨雷電。",
+                                        ]}
+                                        speed={150}
+                                        variant="body2"
+                                        repeat={1}
+                                        sx={{
+                                            color: themeObject.palette.primary.main,
+                                        }}
+                                    />
+                                </Box>
+                                <Tooltip title="點擊可編輯郵件" placement="left">
+                                    <Button
+                                        variant="outlined"
+                                        sx={{ marginLeft: 'auto' }}
+                                        href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=C110110157@nkust.edu.tw"
+                                        target="_blank"
+                                        rel="noopener"
+                                        endIcon={<SendIcon />}    // 圖示放文字右側
+                                    >
+                                        寄信
+                                    </Button>
+                                </Tooltip>
                             </Box>
 
                             <Box
@@ -72,25 +96,6 @@ const Contact = () => {
                             </Box>
                         </Paper>
                     </Grid>
-
-
-                    {/* 右邊留言區域 */}
-
-                    <Grid item xs={12} sm={12} md={12} >
-
-                        <Typography variant="h4" sx={{ textAlign: "left", padding: 0, marginBottom: 5, color: themeObject.palette.text.primary }}>
-                            留言區
-                        </Typography>
-                        <Paper
-                            id="mycalender"
-                            elevation={(theme === 'light' ? 3 : 3)}
-                            sx={{ width: "100%", my: 4, marginBottom: 2, backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)" }}
-                        >
-
-                        </Paper>
-                        {/* Add your message content here */}
-                    </Grid>
-
                 </Grid>
             </ThemeProvider>
         </Container>
