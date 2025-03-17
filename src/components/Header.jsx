@@ -278,7 +278,7 @@ const Header = () => {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY === 0) {
+            if (currentScrollY <= 0) {
                 setDynamicBreadcrumbsOpen(true); // 向上滾動，顯示
             } else if (currentScrollY < prevScrollY.current) {
                 setDynamicBreadcrumbsOpen(true); // 向上滾動，顯示
