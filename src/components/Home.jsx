@@ -14,6 +14,9 @@ import {
 import { createTheme } from "@mui/material/styles";
 import { ThemeContext, LanguageContext } from "../App";
 
+// 動態
+import TextSwitcher from "./effects/TextSwitcher";
+
 function Home() {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -69,7 +72,27 @@ function Home() {
                 mt: 4
             }}
         >
+            <Grid container spacing={3} sx={{
+                mt: 4, justifyContent: 'center',
+            }}>
+                <TextSwitcher
+                    texts={[
+                        'std::cout << "Hello World!";',
+                        'printf("Hello World!");',
+                        'console.log("Hello World!");',
+                        'print("Hello World!")',
+                        'fmt.Println("Hello World!")',]}
+                    fontSize={24}
+                    animationDuration={2000}
+                    sx={{ color: themeObject.palette.text.primary }}
+                    size={1500}
+                />
+            </Grid>
+
+
+
             <Grid container spacing={3} sx={{ mt: 4 }}>
+
                 <Grid item xs={12}>
                     <Typography
                         variant="h4"

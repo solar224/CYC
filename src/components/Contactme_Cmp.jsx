@@ -5,6 +5,7 @@ import { ThemeContext, LanguageContext } from "../App";
 import { Grid, Box, Typography, Container, Paper, Button, Tooltip } from "@mui/material";
 import MyCalendar from "./MyCalendar";
 import Mimictypingeffects from "./effects/Mimictypingeffects";
+import TextSwitcher from "./effects/TextSwitcher";
 
 // icon
 import SendIcon from '@mui/icons-material/Send';
@@ -35,7 +36,6 @@ const Contact = () => {
                                     display: "flex",
                                     alignItems: "center",
                                     gap: 1,
-                                    marginBottom: 1,
                                 }}
                             >
                                 <Box
@@ -53,22 +53,8 @@ const Contact = () => {
                                             whiteSpace: "nowrap", // 防止換行
                                         }}
                                     >
-                                        行事曆 /
+                                        行事曆
                                     </Typography>
-
-                                    <Mimictypingeffects
-                                        textList={[
-                                            "以下為忙碌時間，有事請寄信。",
-                                            "繁忙的日子，會讓人無心空閑懊惱。",
-                                            "人生旅途中有陽光、也有風雨雷電。",
-                                        ]}
-                                        speed={150}
-                                        variant="body2"
-                                        repeat={1}
-                                        sx={{
-                                            color: themeObject.palette.primary.main,
-                                        }}
-                                    />
                                 </Box>
                                 <Tooltip title="點擊可編輯郵件" placement="left">
                                     <Button
@@ -83,7 +69,28 @@ const Contact = () => {
                                     </Button>
                                 </Tooltip>
                             </Box>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "left",
+                                    marginBottom: 1,
+                                }}
+                            >*
+                                <Mimictypingeffects
+                                    textList={[
+                                        "以下為忙碌時間，有事請寄信。",
+                                        "繁忙的日子，讓人無心空閑懊惱。",
+                                        "人生旅途中有陽光、有風雨雷電。",
+                                    ]}
+                                    speed={150}
+                                    variant="body2"
+                                    repeat={1}
+                                    sx={{
+                                        color: themeObject.palette.primary.main,
+                                    }}
+                                />
 
+                            </Box>
                             <Box
                                 sx={{
                                     border: `1px solid ${themeObject.palette.divider}`,

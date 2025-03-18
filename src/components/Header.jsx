@@ -508,7 +508,7 @@ const Header = () => {
                 </AppBar>
             </ElevationScroll>
             {/* 手機 */}
-            <Slide direction="down" in={dynamicBreadcrumbsOpen} mountOnEnter unmountOnExit>
+            <Slide direction="right" in={dynamicBreadcrumbsOpen} mountOnEnter unmountOnExit>
                 <Tooltip title="索引導覽" placement="bottom">
                     <Box
                         style={{

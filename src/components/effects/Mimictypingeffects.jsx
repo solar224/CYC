@@ -14,7 +14,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 
-const TypingEffect = ({ textList, speed, variant = "h6", repeat }) => {
+const TypingEffect = ({ textList, speed, variant, repeat }) => {
     const [textIndex, setTextIndex] = useState(0); // 追蹤目前顯示的文字
     const [displayedText, setDisplayedText] = useState(""); // 當前顯示的字
     const [index, setIndex] = useState(0); // 追蹤打字進度
