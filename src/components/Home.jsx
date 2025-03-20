@@ -73,7 +73,8 @@ function Home() {
             }}
         >
             <Grid container spacing={3} sx={{
-                mt: 4, justifyContent: 'center',
+                mt: 4, justifyContent: 'center', alignItems: 'center',
+
             }}>
                 <TextSwitcher
                     texts={[

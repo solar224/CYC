@@ -11,7 +11,7 @@ import FloatingCircle from "./components/FloatingCircle";
 import DynamicBackground from "./components/DynamicBackground";
 import Schoolcurriculum from "./components/notes/Schoolcurriculum";
 import Proceduralexercises from "./components/notes/Codingpractice";
-import Englishpractice from "./components/notes/Englishpractice";
+import Otherpractice from "./components/notes/Otherpractice";
 import { SnackbarProvider } from "notistack";
 import Note from "./components/Note";
 
@@ -57,7 +57,7 @@ export default function App() {
                 <Route path="/contact-me" element={<Contactme />} />
                 <Route path="/note/school-curriculum" element={<Schoolcurriculum />} />
                 <Route path="/note/coding-practice" element={<Proceduralexercises />} />
-                <Route path="/note/english-practice" element={<Englishpractice />} />
+                <Route path="/note/other-practice" element={<Otherpractice />} />
 
               </Routes>
               <FloatingCircle />

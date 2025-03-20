@@ -21,7 +21,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import InputBase from "@mui/material/InputBase";
 import { Link } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+
 import { ListItemIcon, Tooltip, Slide } from '@mui/material';
 // icon
 import SearchIcon from "@mui/icons-material/Search";
@@ -62,49 +62,6 @@ const Header = () => {
         }
         setDrawerOpen(open);
     };
-
-
-    // 選單項目或空白區域點擊時，關閉選單
-    const Search = styled('div')(({ theme, open }) => ({
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        border: '1px solid #333333', // 外圍增加黑色邊框
-        backgroundColor: alpha(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: alpha(theme.palette.common.white, 0.25),
-        },
-        width: open ? '100%' : '40px', // 未點擊時顯示圖示，點擊後展開
-        display: 'flex',
-        alignItems: 'center',
-        transition: theme.transitions.create('width', {
-            duration: '500ms', // 延長動畫持續時間
-            easing: theme.transitions.easing.easeInOut, // 設置動畫緩和效果
-        }),
-    }));
-
-    const SearchIconWrapper = styled('div')({
-        padding: '0 10px',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer', // 讓搜尋圖示可點擊
-    });
-
-    const StyledInputBase = styled(InputBase)(({ theme, open }) => ({
-        color: 'inherit',
-        width: open ? '100%' : '0', // 點擊時展開，未點擊時隱藏
-        opacity: open ? 1 : 0, // 未點擊時輸入框透明
-        transition: theme.transitions.create(['width', 'opacity'], {
-            duration: '500ms', // 延長動畫持續時間
-            easing: theme.transitions.easing.easeInOut, // 設置動畫緩和效果
-        }),
-        '& .MuiInputBase-input': {
-            padding: theme.spacing(1, 1, 1, 0),
-            paddingLeft: open ? theme.spacing(1) : 0, // 確保 padding 在展開時生效
-        },
-    }));
-
     const drawerContent = (
         <Box
             sx={{
@@ -153,22 +110,6 @@ const Header = () => {
                 </IconButton>
             </Box>
             <Divider sx={{ backgroundColor: theme === "light" ? "black" : "white" }} />
-
-            <Box sx={{ paddingTop: '20px', paddingLeft: '10px', paddingRight: '10px', paddingBottom: '20px' }}>
-                <ClickAwayListener onClickAway={handleClickAway}>
-                    <Search open={Searchopen}>
-                        <SearchIconWrapper onClick={handleFocus}>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            open={Searchopen}
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                            onFocus={handleFocus}
-                        />
-                    </Search>
-                </ClickAwayListener>
-            </Box>
             <List>
 
                 <ListItem disablePadding sx={{ paddingTop: '2px', paddingLeft: '5px', paddingRight: '5px', paddingBottom: '2px' }}>
@@ -366,7 +307,9 @@ const Header = () => {
                                         YC-Chan
                                     </a>
                                 </Typography>
+                                {/* search */}
                             </Box>
+
                             {!isMobile && (
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                     <Button
@@ -503,11 +446,25 @@ const Header = () => {
 
                                 </Box>
                             )}
+
                         </Toolbar>
                     </Container>
                 </AppBar>
             </ElevationScroll>
             {/* 手機 */}
+            <Drawer
+                anchor="left"
+                open={drawerOpen}
+                onClose={toggleDrawer(false)}
+                sx={{
+                    "& .MuiDrawer-paper": {
+                        backgroundColor: theme === "light" ? "#ffffff" : "#333333", // 根據 theme 設置背景色
+                        color: theme === "light" ? "#000000" : "#ffffff", // 設置文字顏色
+                    },
+                }}
+            >
+                {drawerContent}
+            </Drawer>
             <Slide direction="right" in={dynamicBreadcrumbsOpen} mountOnEnter unmountOnExit>
                 <Tooltip title="索引導覽" placement="bottom">
                     <Box
@@ -525,23 +482,8 @@ const Header = () => {
                         <DynamicBreadcrumbs activePage={activePage} />
                     </Box>
                 </Tooltip>
+
             </Slide>
-
-
-            <Drawer
-                anchor="left"
-                open={drawerOpen}
-                onClose={toggleDrawer(false)}
-                sx={{
-                    "& .MuiDrawer-paper": {
-                        backgroundColor: theme === "light" ? "#ffffff" : "#333333", // 根據 theme 設置背景色
-                        color: theme === "light" ? "#000000" : "#ffffff", // 設置文字顏色
-                    },
-                }}
-            >
-                {drawerContent}
-            </Drawer>
-
         </div >
     );
 };

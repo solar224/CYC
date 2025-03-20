@@ -18,7 +18,7 @@ export default function DynamicBreadcrumbs({ activePage }) {
 
         "school-curriculum": "學校課程",
         "coding-practice": "程式練習",
-        "english-practice": "英文練習",
+        "other-practice": "其他",
     };
     return (
         <Breadcrumbs
