@@ -8,7 +8,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import anime from "animejs/lib/anime.es.js";
-import { Grid, Paper, Container, Tooltip, Card, CardContent, Stack, ListItemButton } from "@mui/material";
+import { Grid, Paper, Container, Tooltip, Card, CardContent, Stack, ListItemButton, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ThemeContext, LanguageContext } from "../App";
 import Accordion from '@mui/material/Accordion';
@@ -447,22 +447,29 @@ const About = () => {
                                     sx={{
                                         position: "sticky",
                                         top: 70,
-                                        borderRadius: 4, // ✅ 圓角設定
+                                        borderRadius: 4,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.85)" : "rgba(20, 20, 20, 0.5)",
-                                        backdropFilter: "blur(4px)",
+                                        backdropFilter: "blur(6px)",
                                         overflow: "hidden",
+                                        boxShadow: theme === "light" ? 2 : 8,
+                                        transition: "all 0.3s ease",
+                                        "&:hover": {
+                                            boxShadow: 6,
+                                            transform: "translateY(-2px)",
+                                        },
                                     }}
                                 >
+                                    {/* Header */}
                                     <AccordionSummary
                                         expandIcon={<ArrowDropDownIcon />}
                                         aria-controls="panel2-content"
                                         id="panel2-header"
                                         sx={{
-                                            backgroundColor: theme === "light" ? "rgba(240,240,240,0.8)" : "rgba(40,40,40,0.8)",
+                                            backgroundColor: theme === "light" ? "rgba(240,240,240,0.9)" : "rgba(40,40,40,0.9)",
                                             "&:hover": {
                                                 backgroundColor: theme === "light" ? "rgba(230,230,230,1)" : "rgba(50,50,50,1)",
                                             },
-                                            borderTopLeftRadius: 4, // ✅ 保證展開區塊圓角
+                                            borderTopLeftRadius: 4,
                                             borderTopRightRadius: 4,
                                         }}
                                     >
@@ -471,14 +478,15 @@ const About = () => {
                                         </Typography>
                                     </AccordionSummary>
 
+                                    {/* List */}
                                     <AccordionDetails
                                         sx={{
                                             padding: 0,
-                                            borderBottomLeftRadius: 4, // ✅ 讓收合時底部也有圓角
+                                            borderBottomLeftRadius: 4,
                                             borderBottomRightRadius: 4,
                                         }}
                                     >
-                                        <List>
+                                        <List disablePadding>
                                             {[
                                                 "關於我",
                                                 "教育學歷",
@@ -494,20 +502,20 @@ const About = () => {
                                                     sx={{
                                                         px: 2,
                                                         py: 1,
-                                                        borderRadius: 2, // ✅ 圓角
-                                                        color: theme === "light" ? "#333" : "#fff",
+                                                        mx: 1,
+                                                        my: 0.5,
+                                                        borderRadius: 2,
                                                         transition: "all 0.3s",
+                                                        color: theme === "light" ? "#333" : "#fff",
                                                         "&.Mui-selected": {
                                                             backgroundColor: theme === "light" ? "#333" : "#fff",
                                                             color: theme === "light" ? "#fff" : "#333",
-                                                            borderRadius: 2, // ✅ 選中時保持圓角
                                                             "&:hover": {
                                                                 backgroundColor: theme === "light" ? "#555" : "#e0e0e0",
                                                             },
                                                         },
                                                         "&:hover": {
-                                                            backgroundColor:
-                                                                theme === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)",
+                                                            backgroundColor: theme === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)",
                                                         },
                                                     }}
                                                 >
@@ -515,9 +523,9 @@ const About = () => {
                                                 </ListItemButton>
                                             ))}
                                         </List>
-
                                     </AccordionDetails>
                                 </Accordion>
+
 
                             </Grid>
 
@@ -528,21 +536,26 @@ const About = () => {
                                     sx={{
                                         padding: 3,
                                         borderRadius: 4,
-                                        marginBottom: 2,
+                                        marginBottom: 4,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
+                                        "&:hover": {
+                                            boxShadow: 6,
+                                        },
                                     }}
                                     id="教育學歷"
                                     onMouseEnter={() => setActiveSection("教育學歷")}
                                 >
+                                    {/* 標題 */}
                                     <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-                                        <img src={education} alt="education" style={{ width: 24 }} />
+                                        <Box component="img" src={education} alt="education" sx={{ width: 24 }} />
                                         <Typography variant="h5" fontWeight="bold">
                                             教育學歷
                                         </Typography>
                                     </Stack>
 
-                                    <Stack spacing={2}>
+                                    {/* 學歷內容 */}
+                                    <Stack spacing={1.5}>
                                         {[
                                             // { date: "2025 ~ 2027", school: "國立陽明交通大學 數據科學與工程研究所", link: "https://www.cs.nycu.edu.tw/intro/organization/cybersecurity" },
                                             { date: "2021/9 ~ 2025/6", school: "國立高雄科技大學 電腦與通訊工程系", link: "https://ccee.nkust.edu.tw/" },
@@ -552,45 +565,43 @@ const About = () => {
                                                 key={`edu-${index}`}
                                                 sx={{
                                                     padding: 2,
-                                                    borderRadius: 2,
-                                                    backgroundColor: theme === "light" ? "rgba(240,240,240,0.6)" : "rgba(30,30,30,0.8)",
+                                                    borderRadius: 3,
+                                                    backgroundColor: theme === "light" ? "rgba(240,240,240,0.7)" : "rgba(30,30,30,0.85)",
                                                     transition: "all 0.3s",
-                                                    '&:hover': {
+                                                    "&:hover": {
                                                         boxShadow: 4,
-                                                        transform: "translateY(-2px)",
+                                                        transform: "translateY(-3px)",
                                                     },
                                                 }}
                                             >
-                                                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                                    <Box>
-                                                        <Typography variant="body2" color="text.secondary">
-                                                            {item.date}
-                                                        </Typography>
-                                                        <Tooltip title={language === "zh" ? "進入官網" : "Go to official site"} placement="right">
-                                                            <Typography
-                                                                variant="body1"
-                                                                component="a"
-                                                                href={item.link}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                sx={{
-                                                                    textDecoration: "none",
-                                                                    color: theme === "light" ? "#333" : "#fff",
-                                                                    transition: "color 0.2s",
-                                                                    '&:hover': {
-                                                                        color: "#f39212",
-                                                                    },
-                                                                }}
-                                                            >
-                                                                {item.school}
-                                                            </Typography>
-                                                        </Tooltip>
-                                                    </Box>
-                                                </Stack>
+                                                <Typography variant="body2" color="text.secondary" mb={0.5}>
+                                                    📅 {item.date}
+                                                </Typography>
+                                                <Tooltip title={language === "zh" ? "進入官網" : "Go to official site"} placement="right">
+                                                    <Typography
+                                                        variant="body1"
+                                                        fontWeight="bold"
+                                                        component="a"
+                                                        href={item.link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        sx={{
+                                                            textDecoration: "none",
+                                                            color: theme === "light" ? "#333" : "#fff",
+                                                            transition: "color 0.3s",
+                                                            "&:hover": {
+                                                                color: "#f39212",
+                                                            },
+                                                        }}
+                                                    >
+                                                        🎓 {item.school}
+                                                    </Typography>
+                                                </Tooltip>
                                             </Box>
                                         ))}
                                     </Stack>
                                 </Paper>
+
 
 
                                 <Paper
@@ -598,60 +609,120 @@ const About = () => {
                                     sx={{
                                         padding: 3,
                                         borderRadius: 4,
-                                        marginBottom: 2,
+                                        marginBottom: 4,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
+                                        "&:hover": {
+                                            boxShadow: 6,
+                                        },
                                     }}
                                     id="學習經歷"
                                     onMouseEnter={() => setActiveSection("學習經歷")}
                                 >
+                                    {/* 標題 */}
                                     <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-                                        <img
-                                            src={schoolbag}
-                                            alt="schoolbag"
-                                            style={{ width: 24 }}
-                                        />
+                                        <Box component="img" src={schoolbag} alt="schoolbag" sx={{ width: 24 }} />
                                         <Typography variant="h5" fontWeight="bold">
                                             學習經歷
                                         </Typography>
                                     </Stack>
 
-                                    <Stack spacing={1}>
+                                    {/* 經歷內容 */}
+                                    <Stack spacing={1.5}>
                                         {[
-                                            { date: "2024/7 ~ 2024/8", title: "暑期教師", titleen: "Summer Teacher", level: "小學" },
-                                            { date: "2024/2 ~ 2024/6", title: "機率助教", titleen: "Chance Teaching Assistant", level: "大學" },
-                                            { date: "2023/9 ~ 2024/1", title: "線性代數助教", titleen: "Teaching assistant in linear algebra", level: "大學" },
+                                            { date: "2024/7 ~ 2024/8", title: "暑期教師", titleen: "Summer Teacher", level: "小學", levelen: "elementary school" },
+                                            { date: "2024/2 ~ 2024/6", title: "機率助教", titleen: "Chance Teaching Assistant", level: "大學", levelen: "university" },
+                                            { date: "2023/9 ~ 2024/1", title: "線性代數助教", titleen: "Teaching assistant in linear algebra", level: "大學", levelen: "university" },
                                         ].map((item, id) => (
                                             <Box
                                                 key={`teach-${id}`}
                                                 sx={{
                                                     display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "space-between",
-                                                    padding: 1.5,
-                                                    borderRadius: 2,
-                                                    backgroundColor: theme === "light" ? "rgba(240,240,240,0.6)" : "rgba(30,30,30,0.8)",
-                                                    '&:hover': {
+                                                    flexDirection: "column",
+                                                    gap: 0.5,
+                                                    padding: 2,
+                                                    borderRadius: 3,
+                                                    backgroundColor: theme === "light" ? "rgba(240,240,240,0.7)" : "rgba(30,30,30,0.85)",
+                                                    transition: "all 0.3s",
+                                                    "&:hover": {
                                                         boxShadow: 4,
-                                                        transform: "translateY(-2px)",
-                                                        transition: "all 0.2s",
+                                                        transform: "translateY(-3px)",
                                                     },
                                                 }}
                                             >
-                                                <Stack direction="row" alignItems="center" spacing={1}>
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        {item.date}
-                                                    </Typography>
-                                                    <Typography variant="body1">
-                                                        | {item.title} ({item.level})
-                                                    </Typography>
-                                                </Stack>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    📅 {item.date}
+                                                </Typography>
+                                                <Typography variant="body1" fontWeight="bold">
+                                                    🎯 {(language === "zh") ? item.title : item.titleen}
+                                                    ({(language === "zh") ? item.level : item.levelen})
+                                                </Typography>
+                                            </Box>
+                                        ))}
+                                    </Stack>
+                                </Paper>
 
-                                                <Tooltip title={language === "zh" ? item.title : item.titleen} placement="left">
-                                                    <Typography variant="body2" color="primary">
-                                                        {language === "zh" ? "更多" : "More"}
-                                                    </Typography>
-                                                </Tooltip>
+
+
+                                <Paper
+                                    elevation={theme === "light" ? 1 : 12}
+                                    sx={{
+                                        padding: 3,
+                                        borderRadius: 4,
+                                        marginBottom: 4,
+                                        backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
+                                        transition: "all 0.3s",
+                                        "&:hover": {
+                                            boxShadow: 6,
+                                        },
+                                    }}
+                                    id="專案計畫"
+                                    onMouseEnter={() => setActiveSection("專案計畫")}
+                                >
+                                    {/* 標題 */}
+                                    <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                                        <Box component="img" src={project} alt="project" sx={{ width: 24 }} />
+                                        <Typography variant="h5" fontWeight="bold">
+                                            專案計畫
+                                        </Typography>
+                                    </Stack>
+
+                                    {/* 專案內容 */}
+                                    <Stack spacing={2}>
+                                        {[
+                                            { date: "2023/7 ~ 2024/6", title: "運算思維差異化教學平臺", author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
+                                            { date: "2024/2 ~ 2024/6", title: "禁忌搜索與模擬退火結合貪婪匹配最佳化方法", author: "詹宇宸" },
+                                            { date: "2024/2 ~ 2024/6", title: "考量樂觀偏差現象的哈里斯鷹最佳化方法應用於手術時間預測", author: "薛榆杰、詹宇宸" },
+                                            { date: "2023/9 ~ 2024/1", title: "超參數優化梯度提升樹解決手術時間預測問題", author: "詹宇宸" },
+                                        ].map((item, index) => (
+                                            <Box
+                                                key={`project-${index}`}
+                                                sx={{
+                                                    padding: 2,
+                                                    borderRadius: 3,
+                                                    backgroundColor: theme === "light" ? "rgba(245,245,245,0.8)" : "rgba(30,30,30,0.85)",
+                                                    boxShadow: 2,
+                                                    transition: "all 0.3s",
+                                                    "&:hover": {
+                                                        boxShadow: 6,
+                                                        transform: "translateY(-3px)",
+                                                    },
+                                                }}
+                                            >
+                                                <Typography variant="body2" color="text.secondary" mb={0.5}>
+                                                    📅 {item.date}
+                                                </Typography>
+                                                <Typography
+                                                    variant="body1"
+                                                    fontWeight="bold"
+                                                    gutterBottom
+                                                    sx={{ lineHeight: 1.6 }}
+                                                >
+                                                    📌 {item.title}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    👥 參與成員：{item.author}
+                                                </Typography>
                                             </Box>
                                         ))}
                                     </Stack>
@@ -666,90 +737,39 @@ const About = () => {
                                         marginBottom: 4,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
-                                    }}
-                                    id="專案計畫"
-                                    onMouseEnter={() => setActiveSection("專案計畫")}
-                                >
-                                    <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-                                        <img src={project} alt="project" style={{ width: 24 }} />
-                                        <Typography variant="h5" fontWeight="bold">
-                                            專案計畫
-                                        </Typography>
-                                    </Stack>
-
-                                    <Stack spacing={2}>
-                                        {[
-                                            { date: "2023/7 ~ 2024/6", title: "運算思維差異化教學平臺", author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
-                                            { date: "2024/2 ~ 2024/6", title: "禁忌搜索與模擬退火結合貪婪匹配最佳化方法", author: "詹宇宸" },
-                                            { date: "2024/2 ~ 2024/6", title: "考量樂觀偏差現象的哈里斯鷹最佳化方法應用於手術時間預測", author: "薛榆杰、詹宇宸" },
-                                            { date: "2023/9 ~ 2024/1", title: "超參數優化梯度提升樹解決手術時間預測問題", author: "詹宇宸" },
-                                        ].map((item, index) => (
-                                            <Box
-                                                key={`project-${index}`}
-                                                sx={{
-                                                    padding: 2,
-                                                    borderRadius: 2,
-                                                    backgroundColor: theme === "light" ? "rgba(240,240,240,0.6)" : "rgba(30,30,30,0.8)",
-                                                    transition: "all 0.3s",
-                                                    '&:hover': {
-                                                        boxShadow: 4,
-                                                        transform: "translateY(-2px)",
-                                                    },
-                                                }}
-                                            >
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {item.date}
-                                                </Typography>
-                                                <Typography variant="body1" fontWeight="bold" gutterBottom>
-                                                    📌 {item.title}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    參與成員：{item.author}
-                                                </Typography>
-                                            </Box>
-                                        ))}
-                                    </Stack>
-                                </Paper>
-
-                                <Paper
-                                    elevation={theme === "light" ? 1 : 12}
-                                    sx={{
-                                        padding: 3,
-                                        borderRadius: 4,
-                                        marginBottom: 2,
-                                        backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
-                                        transition: "all 0.3s",
+                                        "&:hover": {
+                                            boxShadow: 6,
+                                        },
                                     }}
                                     id="競賽榮譽"
                                     onMouseEnter={() => setActiveSection("競賽榮譽")}
                                 >
-                                    <Grid container spacing={2} alignItems="center">
-                                        <Grid item xs={12}>
-                                            <Stack direction="row" alignItems="center" spacing={1}>
-                                                <img src={trophy} alt="trophy" style={{ width: 28 }} />
-                                                <Typography variant="h5" fontWeight="bold">
-                                                    競賽榮譽
-                                                </Typography>
-                                            </Stack>
-                                        </Grid>
+                                    {/* 標題 */}
+                                    <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                                        <Box component="img" src={trophy} alt="trophy" sx={{ width: 28 }} />
+                                        <Typography variant="h5" fontWeight="bold">
+                                            競賽榮譽
+                                        </Typography>
+                                    </Stack>
 
+                                    {/* 卡片 */}
+                                    <Grid container spacing={2}>
                                         {visibleItems.map((item, index) => (
-                                            <Grid item xs={12} sm={6} md={4} key={`trophy-${index}`} sx={{ display: "flex" }}>
+                                            <Grid item xs={12} sm={6} md={4} key={`trophy-${index}`} display="flex">
                                                 <Card
                                                     sx={{
                                                         width: "100%",
-                                                        height: "100%",
-                                                        minHeight: 220, // ✅ 統一卡片高度
+                                                        minHeight: 220,
                                                         display: "flex",
                                                         flexDirection: "column",
                                                         justifyContent: "space-between",
                                                         borderRadius: 3,
-                                                        boxShadow: 4,
+                                                        boxShadow: 3,
                                                         background: theme === "light"
                                                             ? "linear-gradient(135deg, #ffffff, #f7f7f7)"
                                                             : "linear-gradient(135deg, #1f1f1f, #2b2b2b)",
-                                                        transition: "transform 0.2s, box-shadow 0.2s",
-                                                        '&:hover': {
+                                                        transition: "all 0.3s",
+                                                        "&:hover": {
                                                             transform: "translateY(-4px)",
                                                             boxShadow: 8,
                                                         },
@@ -764,310 +784,229 @@ const About = () => {
                                                         }}
                                                     >
                                                         <Box>
-                                                            <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                                                            <Typography
+                                                                variant="subtitle1"
+                                                                fontWeight="bold"
+                                                                gutterBottom
+                                                                sx={{
+                                                                    overflow: "hidden",
+                                                                    textOverflow: "ellipsis",
+                                                                    display: "-webkit-box",
+                                                                    WebkitLineClamp: 2,
+                                                                    WebkitBoxOrient: "vertical",
+                                                                }}
+                                                            >
                                                                 🏆 {item.title}
                                                             </Typography>
                                                             {item.Awards && (
-                                                                <Typography variant="body2" color="text.secondary">
+                                                                <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
                                                                     獲獎：{item.Awards}
                                                                 </Typography>
                                                             )}
                                                         </Box>
 
-                                                        <Typography
-                                                            variant="body2"
-                                                            color="text.secondary"
-                                                            sx={{ mt: 1 }}
-                                                        >
+                                                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                                                             參與成員：{item.author}
                                                         </Typography>
                                                     </CardContent>
                                                 </Card>
                                             </Grid>
                                         ))}
-
                                     </Grid>
 
-                                    <Box textAlign="right" mt={2}>
-                                        <Button variant="outlined" onClick={() => setAwardShowAll(!awardShowAll)}>
+                                    {/* 更多按鈕 */}
+                                    <Box display="flex" justifyContent="flex-end" mt={2}>
+                                        <Button
+                                            variant="outlined"
+                                            size="small"
+                                            onClick={() => setAwardShowAll(!awardShowAll)}
+                                            endIcon={awardShowAll ? "▲" : "▼"}
+                                            sx={{
+                                                borderRadius: 2,
+                                                textTransform: "none",
+                                                paddingX: 2,
+                                                paddingY: 0.8,
+                                            }}
+                                        >
                                             {awardShowAll ? "收合" : "查看更多"}
                                         </Button>
                                     </Box>
                                 </Paper>
+
 
                                 <Paper
                                     elevation={theme === "light" ? 1 : 12}
                                     sx={{
                                         padding: 3,
                                         borderRadius: 4,
-                                        marginBottom: 2,
+                                        marginBottom: 4,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
+                                        "&:hover": {
+                                            boxShadow: 6,
+                                        },
                                     }}
                                     id="學業表現"
                                     onMouseEnter={() => setActiveSection("學業表現")}
                                 >
-                                    <Grid container>
-                                        <Grid md={6} xs={6}>
-                                            <Typography variant="h5" gutterBottom>
-                                                <img
-                                                    src={score}
-                                                    alt="score"
-                                                    style={{
-                                                        maxWidth: "20px",
-                                                        width: "100%",
-                                                    }}
-                                                /> 學業表現
+                                    <Grid container alignItems="center" spacing={2}>
+                                        <Grid item xs={12} md={6} display="flex" alignItems="center">
+                                            <Box
+                                                component="img"
+                                                src={score}
+                                                alt="score"
+                                                sx={{ width: 24, mr: 1 }}
+                                            />
+                                            <Typography variant="h5" fontWeight="bold">
+                                                學業表現
                                             </Typography>
                                         </Grid>
-                                        {/* 切換按鈕 */}
-                                        <Grid item xs={6} md={6} display="flex" justifyContent="flex-end">
-                                            <ButtonGroup variant="text">
-                                                <Button
-                                                    onClick={() => setShowUndergrad(true)}
 
+                                        {/* 切換按鈕 */}
+                                        <Grid item xs={12} md={6} display="flex" justifyContent="flex-end">
+                                            <ButtonGroup variant="outlined" size="small">
+                                                <Button
+                                                    variant={showUndergrad ? "contained" : "outlined"}
+                                                    onClick={() => setShowUndergrad(true)}
                                                 >
                                                     大學
                                                 </Button>
                                                 <Button
+                                                    variant={!showUndergrad ? "contained" : "outlined"}
                                                     onClick={() => setShowUndergrad(false)}
-
                                                 >
                                                     研究所
                                                 </Button>
                                             </ButtonGroup>
-
                                         </Grid>
                                     </Grid>
-                                    <br />
-                                    <Grid container>
-                                        {/* 大學圖表 */}
+
+                                    <Divider sx={{ my: 2 }} />
+
+                                    <Grid container spacing={2}>
+                                        {/* 大學資料 */}
                                         {showUndergrad && (
                                             <>
+                                                {/* GPA Chart */}
                                                 <Grid item xs={12} md={12}>
                                                     <ResponsiveContainer width="100%" height={250}>
                                                         <ComposedChart data={College_grades} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
                                                             <CartesianGrid strokeDasharray="1 1" stroke="#ddd" />
-                                                            <XAxis dataKey="semester"
-                                                                tick={{ fill: theme === 'dark' ? '#fff' : '#333' }} // 設定刻度文字顏色
-                                                                axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }} // 設定X軸線條顏色
-                                                            />
+                                                            <XAxis dataKey="semester" tick={{ fill: theme === "dark" ? "#fff" : "#333" }} />
                                                             <YAxis
                                                                 yAxisId="left"
                                                                 orientation="left"
                                                                 domain={[0, 4.3]}
                                                                 label={{ value: "GPA", angle: -90, position: "insideLeft" }}
-                                                                axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
-                                                                tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
                                                             />
                                                             <YAxis
                                                                 yAxisId="right"
                                                                 orientation="right"
                                                                 domain={[0, 100]}
                                                                 label={{ value: "班級 PR", angle: -90, position: "insideRight" }}
-                                                                axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
-                                                                tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
                                                             />
                                                             <RechartsTooltip
                                                                 contentStyle={{
-                                                                    backgroundColor: theme === 'dark' ? '#333' : '#fff', // 深色模式背景為深灰色，淺色模式為白色
-                                                                    color: theme === 'dark' ? '#fff' : '#333', // 文字顏色根據模式變化
-                                                                    border: '1px solid', // 可以添加邊框以增強可視化效果
-                                                                    borderColor: theme === 'dark' ? '#444' : '#ccc', // 邊框顏色
+                                                                    backgroundColor: theme === "dark" ? "#333" : "#fff",
+                                                                    color: theme === "dark" ? "#fff" : "#333",
+                                                                    border: "1px solid",
+                                                                    borderColor: theme === "dark" ? "#444" : "#ccc",
                                                                 }}
                                                             />
                                                             <Legend />
-                                                            {/* 學分數的 Bar */}
-                                                            <Bar
-                                                                yAxisId="right"
-                                                                dataKey="Credits"
-                                                                fill="#ff7300"
-                                                                barSize={2.5}
-                                                                name="學分"
-                                                            />
-                                                            {/* GPA 線條 */}
+                                                            <Bar yAxisId="right" dataKey="Credits" fill="#ff7300" barSize={2.5} name="學分" />
                                                             <Line yAxisId="left" type="monotone" name="GPA" dataKey="GPA" stroke="#8884d8" strokeWidth={2} activeDot={{ r: 8 }} />
-                                                            {/* 班級排名線條 */}
                                                             <Line yAxisId="right" type="monotone" name="PR" dataKey="PR" stroke="#82ca9d" strokeWidth={2} activeDot={{ r: 8 }} />
                                                             <Brush dataKey="semester" height={10} stroke="#8884d8" />
                                                         </ComposedChart>
                                                     </ResponsiveContainer>
                                                 </Grid>
-                                                <Grid item xs={12} md={5.9}>
-                                                    <Box sx={{ width: '100%' }}>
-                                                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                                            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+
+                                                {/* 學科表 & 雷達圖 */}
+                                                <Grid item xs={12} md={6}>
+                                                    <Box sx={{ width: "100%" }}>
+                                                        <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 1 }}>
+                                                            <Tabs value={value} onChange={handleChange}>
                                                                 <Tab label="資工" {...a11yProps(0)} />
                                                                 <Tab label="通訊" {...a11yProps(1)} />
                                                                 <Tab label="其他" {...a11yProps(2)} />
                                                             </Tabs>
                                                         </Box>
 
-                                                        {/* 資工 */}
                                                         <CustomTabPanel value={value} index={0}>
                                                             <GradesTable data={College_grades_Group["cs"]} />
                                                         </CustomTabPanel>
-
-                                                        {/* 通訊 */}
                                                         <CustomTabPanel value={value} index={1}>
                                                             <GradesTable data={College_grades_Group["communications"]} />
                                                         </CustomTabPanel>
-
-                                                        {/* 其他 */}
                                                         <CustomTabPanel value={value} index={2}>
                                                             <GradesTable data={College_grades_Group["others"]} />
                                                         </CustomTabPanel>
                                                     </Box>
                                                 </Grid>
-                                                <Grid item xs={12} md={0.2} />
 
-                                                <Grid item xs={12} md={5.9} sx={{ mt: 2 }}>
-                                                    {/* 雷達圖 */}
+                                                <Grid item xs={12} md={6}>
                                                     <ResponsiveContainer width="100%" height={300}>
                                                         <RadarChart cx="50%" cy="50%" outerRadius="75%" data={Skill_distribution}>
                                                             <PolarGrid />
-                                                            <PolarAngleAxis dataKey="subject" stroke={theme === 'dark' ? '#fff' : '#333'}
-                                                                tick={{ dy: 5 }} // 使用 dy 調整標籤距離
-                                                            /> {/* 設置軸標籤字體顏色 */}
-                                                            <PolarRadiusAxis stroke={theme === 'dark' ? '#fff' : '#333'} /> {/* 設置輻射軸字體顏色 */}
-                                                            <Radar name="技能評估" dataKey="score" stroke="#8884d8" fill="#8884d8" fillOpacity={0.4}
-
-                                                            />
+                                                            <PolarAngleAxis dataKey="subject" stroke={theme === "dark" ? "#fff" : "#333"} tick={{ dy: 5 }} />
+                                                            <PolarRadiusAxis stroke={theme === "dark" ? "#fff" : "#333"} />
+                                                            <Radar name="技能評估" dataKey="score" stroke="#8884d8" fill="#8884d8" fillOpacity={0.4} />
                                                         </RadarChart>
                                                     </ResponsiveContainer>
-                                                    {/* 直方圖 */}
+
                                                     <ResponsiveContainer width="100%" height={200}>
-                                                        <ComposedChart data={College_Fractions} margin={{
-                                                            top: 5,
-                                                            right: 30,
-                                                            left: 20,
-                                                            bottom: 5,
-                                                        }}>
+                                                        <ComposedChart data={College_Fractions} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                                                             <CartesianGrid strokeDasharray="1 1" stroke="#ddd" />
-
-                                                            <YAxis
-                                                                axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
-                                                                tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
-                                                            />
-                                                            <XAxis
-                                                                dataKey="name"
-                                                                tick={{ fill: theme === 'dark' ? '#fff' : '#333' }} // 設定刻度文字顏色
-                                                                axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }} // 設定X軸線條顏色
-                                                            />
-
+                                                            <YAxis />
+                                                            <XAxis dataKey="name" tick={{ fill: theme === "dark" ? "#fff" : "#333" }} />
                                                             <RechartsTooltip
                                                                 contentStyle={{
-                                                                    backgroundColor: theme === 'dark' ? '#333' : '#fff', // 深色模式背景為深灰色，淺色模式為白色
-                                                                    color: theme === 'dark' ? '#fff' : '#333', // 文字顏色根據模式變化
-                                                                    border: '1px solid', // 可以添加邊框以增強可視化效果
-                                                                    borderColor: theme === 'dark' ? '#444' : '#ccc', // 邊框顏色
+                                                                    backgroundColor: theme === "dark" ? "#333" : "#fff",
+                                                                    color: theme === "dark" ? "#fff" : "#333",
+                                                                    border: "1px solid",
+                                                                    borderColor: theme === "dark" ? "#444" : "#ccc",
                                                                 }}
                                                             />
                                                             <Legend />
-                                                            {/* 學分數的 Bar */}
-                                                            <Bar
-                                                                dataKey="aa"
-                                                                fill="#8884d8"
-                                                                barSize={20} name="A+"
-                                                            />
-                                                            <Bar
-                                                                dataKey="a"
-                                                                fill="#82ca9d"
-                                                                barSize={20} name="A"
-                                                            />
-                                                            <Bar
-                                                                dataKey="as"
-                                                                fill="#ff7300"
-                                                                barSize={20}
-                                                                name="A-"
-                                                            />
+                                                            <Bar dataKey="aa" fill="#8884d8" barSize={20} name="A+" />
+                                                            <Bar dataKey="a" fill="#82ca9d" barSize={20} name="A" />
+                                                            <Bar dataKey="as" fill="#ff7300" barSize={20} name="A-" />
                                                         </ComposedChart>
                                                     </ResponsiveContainer>
                                                 </Grid>
                                             </>
                                         )}
 
-                                        {/* 研究所圖表 */}
+                                        {/* 研究所資料 */}
                                         {!showUndergrad && (
-                                            <>
-                                                <Grid item xs={12} md={12}>
-                                                    <ResponsiveContainer width="100%" height={250}>
-                                                        <ComposedChart data={College_grades} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-                                                            <CartesianGrid strokeDasharray="1 1" stroke="#ddd" />
-                                                            <XAxis dataKey="semester"
-                                                                tick={{ fill: theme === 'dark' ? '#fff' : '#333' }} // 設定刻度文字顏色
-                                                                axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }} // 設定X軸線條顏色
-                                                            />
-                                                            <YAxis
-                                                                yAxisId="left"
-                                                                orientation="left"
-                                                                domain={[0, 4.3]}
-                                                                label={{ value: "GPA", angle: -90, position: "insideLeft" }}
-                                                                axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
-                                                                tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
-                                                            />
-                                                            <YAxis
-                                                                yAxisId="right"
-                                                                orientation="right"
-                                                                domain={[0, 100]}
-                                                                label={{ value: "班級 PR", angle: -90, position: "insideRight" }}
-                                                                axisLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變軸線顏色
-                                                                tickLine={{ stroke: theme === 'dark' ? '#fff' : '#333' }}  // 根據模式改變刻度線顏色
-                                                            />
-                                                            <RechartsTooltip
-                                                                contentStyle={{
-                                                                    backgroundColor: theme === 'dark' ? '#333' : '#fff', // 深色模式背景為深灰色，淺色模式為白色
-                                                                    color: theme === 'dark' ? '#fff' : '#333', // 文字顏色根據模式變化
-                                                                    border: '1px solid', // 可以添加邊框以增強可視化效果
-                                                                    borderColor: theme === 'dark' ? '#444' : '#ccc', // 邊框顏色
-                                                                }}
-                                                            />
-                                                            <Legend />
-                                                            {/* 學分數的 Bar */}
-                                                            <Bar
-                                                                yAxisId="right"
-                                                                dataKey="Credits"
-                                                                fill="#ff7300"
-                                                                barSize={2.5}
-                                                                name="學分"
-                                                            />
-                                                            {/* GPA 線條 */}
-                                                            <Line yAxisId="left" type="monotone" name="GPA" dataKey="GPA" stroke="#8884d8" strokeWidth={2} activeDot={{ r: 8 }} />
-                                                            {/* 班級排名線條 */}
-                                                            <Line yAxisId="right" type="monotone" name="PR" dataKey="PR" stroke="#82ca9d" strokeWidth={2} activeDot={{ r: 8 }} />
-                                                            <Brush dataKey="semester" height={10} stroke="#8884d8" />
-                                                        </ComposedChart>
-                                                    </ResponsiveContainer>
-                                                </Grid>
-                                                <Grid item xs={12} md={5.9}>
-                                                    {/* <Box sx={{ width: '100%' }}>
-                                                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                                        <Tab label="資工" {...a11yProps(0)} />
-                                                        <Tab label="通訊" {...a11yProps(1)} />
-                                                        <Tab label="其他" {...a11yProps(2)} />
-                                                    </Tabs>
-                                                </Box>
-                                                <CustomTabPanel value={value} index={0}>
-
-                                                </CustomTabPanel>
-                                                <CustomTabPanel value={value} index={1}>
-                                                    Item Two
-                                                </CustomTabPanel>
-                                                <CustomTabPanel value={value} index={2}>
-                                                    Item Three
-                                                </CustomTabPanel>
-                                            </Box> */}
-                                                </Grid>
-                                                <Grid item xs={12} md={0.2} />
-                                                <Grid item xs={12} md={5.9}>
-
-
-                                                </Grid>
-                                            </>
+                                            <Grid item xs={12}>
+                                                <ResponsiveContainer width="100%" height={250}>
+                                                    <ComposedChart data={College_grades} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+                                                        <CartesianGrid strokeDasharray="1 1" stroke="#ddd" />
+                                                        <XAxis dataKey="semester" tick={{ fill: theme === "dark" ? "#fff" : "#333" }} />
+                                                        <YAxis yAxisId="left" orientation="left" domain={[0, 4.3]} label={{ value: "GPA", angle: -90, position: "insideLeft" }} />
+                                                        <YAxis yAxisId="right" orientation="right" domain={[0, 100]} label={{ value: "班級 PR", angle: -90, position: "insideRight" }} />
+                                                        <RechartsTooltip
+                                                            contentStyle={{
+                                                                backgroundColor: theme === "dark" ? "#333" : "#fff",
+                                                                color: theme === "dark" ? "#fff" : "#333",
+                                                                border: "1px solid",
+                                                                borderColor: theme === "dark" ? "#444" : "#ccc",
+                                                            }}
+                                                        />
+                                                        <Legend />
+                                                        <Bar yAxisId="right" dataKey="Credits" fill="#ff7300" barSize={2.5} name="學分" />
+                                                        <Line yAxisId="left" type="monotone" name="GPA" dataKey="GPA" stroke="#8884d8" strokeWidth={2} activeDot={{ r: 8 }} />
+                                                        <Line yAxisId="right" type="monotone" name="PR" dataKey="PR" stroke="#82ca9d" strokeWidth={2} activeDot={{ r: 8 }} />
+                                                        <Brush dataKey="semester" height={10} stroke="#8884d8" />
+                                                    </ComposedChart>
+                                                </ResponsiveContainer>
+                                            </Grid>
                                         )}
                                     </Grid>
                                 </Paper>
+
                             </Grid>
                         </Grid>
                     </Grid>

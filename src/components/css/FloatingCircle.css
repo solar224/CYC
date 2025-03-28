@@ -1,11 +1,3 @@
-.floating-circle-container {
-    display: flex;
-    flex-direction: column;
-    /* align-items: right; */
-    z-index: 1;
-    align-items: flex-end;
-}
-
 /* 圓圈基礎樣式 */
 .floating-circle {
     width: 60px;
