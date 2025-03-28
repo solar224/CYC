@@ -3,7 +3,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Container, Grid, Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material";
 import { ThemeContext, LanguageContext } from "../../App";
 import { Link } from "react-router-dom";
-const Englishpractice = () => {
+const Otherpractice = () => {
     const { theme } = useContext(ThemeContext);
     const themeObject = createTheme({ palette: { mode: theme === "light" ? "light" : "dark" } });
     return (
@@ -26,4 +26,4 @@ const Englishpractice = () => {
     );
 };
 
-export default Englishpractice;
+export default Otherpractice;

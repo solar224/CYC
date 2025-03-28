@@ -37,7 +37,7 @@ const AnimatedText = styled(Typography)(({ animationDuration }) => ({
     animation: `${slideFade} ${animationDuration}ms linear 1 forwards`,
 }));
 
-export default function TextSwitcher({ texts, fontSize, animationDuration, sx }) {
+export default function TextSwitcher({ texts, fontSize, animationDuration, sx, size }) {
     const [index, setIndex] = useState(0);
 
     if (!texts || !texts.length) return null;
@@ -51,7 +51,7 @@ export default function TextSwitcher({ texts, fontSize, animationDuration, sx })
             style={{
                 display: "inline-block",
                 position: "relative",
-                width: 600,              // 指定一個固定寬度或最小寬度
+                width: size,              // 指定一個固定寬度或最小寬度
                 height: fontSize * 1.6,
                 overflow: "hidden",
             }}

@@ -9,7 +9,8 @@ import {
     Container,
     Box,
     ButtonGroup,
-    Skeleton
+    Skeleton,
+    Pagination
 } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { ThemeContext, LanguageContext } from "../App";
@@ -25,7 +26,14 @@ function Home() {
     const { theme } = useContext(ThemeContext);
     const themeObject = createTheme({ palette: { mode: theme === 'light' ? 'light' : 'dark' } });
     const [color, setColor] = useState(theme === 'light' ? "black" : "white");
+    const [page, setPage] = useState(1);
+    const itemsPerPage = 6;
+    const totalPages = Math.ceil(news.length / itemsPerPage);
+    const handleChange = (event, value) => {
+        setPage(value);
+    };
 
+    const displayedNews = news.slice((page - 1) * itemsPerPage, page * itemsPerPage);
     useEffect(() => {
         setColor(theme === 'light' ? "black" : "white");
     }, [theme]);
@@ -202,7 +210,7 @@ function Home() {
                             </Card>
                         </Grid>
                     ))
-                    : news.map((article, index) => (
+                    : displayedNews.map((article, index) => (
                         <Grid
                             item
                             xs={12}
@@ -215,14 +223,19 @@ function Home() {
                             <Card
                                 sx={{
                                     width: "100%",
-                                    borderRadius: 2,
-                                    boxShadow: 3,
+                                    borderRadius: 3,
+                                    boxShadow: 4,
                                     backgroundColor:
                                         theme === "light"
-                                            ? "rgba(255, 255, 255, 0.85)"
-                                            : "rgba(3, 3, 3, 0.65)",
+                                            ? "rgba(255, 255, 255, 0.92)"
+                                            : "rgba(18, 18, 18, 0.85)",
                                     color: theme === "light" ? "black" : "white",
                                     position: "relative",
+                                    transition: "all 0.3s",
+                                    "&:hover": {
+                                        transform: "translateY(-3px)",
+                                        boxShadow: 6,
+                                    },
                                 }}
                             >
                                 <CardMedia
@@ -230,14 +243,20 @@ function Home() {
                                     height="180"
                                     image={article.urlToImage}
                                     alt={article.title}
+                                    sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
                                 />
                                 <CardContent sx={{ paddingBottom: "100px" }}>
                                     <Typography
                                         gutterBottom
-                                        variant="h6"
-                                        component="div"
+                                        variant="subtitle1"
+                                        fontWeight="bold"
                                         sx={{
-                                            color: theme === "light" ? "black" : "white"
+                                            color: theme === "light" ? "#222" : "#eee",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            display: "-webkit-box",
+                                            WebkitLineClamp: 2,
+                                            WebkitBoxOrient: "vertical",
                                         }}
                                     >
                                         {article.title}
@@ -245,10 +264,12 @@ function Home() {
                                     <Typography
                                         variant="body2"
                                         sx={{
-                                            color:
-                                                theme === "light"
-                                                    ? "black"
-                                                    : "rgba(200, 200, 200, 0.65)"
+                                            color: theme === "light" ? "#444" : "rgba(200, 200, 200, 0.8)",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            display: "-webkit-box",
+                                            WebkitLineClamp: 3,
+                                            WebkitBoxOrient: "vertical",
                                         }}
                                     >
                                         {article.description}
@@ -276,7 +297,7 @@ function Home() {
                                         bottom: 10,
                                         left: 10,
                                         fontSize: "12px",
-                                        color: theme === "light" ? "black" : "white"
+                                        color: theme === "light" ? "#333" : "#ccc",
                                     }}
                                 >
                                     <Typography variant="body2">
@@ -296,6 +317,17 @@ function Home() {
                             </Card>
                         </Grid>
                     ))}
+                {totalPages > 1 && (
+                    <Box display="flex" justifyContent="center" mt={3}>
+                        <Pagination
+                            count={totalPages}
+                            page={page}
+                            onChange={handleChange}
+                            color="primary"
+                            shape="rounded"
+                        />
+                    </Box>
+                )}
             </Grid>
         </Container>
     );

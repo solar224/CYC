@@ -21,12 +21,15 @@ const Contact = () => {
                     <Grid item xs={12} sm={12} md={12} sx={{ display: "flex", justifyContent: "center" }}>
                         <Paper
                             elevation={(theme === 'light' ? 1 : 12)}
+
                             sx={{
                                 padding: 2,
-                                backgroundColor: theme === 'light' ? "rgba(255, 255, 255, 0.85)" : "rgba(3, 3, 3, 0.85)",
+                                borderRadius: 4,
+                                marginBottom: 2,
+                                transition: "all 0.3s",
+
+                                backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                 boxShadow: 4,
-                                // borderRadius: "10px",
-                                // maxWidth: 600,
                                 width: "100%",
                                 textAlign: "center",
                             }}
@@ -93,10 +96,10 @@ const Contact = () => {
                             </Box>
                             <Box
                                 sx={{
-                                    border: `1px solid ${themeObject.palette.divider}`,
+                                    border: `0.5px solid ${themeObject.palette.divider}`,
                                     borderRadius: "10px",
                                     overflow: "hidden",
-                                    padding: 2,
+                                    padding: 0.5,
                                 }}
                             >
                                 <MyCalendar />
