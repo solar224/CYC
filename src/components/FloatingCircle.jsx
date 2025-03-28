@@ -23,7 +23,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function FloatingCircleNoLag() {
     const circleRef = useRef(null);
     const footerSpace = 125; // 與底部距離
-    const defaultBottom = 5;
+    const defaultBottom = 10;
     const [showScrollToTop, setShowScrollToTop] = useState(false);
     const [isOneHovered, setIsOneHovered] = useState(false);
     const [isTwoHovered, setIsTwoHovered] = useState(false);
@@ -87,7 +87,7 @@ export default function FloatingCircleNoLag() {
                 ref={circleRef}
                 style={{
                     position: "fixed",
-                    right: "5px",
+                    right: "10px",
                     bottom: `${defaultBottom}px`,
                     display: "flex",
                     flexDirection: "column",
