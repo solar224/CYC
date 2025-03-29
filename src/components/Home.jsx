@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
     Card,
     CardContent,
@@ -18,7 +18,12 @@ import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import SendIcon from "@mui/icons-material/Send";
 
+// icon
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
 function Home() {
+    const newsRef = useRef(null);
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState("general");
@@ -53,6 +58,58 @@ function Home() {
         fetchNews();
     }, [selectedCategory]);
 
+    useEffect(() => {
+        const handleWheel = (e) => {
+            if (newsRef.current) {
+                const newsTop = newsRef.current.getBoundingClientRect().top + window.scrollY - 70;
+                const scrollY = window.scrollY;
+
+                // 滾動到 newsRef 頂部且繼續往上滑時
+                if (e.deltaY < 0 && scrollY < newsTop) {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+
+                // 如果往下滑，且剛好在 hero 區域
+                if (e.deltaY > 0 && scrollY < newsTop) {
+                    window.scrollTo({ top: newsTop, behavior: "smooth" });
+                }
+            }
+        };
+
+        window.addEventListener("wheel", handleWheel, { passive: true });
+        return () => window.removeEventListener("wheel", handleWheel);
+    }, []);
+
+
+    useEffect(() => {
+        const handleTouchMove = (e) => {
+            if (newsRef.current) {
+                const newsTop = newsRef.current.getBoundingClientRect().top + window.scrollY - 70;
+                const scrollY = window.scrollY;
+                const touch = e.touches[0];
+                const previousTouchY = touch.clientY;
+
+                // 檢測滑動方向
+                if (touch && scrollY < newsTop) {
+                    if (previousTouchY - touch.clientY > 0) {  // 往上滑
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                }
+
+                // 如果往下滑，且剛好在 hero 區域
+                if (touch && scrollY < newsTop) {
+                    if (previousTouchY - touch.clientY < 0) {  // 往下滑
+                        window.scrollTo({ top: newsTop, behavior: "smooth" });
+                    }
+                }
+            }
+        };
+        window.addEventListener("touchmove", handleTouchMove, { passive: true });
+        return () => window.removeEventListener("touchmove", handleTouchMove);
+    }, []);
+
+
+
     const categories = [
         { key: "general", labelZh: "綜合", labelEn: "General" },
         { key: "technology", labelZh: "科技", labelEn: "Technology" },
@@ -71,7 +128,7 @@ function Home() {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
-                    minHeight: "94vh",
+                    minHeight: "95vh",
                     textAlign: "center",
                     py: 8,
                 }}
@@ -153,11 +210,46 @@ function Home() {
                         }}
                     />
                 </Box>
-                <Grid container spacing={2} mt={4}>
+                <IconButton
+                    onClick={() => {
+                        if (newsRef.current) {
+                            const offsetTop = newsRef.current.getBoundingClientRect().top + window.scrollY - 70;
+                            window.scrollTo({ top: offsetTop, behavior: "smooth" });
+                        }
+                    }}
+                    sx={{
+                        position: "absolute",
+                        bottom: 24,
+
+                        color: theme === "light" ? "#333" : "#eee",
+                        width: 48,
+                        height: 48,
+                    }}
+                >
+                    <KeyboardArrowDownIcon fontSize="large" />
+                </IconButton>
+            </Container>
+
+
+
+            {/* News Section */}
+            <Container ref={newsRef} maxWidth="lg" sx={{ mb: 6, position: "relative" }} >
+                <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 2, textAlign: "center" }}>
+                    <IconButton
+                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                        sx={{
+                            color: theme === "light" ? "#333" : "#eee",
+                            zIndex: 10,
+                        }}
+                    >
+                        <KeyboardArrowUpIcon fontSize="large" />
+                    </IconButton>
+                </Box>
+                <Grid container spacing={2} mt={4} marginBottom={4}>
                     {[1, 2, 3].map((item) => (
                         <Grid item xs={12} sm={4} key={item}>
                             {item === 1 ? (
-                                // 第一張 - 關於我
+                                // 關於我
                                 <Link to="/about-me" style={{ textDecoration: "none" }}>
                                     <Card
                                         sx={{
@@ -183,6 +275,7 @@ function Home() {
                                     </Card>
                                 </Link>
                             ) : item === 2 ? (
+                                // 聯絡我
                                 <Link to="/contact-me" style={{ textDecoration: "none" }}>
                                     <Card
                                         sx={{
@@ -195,20 +288,16 @@ function Home() {
                                                 transform: "translateY(-3px)",
                                                 boxShadow: 6,
                                             },
+                                            cursor: "pointer",
                                         }}
                                     >
-                                        <CardContent
-                                            sx={{
-                                                display: "flex",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                height: 150,
-                                            }}
-                                        >
-                                            <Typography variant="body2" color="text.secondary">
-                                                第二張卡片
-                                            </Typography>
-                                        </CardContent>
+                                        <CardMedia
+                                            component="img"
+                                            height="180"
+                                            image={`${process.env.PUBLIC_URL}/contactme.png`}
+                                            alt="關於我"
+                                            sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+                                        />
                                     </Card>
                                 </Link>
                             ) : (
@@ -224,32 +313,22 @@ function Home() {
                                                 transform: "translateY(-3px)",
                                                 boxShadow: 6,
                                             },
+                                            cursor: "pointer",
                                         }}
                                     >
-                                        <CardContent
-                                            sx={{
-                                                display: "flex",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                height: 150,
-                                            }}
-                                        >
-                                            <Typography variant="body2" color="text.secondary">
-                                                第三張卡片
-                                            </Typography>
-                                        </CardContent>
+                                        <CardMedia
+                                            component="img"
+                                            height="180"
+                                            image={`${process.env.PUBLIC_URL}/note.png`}
+                                            alt="關於我"
+                                            sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+                                        />
                                     </Card>
                                 </Link>
                             )}
                         </Grid>
                     ))}
                 </Grid>
-            </Container>
-
-
-
-            {/* News Section */}
-            <Container maxWidth="lg" sx={{ mb: 6 }}>
                 <Box sx={{ mb: 4, textAlign: "left" }}>
                     <Typography variant="h4" fontWeight="bold" mb={1} sx={{
                         color: theme === "light" ? "#555" : "#ccc", // secondary text 顏色

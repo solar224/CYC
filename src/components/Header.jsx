@@ -214,7 +214,10 @@ const Header = () => {
     useEffect(() => {
         setActivePage(location.pathname);
         setDynamicBreadcrumbsOpen(true);
+        window.scrollTo(0, 0);
+
     }, [location.pathname]);
+
 
     useEffect(() => {
         const handleScroll = () => {
