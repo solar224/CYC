@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# CYC - 個人網頁
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+這是一個展示我個人資訊、技術經歷與作品集的個人網站，透過簡潔的設計與互動式動畫，呈現我的學習歷程與專業技能。本網站使用 React 相關技術進行開發，並部署於 GitHub Pages。
 
-## Available Scripts
+## 🚀 專案預覽
+🔗 [https://solar224.github.io/CYC](https://solar224.github.io/CYC)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 📌 技術棧
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **React 19**
+- **Material UI (MUI)**
+- **React Router DOM**
+- **Recharts** - 資料視覺化
+- **Three.js** - 3D 動畫
+- **Anime.js** - 動畫特效
+- **GitHub Pages** - 網站部署
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## ✨ 網站功能
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- 🏠 **首頁**：個人簡介、社群連結
+- 📄 **作品集**：歷年專案與研究展示
+- 📊 **技術新聞**：即時技術類新聞資訊
+- 📰 **部落格**：學習心得與技術筆記
+- ✉️ **聯絡表單**：提供訪客留言或聯絡
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📥 安裝與執行
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+若想在本地端進行開發或修改，請執行以下指令：
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+git clone https://github.com/solar224/CYC.git
+cd CYC
+npm install
+npm start
+```
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🚀 部署方式
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+本網站透過 **GitHub Pages** 進行部署  
+部署指令如下：
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+npm run deploy
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 🎯 未來規劃 (TODO)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- 增加筆記分類與搜尋功能
+- 整合 Google Analytics 追蹤流量
+- 增加生成式個人虛擬 AI
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## 🙌 聯絡方式
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- 📧 Email: C110110157@nkust.edu.tw
+- 🌐 Website: [https://solar224.github.io/CYC](https://solar224.github.io/CYC)
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
