@@ -23,6 +23,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import useMediaQuery from "@mui/material/useMediaQuery";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import {
     ComposedChart,
@@ -130,6 +131,7 @@ function createData(subject, credits, score) {
 }
 // ---------------------------------------------------------------------------
 const About = () => {
+    const isMobile = useMediaQuery("(max-width: 965px)");
     const { theme } = useContext(ThemeContext);
     const { language } = useContext(LanguageContext); // 主題狀態
     const ThemeProviderTheme = createTheme({ palette: { mode: (theme === 'light' ? 'light' : 'dark') } });
@@ -290,12 +292,6 @@ const About = () => {
             behavior: "smooth",
         });
     };
-    const handleTeachButtonClick = (title) => {
-        alert(`你點擊了教學經驗 ${title}`);
-    }
-    const handleProjectButtonClick = (title) => {
-        alert(`你點擊了專案計畫 ${title}`);
-    }
     const GradesTable = ({ data }) => (
         <TableContainer component={Paper} sx={{ backgroundColor: theme === "dark" ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.6)", boxShadow: "none" }} elevation={0}>
             <Table size="small" aria-label="grades table">
@@ -440,103 +436,102 @@ const About = () => {
 
                         <Grid container spacing={{ xs: 1, sm: 2 }}>
                             {/* 左側內容 */}
-                            <Grid item xs={12} md={2.5}>
-                                <Accordion
-                                    defaultExpanded
-                                    elevation={theme === "light" ? 1 : 12}
-                                    sx={{
-                                        position: "sticky",
-                                        top: 70,
-                                        borderRadius: 4,
-                                        backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.85)" : "rgba(20, 20, 20, 0.5)",
-                                        backdropFilter: "blur(6px)",
-                                        overflow: "hidden",
-                                        boxShadow: theme === "light" ? 2 : 8,
-                                        transition: "all 0.3s ease",
-                                        "&:hover": {
-                                            boxShadow: 6,
-                                            transform: "translateY(-2px)",
-                                        },
-                                    }}
-                                >
-                                    {/* Header */}
-                                    <AccordionSummary
-                                        expandIcon={<ArrowDropDownIcon />}
-                                        aria-controls="panel2-content"
-                                        id="panel2-header"
+                            {!isMobile && (
+                                <Grid item xs={12} md={2.5}>
+                                    <Accordion
+                                        defaultExpanded
+                                        elevation={theme === "light" ? 1 : 12}
                                         sx={{
-                                            backgroundColor: theme === "light" ? "rgba(240,240,240,0.9)" : "rgba(40,40,40,0.9)",
+                                            position: "sticky",
+                                            top: 70,
+                                            borderRadius: 4,
+                                            backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.85)" : "rgba(20, 20, 20, 0.5)",
+                                            backdropFilter: "blur(6px)",
+                                            overflow: "hidden",
+                                            boxShadow: theme === "light" ? 2 : 8,
+                                            transition: "all 0.3s ease",
                                             "&:hover": {
-                                                backgroundColor: theme === "light" ? "rgba(230,230,230,1)" : "rgba(50,50,50,1)",
+                                                boxShadow: 6,
+                                                transform: "translateY(-2px)",
                                             },
-                                            borderTopLeftRadius: 4,
-                                            borderTopRightRadius: 4,
                                         }}
                                     >
-                                        <Typography variant="h6" fontWeight="bold">
-                                            📂 目錄
-                                        </Typography>
-                                    </AccordionSummary>
+                                        {/* Header */}
+                                        <AccordionSummary
+                                            expandIcon={<ArrowDropDownIcon />}
+                                            aria-controls="panel2-content"
+                                            id="panel2-header"
+                                            sx={{
+                                                backgroundColor: theme === "light" ? "rgba(240,240,240,0.9)" : "rgba(40,40,40,0.9)",
+                                                "&:hover": {
+                                                    backgroundColor: theme === "light" ? "rgba(230,230,230,1)" : "rgba(50,50,50,1)",
+                                                },
+                                                borderTopLeftRadius: 4,
+                                                borderTopRightRadius: 4,
+                                            }}
+                                        >
+                                            <Typography variant="h6" fontWeight="bold">
+                                                📂 目錄
+                                            </Typography>
+                                        </AccordionSummary>
 
-                                    {/* List */}
-                                    <AccordionDetails
-                                        sx={{
-                                            padding: 0,
-                                            borderBottomLeftRadius: 4,
-                                            borderBottomRightRadius: 4,
-                                        }}
-                                    >
-                                        <List disablePadding>
-                                            {[
-                                                "關於我",
-                                                "教育學歷",
-                                                "學習經歷",
-                                                "專案計畫",
-                                                "競賽榮譽",
-                                                "學業表現",
-                                            ].map((section) => (
-                                                <ListItemButton
-                                                    key={section}
-                                                    selected={activeSection === section}
-                                                    onClick={() => handleScrollTo(section)}
-                                                    sx={{
-                                                        px: 2,
-                                                        py: 1,
-                                                        mx: 1,
-                                                        my: 0.5,
-                                                        borderRadius: 2,
-                                                        transition: "all 0.3s",
-                                                        color: theme === "light" ? "#333" : "#fff",
-                                                        "&.Mui-selected": {
-                                                            backgroundColor: theme === "light" ? "#333" : "#fff",
-                                                            color: theme === "light" ? "#fff" : "#333",
-                                                            "&:hover": {
-                                                                backgroundColor: theme === "light" ? "#555" : "#e0e0e0",
+                                        {/* List */}
+                                        <AccordionDetails
+                                            sx={{
+                                                padding: 0,
+                                                borderBottomLeftRadius: 4,
+                                                borderBottomRightRadius: 4,
+                                            }}
+                                        >
+                                            <List disablePadding>
+                                                {[
+                                                    "關於我",
+                                                    "教育學歷",
+                                                    "學習經歷",
+                                                    "專案計畫",
+                                                    "競賽榮譽",
+                                                    "學業表現",
+                                                ].map((section) => (
+                                                    <ListItemButton
+                                                        key={section}
+                                                        selected={activeSection === section}
+                                                        onClick={() => handleScrollTo(section)}
+                                                        sx={{
+                                                            px: 2,
+                                                            py: 1,
+                                                            mx: 1,
+                                                            my: 0.5,
+                                                            borderRadius: 2,
+                                                            transition: "all 0.3s",
+                                                            color: theme === "light" ? "#333" : "#fff",
+                                                            "&.Mui-selected": {
+                                                                backgroundColor: theme === "light" ? "#333" : "#fff",
+                                                                color: theme === "light" ? "#fff" : "#333",
+                                                                "&:hover": {
+                                                                    backgroundColor: theme === "light" ? "#555" : "#e0e0e0",
+                                                                },
                                                             },
-                                                        },
-                                                        "&:hover": {
-                                                            backgroundColor: theme === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)",
-                                                        },
-                                                    }}
-                                                >
-                                                    <Typography variant="body1">{section}</Typography>
-                                                </ListItemButton>
-                                            ))}
-                                        </List>
-                                    </AccordionDetails>
-                                </Accordion>
-
-
-                            </Grid>
-
+                                                            "&:hover": {
+                                                                backgroundColor: theme === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)",
+                                                            },
+                                                        }}
+                                                    >
+                                                        <Typography variant="body1">{section}</Typography>
+                                                    </ListItemButton>
+                                                ))}
+                                            </List>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                </Grid>
+                            )}
                             {/* 右側內容 */}
-                            <Grid item xs={12} md={9.5}>
+                            <Grid item xs={12} md={isMobile ? 12 : 9.5}>
                                 <Paper
                                     elevation={theme === "light" ? 1 : 12}
                                     sx={{
                                         padding: 3,
                                         borderRadius: 4,
-                                        marginBottom: 4,
+                                        marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
                                         "&:hover": {
@@ -609,7 +604,7 @@ const About = () => {
                                     sx={{
                                         padding: 3,
                                         borderRadius: 4,
-                                        marginBottom: 4,
+                                        marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
                                         "&:hover": {
@@ -669,7 +664,7 @@ const About = () => {
                                     sx={{
                                         padding: 3,
                                         borderRadius: 4,
-                                        marginBottom: 4,
+                                        marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
                                         "&:hover": {
@@ -734,7 +729,7 @@ const About = () => {
                                     sx={{
                                         padding: 3,
                                         borderRadius: 4,
-                                        marginBottom: 4,
+                                        marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
                                         "&:hover": {
@@ -839,7 +834,7 @@ const About = () => {
                                     sx={{
                                         padding: 3,
                                         borderRadius: 4,
-                                        marginBottom: 4,
+                                        marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
                                         "&:hover": {
