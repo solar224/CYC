@@ -14,6 +14,9 @@ import {
 import { createTheme } from "@mui/material/styles";
 import { ThemeContext, LanguageContext } from "../App";
 import TextSwitcher from "./effects/TextSwitcher";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
+import { Link } from "react-router-dom";
+import SendIcon from "@mui/icons-material/Send";
 
 function Home() {
     const [news, setNews] = useState([]);
@@ -73,9 +76,17 @@ function Home() {
                     py: 8,
                 }}
             >
-                <Typography variant="h4" fontWeight="bold" mb={3} color="text.primary">
+                <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    mb={3}
+                    sx={{
+                        color: theme === "light" ? "black" : "white",
+                    }}
+                >
                     你好，我是詹宇宸
                 </Typography>
+
                 <TextSwitcher
                     texts={[
                         'std::cout << "Hello World!";',
@@ -85,22 +96,169 @@ function Home() {
                         'fmt.Println("Hello World!")',
                     ]}
                     fontSize={20}
-                    animationDuration={2000}
-                    sx={{ color: "text.secondary" }}
-                    size={2000}
+                    duration={2000}
+                    sx={{ color: theme === "light" ? "#555" : "#ccc" }}
+                    width={250}
                 />
-                <Typography variant="caption" sx={{ color: "text.disabled", mt: 4 }}>
-                    YC-Chan - 個人網站
-                </Typography>
+
+                {/* 新增輸入框 */}
+                <Box
+                    sx={{
+                        width: "100%",
+                        mt: 3,
+                        display: "flex",
+                        justifyContent: "center",
+                    }}
+                >
+                    <TextField
+                        fullWidth
+                        placeholder="有什麼問題想問我？"
+                        variant="outlined"
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        sx={{
+                                            color: theme === "light" ? "#333" : "#eee",
+                                            "&:hover": {
+                                                color: theme === "light" ? "#000" : "#fff",
+                                            },
+                                        }}
+                                    >
+                                        <SendIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                        sx={{
+                            borderRadius: 4,
+                            backgroundColor: theme === "light" ? "rgba(250,250,250,0.9)" : "rgba(30,30,30,0.9)",
+                            input: {
+                                color: theme === "light" ? "#333" : "#eee",
+                            },
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: 4,
+                                "& fieldset": {
+                                    borderColor: theme === "light" ? "#ccc" : "#555",
+                                },
+                                "&:hover fieldset": {
+                                    borderColor: theme === "light" ? "#999" : "#888",
+                                },
+                                "&.Mui-focused fieldset": {
+                                    borderColor: theme === "light" ? "#333" : "#aaa",
+                                },
+                            },
+                            width: "90%",
+                            maxWidth: 600,
+                        }}
+                    />
+                </Box>
+                <Grid container spacing={2} mt={4}>
+                    {[1, 2, 3].map((item) => (
+                        <Grid item xs={12} sm={4} key={item}>
+                            {item === 1 ? (
+                                // 第一張 - 關於我
+                                <Link to="/about-me" style={{ textDecoration: "none" }}>
+                                    <Card
+                                        sx={{
+                                            borderRadius: 4,
+                                            boxShadow: 3,
+                                            backgroundColor:
+                                                theme === "light" ? "rgba(250,250,250,0.95)" : "rgba(30,30,30,0.95)",
+                                            transition: "all 0.3s",
+                                            "&:hover": {
+                                                transform: "translateY(-3px)",
+                                                boxShadow: 6,
+                                            },
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        <CardMedia
+                                            component="img"
+                                            height="180"
+                                            image={`${process.env.PUBLIC_URL}/aboutme.png`}
+                                            alt="關於我"
+                                            sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+                                        />
+                                    </Card>
+                                </Link>
+                            ) : item === 2 ? (
+                                <Link to="/contact-me" style={{ textDecoration: "none" }}>
+                                    <Card
+                                        sx={{
+                                            borderRadius: 4,
+                                            boxShadow: 3,
+                                            backgroundColor:
+                                                theme === "light" ? "rgba(250,250,250,0.95)" : "rgba(30,30,30,0.95)",
+                                            transition: "all 0.3s",
+                                            "&:hover": {
+                                                transform: "translateY(-3px)",
+                                                boxShadow: 6,
+                                            },
+                                        }}
+                                    >
+                                        <CardContent
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                height: 150,
+                                            }}
+                                        >
+                                            <Typography variant="body2" color="text.secondary">
+                                                第二張卡片
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+                            ) : (
+                                <Link to="/note" style={{ textDecoration: "none" }}>
+                                    <Card
+                                        sx={{
+                                            borderRadius: 4,
+                                            boxShadow: 3,
+                                            backgroundColor:
+                                                theme === "light" ? "rgba(250,250,250,0.95)" : "rgba(30,30,30,0.95)",
+                                            transition: "all 0.3s",
+                                            "&:hover": {
+                                                transform: "translateY(-3px)",
+                                                boxShadow: 6,
+                                            },
+                                        }}
+                                    >
+                                        <CardContent
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                height: 150,
+                                            }}
+                                        >
+                                            <Typography variant="body2" color="text.secondary">
+                                                第三張卡片
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+                            )}
+                        </Grid>
+                    ))}
+                </Grid>
             </Container>
+
+
 
             {/* News Section */}
             <Container maxWidth="lg" sx={{ mb: 6 }}>
                 <Box sx={{ mb: 4, textAlign: "left" }}>
-                    <Typography variant="h4" fontWeight="bold" mb={1}>
+                    <Typography variant="h4" fontWeight="bold" mb={1} sx={{
+                        color: theme === "light" ? "#555" : "#ccc", // secondary text 顏色
+                    }}>
                         {language === "zh" ? "新聞" : "News"}
                     </Typography>
-                    <Typography variant="subtitle1" color="text.secondary">
+                    <Typography variant="subtitle1" sx={{
+                        color: theme === "light" ? "#555" : "#ccc", // secondary text 顏色
+                    }}>
                         {language === "zh"
                             ? "隨時瞭解最新的進展和發現。"
                             : "Stay updated with the latest advancements and discoveries."}
@@ -252,8 +410,25 @@ function Home() {
                             onChange={handleChange}
                             color="primary"
                             shape="rounded"
+                            sx={{
+                                "& .MuiPaginationItem-root": {
+                                    color: theme === "light" ? "black" : "white",
+                                    borderColor: theme === "light" ? "black" : "white",
+                                    "&:hover": {
+                                        backgroundColor: theme === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)",
+                                    },
+                                    "&.Mui-selected": {
+                                        backgroundColor: theme === "light" ? "black" : "white",
+                                        color: theme === "light" ? "white" : "black",
+                                        "&:hover": {
+                                            backgroundColor: theme === "light" ? "#333" : "#eee",
+                                        },
+                                    },
+                                },
+                            }}
                         />
                     </Box>
+
                 )}
             </Container>
         </Box>

@@ -45,7 +45,7 @@ export default function App() {
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
         <LanguageContext.Provider value={{ language, toggleLanguage }}>
           <div className={`app`}>
-            {/* <DynamicBackground theme={theme} /> */}
+            <DynamicBackground theme={theme} />
             <Router>
               <Header />
               <Routes>
