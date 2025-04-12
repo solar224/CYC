@@ -23,7 +23,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function FloatingCircleNoLag() {
     const circleRef = useRef(null);
     const footerSpace = 125; // 與底部距離
-    const defaultBottom = 10;
+    const defaultBottom = 15;
     const [showScrollToTop, setShowScrollToTop] = useState(false);
     const [isOneHovered, setIsOneHovered] = useState(false);
     const [isTwoHovered, setIsTwoHovered] = useState(false);
@@ -87,7 +87,7 @@ export default function FloatingCircleNoLag() {
                 ref={circleRef}
                 style={{
                     position: "fixed",
-                    right: "10px",
+                    right: "15px",
                     bottom: `${defaultBottom}px`,
                     display: "flex",
                     flexDirection: "column",
@@ -102,7 +102,7 @@ export default function FloatingCircleNoLag() {
                         style={{
                             width: "60px",
                             height: "60px",
-                            borderRadius: "50%",
+                            borderRadius: "35%",
                             marginBottom: "10px",
                             backgroundColor: "#f39212",
                             display: "flex",
@@ -132,7 +132,7 @@ export default function FloatingCircleNoLag() {
                         style={{
                             width: "60px",
                             height: "60px",
-                            borderRadius: "50%",
+                            borderRadius: "35%",
                             backgroundColor: "#28a745",
                             display: "flex",
                             alignItems: "center",
@@ -174,11 +174,13 @@ export default function FloatingCircleNoLag() {
                     }
                 }}
             >
-                <DialogTitle>{language === "en" ? "🔧setting" : "🔧設定"}</DialogTitle>
+                <DialogTitle>{language === "en" ? "setting" : "設定"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText component="div">
                         <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
-                            <Typography variant="body1" sx={{ mr: 1 }}>
+                            <Typography variant="body1" sx={{
+                                mr: 1, color: theme === "dark" ? "#fff" : "#000",
+                            }}>
                                 {language === "zh" ? "顯示語言：" : "Language:"}
                             </Typography>
                             <Button
@@ -196,7 +198,9 @@ export default function FloatingCircleNoLag() {
                             </Button>
                         </Box>
                         <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
-                            <Typography variant="body1" sx={{ mr: 1 }}>
+                            <Typography variant="body1" sx={{
+                                mr: 1, color: theme === "dark" ? "#fff" : "#000",
+                            }}>
                                 {language === "zh" ? "背景顏色：" : "Theme:"}
                             </Typography>
                             <Button

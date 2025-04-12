@@ -8,7 +8,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import anime from "animejs/lib/anime.es.js";
-import { Grid, Paper, Container, Tooltip, Card, CardContent, Stack, ListItemButton, Divider } from "@mui/material";
+import { Grid, Paper, Container, Tooltip, Card, CardContent, Stack, ListItemButton, Divider, Chip } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ThemeContext, LanguageContext } from "../App";
 import Accordion from '@mui/material/Accordion';
@@ -24,6 +24,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useMediaQuery from "@mui/material/useMediaQuery";
+import IconButton from '@mui/material/IconButton';
+
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import {
     ComposedChart,
@@ -53,6 +55,7 @@ import project from "../images/project.png";
 import score from "../images/score.png";
 import algorithms from "../images/algorithms.png";
 import trophy from "../images/trophy.png";
+import FlagIcon from '@mui/icons-material/Flag';
 
 
 // 動態
@@ -242,14 +245,14 @@ const About = () => {
         ],
     };
     const awardList = [
-        { title: "第 29 屆全國大專校院資訊應用服務創新競賽", Awards: "教育 AI 組佳作、AI 工具應用組第二名", author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
-        { title: "國立高雄科技大學電資學院院專題", Awards: "特優", author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
-        { title: "第九屆全國科技大專校院程式競賽", Awards: "銅獎", author: "金鴻翔、詹宇宸" },
-        { title: "國立高雄科技大學電腦與通訊工程系專題", Awards: "第二名", author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
-        { title: "國立高雄科技大學校園創意發想競賽", Awards: "優等", author: "金鴻翔、薛榆杰、詹宇宸" },
-        { title: "2024 教育大數據分析競賽", Awards: "入圍決賽", author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
-        { title: "第 48 屆國際大學生程式設計競賽亞洲區桃園站", Awards: "", author: "薛榆杰、詹宇宸、徐國章" },
-        { title: "第八屆全國科技大專校院程式競賽", Awards: "銀獎", author: "林垣志、詹宇宸" },
+        { title: "第 29 屆全國大專校院資訊應用服務創新競賽", Awards: ["教育 AI 組佳作", "AI 工具應用組第二名"], author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
+        { title: "國立高雄科技大學電資學院院專題", Awards: ["特優"], author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
+        { title: "第九屆全國科技大專校院程式競賽", Awards: ["銅獎"], author: "金鴻翔、詹宇宸" },
+        { title: "國立高雄科技大學電腦與通訊工程系專題", Awards: ["第二名"], author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
+        { title: "國立高雄科技大學校園創意發想競賽", Awards: ["優等"], author: "金鴻翔、薛榆杰、詹宇宸" },
+        { title: "2024 教育大數據分析競賽", Awards: ["入圍決賽"], author: "金鴻翔、薛榆杰、曾敬淇、詹宇宸" },
+        { title: "第 48 屆國際大學生程式設計競賽亞洲區桃園站", Awards: [""], author: "薛榆杰、詹宇宸、徐國章" },
+        { title: "第八屆全國科技大專校院程式競賽", Awards: ["銀獎"], author: "林垣志、詹宇宸" },
     ];
     const [activeSection, setActiveSection] = useState("關於我");
     const [showUndergrad, setShowUndergrad] = useState(true); // 控制顯示狀態 (true=大學, false=研究所)
@@ -337,10 +340,6 @@ const About = () => {
                                 marginBottom: 2,
                                 backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                 transition: "all 0.3s ease",
-                                "&:hover": {
-                                    boxShadow: 6,
-                                    transform: "translateY(-2px)",
-                                },
                             }}
                             onMouseEnter={() => setActiveSection("關於我")}
                         >
@@ -373,7 +372,7 @@ const About = () => {
                                         <Typography variant="h4" fontWeight="bold">
                                             關於我
                                         </Typography>
-                                        <Tooltip title={language === "zh" ? "履歷表" : "Curriculum Vitae"} placement="left">
+                                        <Tooltip title={language === "zh" ? "下載 (pdf)" : "download (pdf)"} placement="left">
                                             <Button variant="outlined" size="small">
                                                 CV
                                             </Button>
@@ -450,10 +449,7 @@ const About = () => {
                                             overflow: "hidden",
                                             boxShadow: theme === "light" ? 2 : 8,
                                             transition: "all 0.3s ease",
-                                            "&:hover": {
-                                                boxShadow: 6,
-                                                transform: "translateY(-2px)",
-                                            },
+
                                         }}
                                     >
                                         {/* Header */}
@@ -534,9 +530,6 @@ const About = () => {
                                         marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
-                                        "&:hover": {
-                                            boxShadow: 6,
-                                        },
                                     }}
                                     id="教育學歷"
                                     onMouseEnter={() => setActiveSection("教育學歷")}
@@ -552,9 +545,9 @@ const About = () => {
                                     {/* 學歷內容 */}
                                     <Stack spacing={1.5}>
                                         {[
-                                            // { date: "2025 ~ 2027", school: "國立陽明交通大學 數據科學與工程研究所", link: "https://www.cs.nycu.edu.tw/intro/organization/cybersecurity" },
-                                            { date: "2021/9 ~ 2025/6", school: "國立高雄科技大學 電腦與通訊工程系", link: "https://ccee.nkust.edu.tw/" },
-                                            { date: "2019/9 ~ 2021/6", school: "國立彰師附工 控制科", link: "https://w3.sivs.chc.edu.tw/files/13-1000-15978.php" },
+                                            // { date: "2025 ~ 2027", school: "陽明交通大學 數據科學與工程研究所", link: "https://www.cs.nycu.edu.tw/intro/organization/cybersecurity", tags:"" },
+                                            { date: "2021/9 ~ 2025/6", school: "高雄科技大學 電腦與通訊工程系", link: "https://ccee.nkust.edu.tw/", tags: "" },
+                                            { date: "2019/9 ~ 2021/6", school: "彰師附工 控制科", link: "https://w3.sivs.chc.edu.tw/files/13-1000-15978.php", tags: "" },
                                         ].map((item, index) => (
                                             <Box
                                                 key={`edu-${index}`}
@@ -569,9 +562,7 @@ const About = () => {
                                                     },
                                                 }}
                                             >
-                                                <Typography variant="body2" color="text.secondary" mb={0.5}>
-                                                    📅 {item.date}
-                                                </Typography>
+
                                                 <Tooltip title={language === "zh" ? "進入官網" : "Go to official site"} placement="right">
                                                     <Typography
                                                         variant="body1"
@@ -592,6 +583,9 @@ const About = () => {
                                                         🎓 {item.school}
                                                     </Typography>
                                                 </Tooltip>
+                                                <Typography variant="body2" color="text.secondary" mb={0.5}>
+                                                    📅 {item.date}
+                                                </Typography>
                                             </Box>
                                         ))}
                                     </Stack>
@@ -607,9 +601,7 @@ const About = () => {
                                         marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
-                                        "&:hover": {
-                                            boxShadow: 6,
-                                        },
+
                                     }}
                                     id="學習經歷"
                                     onMouseEnter={() => setActiveSection("學習經歷")}
@@ -625,9 +617,9 @@ const About = () => {
                                     {/* 經歷內容 */}
                                     <Stack spacing={1.5}>
                                         {[
-                                            { date: "2024/7 ~ 2024/8", title: "暑期教師", titleen: "Summer Teacher", level: "小學", levelen: "elementary school" },
-                                            { date: "2024/2 ~ 2024/6", title: "機率助教", titleen: "Chance Teaching Assistant", level: "大學", levelen: "university" },
-                                            { date: "2023/9 ~ 2024/1", title: "線性代數助教", titleen: "Teaching assistant in linear algebra", level: "大學", levelen: "university" },
+                                            { date: "2024/7 ~ 2024/8", title: "暑期教師", titleen: "Summer Teacher", dep: "福德國小", depen: "Primary school" },
+                                            { date: "2024/2 ~ 2024/6", title: "機率助教", titleen: "Chance Teaching Assistant", dep: "高雄科技大學", depen: "university" },
+                                            { date: "2023/9 ~ 2024/1", title: "線性代數助教", titleen: "Teaching assistant in linear algebra", dep: "高雄科技大學", depen: "university" },
                                         ].map((item, id) => (
                                             <Box
                                                 key={`teach-${id}`}
@@ -645,12 +637,11 @@ const About = () => {
                                                     },
                                                 }}
                                             >
+                                                <Typography variant="body1" fontWeight="bold">
+                                                    🎯 {(language === "zh") ? item.title : item.titleen} ({(language === "zh") ? item.dep : item.depen})
+                                                </Typography>
                                                 <Typography variant="body2" color="text.secondary">
                                                     📅 {item.date}
-                                                </Typography>
-                                                <Typography variant="body1" fontWeight="bold">
-                                                    🎯 {(language === "zh") ? item.title : item.titleen}
-                                                    ({(language === "zh") ? item.level : item.levelen})
                                                 </Typography>
                                             </Box>
                                         ))}
@@ -667,9 +658,7 @@ const About = () => {
                                         marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
-                                        "&:hover": {
-                                            boxShadow: 6,
-                                        },
+
                                     }}
                                     id="專案計畫"
                                     onMouseEnter={() => setActiveSection("專案計畫")}
@@ -693,20 +682,19 @@ const About = () => {
                                             <Box
                                                 key={`project-${index}`}
                                                 sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    gap: 0.5,
                                                     padding: 2,
                                                     borderRadius: 3,
-                                                    backgroundColor: theme === "light" ? "rgba(245,245,245,0.8)" : "rgba(30,30,30,0.85)",
-                                                    boxShadow: 2,
+                                                    backgroundColor: theme === "light" ? "rgba(240,240,240,0.7)" : "rgba(30,30,30,0.85)",
                                                     transition: "all 0.3s",
                                                     "&:hover": {
-                                                        boxShadow: 6,
+                                                        boxShadow: 4,
                                                         transform: "translateY(-3px)",
                                                     },
                                                 }}
                                             >
-                                                <Typography variant="body2" color="text.secondary" mb={0.5}>
-                                                    📅 {item.date}
-                                                </Typography>
                                                 <Typography
                                                     variant="body1"
                                                     fontWeight="bold"
@@ -717,6 +705,9 @@ const About = () => {
                                                 </Typography>
                                                 <Typography variant="body2" color="text.secondary">
                                                     👥 參與成員：{item.author}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary" mb={0.5}>
+                                                    📅 {item.date}
                                                 </Typography>
                                             </Box>
                                         ))}
@@ -732,9 +723,7 @@ const About = () => {
                                         marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
-                                        "&:hover": {
-                                            boxShadow: 6,
-                                        },
+
                                     }}
                                     id="競賽榮譽"
                                     onMouseEnter={() => setActiveSection("競賽榮譽")}
@@ -750,34 +739,23 @@ const About = () => {
                                     {/* 卡片 */}
                                     <Grid container spacing={2}>
                                         {visibleItems.map((item, index) => (
-                                            <Grid item xs={12} sm={6} md={4} key={`trophy-${index}`} display="flex">
+                                            <Grid item xs={12} sm={12} md={12} key={`trophy-${index}`} display="flex">
                                                 <Card
                                                     sx={{
                                                         width: "100%",
-                                                        minHeight: 220,
                                                         display: "flex",
                                                         flexDirection: "column",
-                                                        justifyContent: "space-between",
                                                         borderRadius: 3,
-                                                        boxShadow: 3,
-                                                        background: theme === "light"
-                                                            ? "linear-gradient(135deg, #ffffff, #f7f7f7)"
-                                                            : "linear-gradient(135deg, #1f1f1f, #2b2b2b)",
+                                                        backgroundColor: theme === "light" ? "rgba(240,240,240,0.7)" : "rgba(30,30,30,0.85)",
                                                         transition: "all 0.3s",
                                                         "&:hover": {
-                                                            transform: "translateY(-4px)",
-                                                            boxShadow: 8,
+                                                            boxShadow: 4,
+                                                            transform: "translateY(-3px)",
                                                         },
                                                     }}
+
                                                 >
-                                                    <CardContent
-                                                        sx={{
-                                                            flexGrow: 1,
-                                                            display: "flex",
-                                                            flexDirection: "column",
-                                                            justifyContent: "space-between",
-                                                        }}
-                                                    >
+                                                    <CardContent>
                                                         <Box>
                                                             <Typography
                                                                 variant="subtitle1"
@@ -793,20 +771,41 @@ const About = () => {
                                                             >
                                                                 🏆 {item.title}
                                                             </Typography>
+                                                            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                                                                👥 參與成員：{item.author}
+                                                            </Typography>
+
                                                             {item.Awards && (
-                                                                <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
-                                                                    獲獎：{item.Awards}
-                                                                </Typography>
+                                                                <Stack direction="column" spacing={1} sx={{ mt: 1 }}>
+                                                                    {item.Awards.map((award, i) => (
+                                                                        <Box
+                                                                            key={`award-${i}`}
+                                                                            sx={{
+                                                                                display: "flex",
+                                                                                alignItems: "center",
+                                                                                gap: 1,
+                                                                                backgroundColor: theme === "light" ? "#e3f2fd" : "#263238",
+                                                                                px: 1.5,
+                                                                                py: 0.8,
+                                                                                borderRadius: 2,
+                                                                                width: "fit-content",
+                                                                            }}
+                                                                        >
+                                                                            <FlagIcon sx={{ color: theme === "light" ? "#1976d2" : "#90caf9", fontSize: 20 }} />
+                                                                            <Typography variant="caption" sx={{ color: theme === "light" ? "#1976d2" : "#90caf9" }}>
+                                                                                {award}
+                                                                            </Typography>
+                                                                        </Box>
+                                                                    ))}
+                                                                </Stack>
                                                             )}
                                                         </Box>
-
-                                                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                                                            參與成員：{item.author}
-                                                        </Typography>
                                                     </CardContent>
+
                                                 </Card>
                                             </Grid>
                                         ))}
+
                                     </Grid>
 
                                     {/* 更多按鈕 */}
@@ -837,9 +836,7 @@ const About = () => {
                                         marginBottom: 2,
                                         backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
                                         transition: "all 0.3s",
-                                        "&:hover": {
-                                            boxShadow: 6,
-                                        },
+
                                     }}
                                     id="學業表現"
                                     onMouseEnter={() => setActiveSection("學業表現")}

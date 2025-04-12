@@ -49,6 +49,7 @@ function Home() {
                 const validNews = filteredNews.filter(article => article.content && article.content.trim() !== "");
                 setNews(validNews);
                 await new Promise(resolve => setTimeout(resolve, 500));
+                setPage(1);
             } catch (error) {
                 console.log(error);
             } finally {
@@ -120,7 +121,6 @@ function Home() {
 
     return (
         <Box sx={{ overflowX: "hidden" }}>
-            {/* Hero Section */}
             <Container
                 maxWidth="md"
                 sx={{
@@ -388,73 +388,78 @@ function Home() {
                         ))
                         : displayedNews.map((article, index) => (
                             <Grid item xs={12} sm={6} md={4} key={index}>
-                                <Card
-                                    sx={{
-                                        width: "100%",
-                                        borderRadius: 3,
-                                        backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.85)",
-                                        color: theme === "light" ? "black" : "white",
-                                        position: "relative",
-                                        height: "100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between",
-                                        transition: "all 0.3s",
-                                        "&:hover": {
-                                            transform: "translateY(-3px)",
-                                            boxShadow: 6,
-                                        },
-                                    }}
+                                <a href={article.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ textDecoration: "none" }}
+
                                 >
-                                    <CardMedia
-                                        component="img"
-                                        height="180"
-                                        image={article.urlToImage}
-                                        alt={article.title}
-                                        sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
-                                    />
-                                    <CardContent sx={{ flexGrow: 1 }}>
-                                        <Typography
-                                            gutterBottom
-                                            variant="subtitle1"
-                                            fontWeight="bold"
-                                            sx={{
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                                display: "-webkit-box",
-                                                WebkitLineClamp: 2,
-                                                WebkitBoxOrient: "vertical",
-                                            }}
-                                        >
-                                            {article.title}
-                                        </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            sx={{
-                                                color: theme === "light" ? "#444" : "rgba(200, 200, 200, 0.8)",
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                                display: "-webkit-box",
-                                                WebkitLineClamp: 3,
-                                                WebkitBoxOrient: "vertical",
-                                            }}
-                                        >
-                                            {article.description}
-                                        </Typography>
-                                    </CardContent>
-                                    <Box
+                                    <Card
                                         sx={{
+                                            width: "100%",
+                                            borderRadius: 3,
+                                            backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.85)",
+                                            color: theme === "light" ? "black" : "white",
+                                            position: "relative",
+                                            height: "100%",
                                             display: "flex",
+                                            flexDirection: "column",
                                             justifyContent: "space-between",
-                                            alignItems: "center",
-                                            p: 1,
+                                            transition: "all 0.3s",
+                                            "&:hover": {
+                                                transform: "translateY(-3px)",
+                                                boxShadow: 6,
+                                            },
                                         }}
                                     >
-                                        <Box>
+                                        <CardMedia
+                                            component="img"
+                                            height="180"
+                                            image={article.urlToImage}
+                                            alt={article.title}
+                                            sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+                                        />
+                                        <CardContent sx={{ flexGrow: 1 }}>
+                                            <Typography
+                                                gutterBottom
+                                                variant="subtitle1"
+                                                fontWeight="bold"
+                                                sx={{
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                    display: "-webkit-box",
+                                                    WebkitLineClamp: 2,
+                                                    WebkitBoxOrient: "vertical",
+                                                }}
+                                            >
+                                                {article.title}
+                                            </Typography>
+                                            <Typography
+                                                variant="body2"
+                                                sx={{
+                                                    color: theme === "light" ? "#444" : "rgba(200, 200, 200, 0.8)",
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                    display: "-webkit-box",
+                                                    WebkitLineClamp: 3,
+                                                    WebkitBoxOrient: "vertical",
+                                                }}
+                                            >
+                                                {article.description}
+                                            </Typography>
+                                        </CardContent>
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                p: 1,
+                                            }}
+                                        >
                                             <Typography variant="caption">
                                                 {language === "zh" ? "作者" : "Author"}:{" "}
                                                 {article.author
-                                                    ? `${article.author.slice(0, 20)}${article.author.length > 20 ? "..." : ""}`
+                                                    ? `${article.author.slice(0, 10)}${article.author.length > 10 ? "..." : ""}`
                                                     : "----"}
                                             </Typography>
                                             <Typography variant="caption">
@@ -464,18 +469,8 @@ function Home() {
                                                     : "N/A"}
                                             </Typography>
                                         </Box>
-                                        <Button
-                                            size="small"
-                                            href={article.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            variant="outlined"
-                                            color="primary"
-                                        >
-                                            {language === "zh" ? "閱讀更多" : "Read More"}
-                                        </Button>
-                                    </Box>
-                                </Card>
+                                    </Card>
+                                </a>
                             </Grid>
                         ))}
                 </Grid>
