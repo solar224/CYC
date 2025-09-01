@@ -74,7 +74,7 @@ const Footer = () => (
             </Tooltip>
             <Tooltip title="Leetcode" placement="top">
                 <IconButton
-                    href="https://leetcode.com/u/c110110157/"
+{/*                     href="https://leetcode.com/u/c110110157/" */}
                     target="_blank"
                     rel="noopener"
                     sx={{
