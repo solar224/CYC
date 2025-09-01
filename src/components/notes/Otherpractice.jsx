@@ -16,7 +16,7 @@ const Otherpractice = () => {
                 <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
                     <Grid container spacing={3} sx={{ my: 4 }}>
 
-                        尚未建構
+                        尚未建構 test
 
                     </Grid>
 
