@@ -1,25 +1,15 @@
 {
   "files": {
     "main.css": "/CYC/static/css/main.e1d16530.css",
-    "main.js": "/CYC/static/js/main.9ddda0c3.js",
+    "main.js": "/CYC/static/js/main.c527f11f.js",
     "static/js/488.97278c65.chunk.js": "/CYC/static/js/488.97278c65.chunk.js",
-    "static/media/person.png": "/CYC/static/media/person.146cd77b2e1e37cd99cf.png",
-    "static/media/communication.png": "/CYC/static/media/communication.1266031d68cc2301a3f1.png",
-    "static/media/schoolbag.png": "/CYC/static/media/schoolbag.1f2a9201ae2883e8f00c.png",
-    "static/media/education.png": "/CYC/static/media/education.386fe7da3eb2a2be8d55.png",
-    "static/media/trophy.png": "/CYC/static/media/trophy.b4042e4a6b4a16e5ee6e.png",
-    "static/media/algorithms.png": "/CYC/static/media/algorithms.3e2ce5cd1a000babd914.png",
-    "static/media/exploration.png": "/CYC/static/media/exploration.8aa1edfa8d1704ba92cb.png",
-    "static/media/project.png": "/CYC/static/media/project.7287c55826ff587100b4.png",
-    "static/media/score.png": "/CYC/static/media/score.831a7cbe0362cb60cad6.png",
-    "static/media/cpu.png": "/CYC/static/media/cpu.cfb90bf4e13d532d9752.png",
     "index.html": "/CYC/index.html",
     "main.e1d16530.css.map": "/CYC/static/css/main.e1d16530.css.map",
-    "main.9ddda0c3.js.map": "/CYC/static/js/main.9ddda0c3.js.map",
+    "main.c527f11f.js.map": "/CYC/static/js/main.c527f11f.js.map",
     "488.97278c65.chunk.js.map": "/CYC/static/js/488.97278c65.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e1d16530.css",
-    "static/js/main.9ddda0c3.js"
+    "static/js/main.c527f11f.js"
   ]
 }
