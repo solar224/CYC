@@ -64,13 +64,9 @@ function Home() {
             if (newsRef.current) {
                 const newsTop = newsRef.current.getBoundingClientRect().top + window.scrollY - 70;
                 const scrollY = window.scrollY;
-
-                // 滾動到 newsRef 頂部且繼續往上滑時
                 if (e.deltaY < 0 && scrollY < newsTop) {
                     window.scrollTo({ top: 0, behavior: "smooth" });
                 }
-
-                // 如果往下滑，且剛好在 hero 區域
                 if (e.deltaY > 0 && scrollY < newsTop) {
                     window.scrollTo({ top: newsTop, behavior: "smooth" });
                 }

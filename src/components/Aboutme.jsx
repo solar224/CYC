@@ -1,5 +1,5 @@
 import React from "react";
-import { About, Projects, Contact } from "./Aboutme_Cmp";
+import { About } from "./Aboutme_Cmp";
 
 const Aboutme = () => {
     return (
@@ -8,8 +8,7 @@ const Aboutme = () => {
             style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
         >
             <About />
-            {/* <Projects />
-                <Contact /> */}
+
         </div>
     );
 };

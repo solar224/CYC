@@ -6,6 +6,7 @@ import Aboutme from "./components/Aboutme";
 import Contactme from "./components/Contactme";
 
 import Header from "./components/Header";
+
 import Footer from "./components/Footer";
 import FloatingCircle from "./components/FloatingCircle";
 import DynamicBackground from "./components/DynamicBackground";
@@ -49,7 +50,6 @@ export default function App() {
             <Router>
               <Header />
               <Routes>
-
                 <Route path="/" element={<Home />} />
                 <Route path="/about-me" element={<Aboutme />} />
                 <Route path="/note" element={<Note />} />
@@ -58,7 +58,7 @@ export default function App() {
                 <Route path="/note/school-curriculum" element={<Schoolcurriculum />} />
                 <Route path="/note/coding-practice" element={<Proceduralexercises />} />
                 <Route path="/note/other-practice" element={<Otherpractice />} />
-
+                
               </Routes>
               <FloatingCircle />
               <Footer />

@@ -59,7 +59,7 @@ const Footer = () => (
             </Tooltip>
             <Tooltip title="Gmail" placement="top">
                 <IconButton
-                    href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=C110110157@nkust.edu.tw"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=cyc.cs14@nycu.edu.tw"
                     target="_blank"
                     rel="noopener"
                     sx={{
@@ -74,7 +74,7 @@ const Footer = () => (
             </Tooltip>
             <Tooltip title="Leetcode" placement="top">
                 <IconButton
-{/*                     href="https://leetcode.com/u/c110110157/" */}
+                    href="https://leetcode.com/u/c_1_1/"
                     target="_blank"
                     rel="noopener"
                     sx={{
