@@ -1,114 +1,72 @@
-import React, { useState, useEffect, useContext } from "react";
-import { styled, alpha, ThemeProvider, createTheme } from "@mui/material/styles";
-import { ThemeContext, LanguageContext } from "../App";
+// src/pages/Contact.jsx
+import React, { useContext, useMemo } from "react";
+import { Container, Box, Stack, Typography, Button } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import SendIcon from "@mui/icons-material/Send";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { ScrollSpyProvider, SpySection, Toc } from "../shared/scrollspy";
 
-import { Grid, Box, Typography, Container, Paper, Button, Tooltip } from "@mui/material";
-import MyCalendar from "./MyCalendar";
-import Mimictypingeffects from "./effects/Mimictypingeffects";
-import TextSwitcher from "./effects/TextSwitcher";
+import PcMyCalendar from "./myCalendarComponents/PcMyCalendar";
+import PhoneMyCalendar from "./myCalendarComponents/PhoneMyCalendar";
 
-// icon
-import SendIcon from '@mui/icons-material/Send';
+import { ThemeContext } from "../App";
+
 const Contact = () => {
-    const { language } = useContext(LanguageContext); // 主題狀態
-    const { theme } = useContext(ThemeContext); // 主題狀態
-    const themeObject = createTheme({ palette: { mode: theme === 'light' ? 'light' : 'dark' } });
+    const { theme: mode } = useContext(ThemeContext);
+    const muiTheme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
+    const isMobile = useMediaQuery("(max-width: 965px)");
 
     return (
-        <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
-            <ThemeProvider theme={themeObject}>
-                <Grid container spacing={2} sx={{ my: 4 }}>
-                    <Grid item xs={12} sm={12} md={12} sx={{ display: "flex", justifyContent: "center" }}>
-                        <Paper
-                            elevation={(theme === 'light' ? 1 : 12)}
+        <ThemeProvider theme={muiTheme}>
+            <CssBaseline enableColorScheme />
+            <ScrollSpyProvider headerOffset={72}>
+                <Container sx={{ mt: 4, mb: 6 }}>
+                    <Box sx={{ mb: 2 }}>
+                        <SpySection id="行事曆" title="行事曆">
+                            <Stack direction="row" alignItems="baseline" spacing={1.5}>
+                                <Typography variant="h4" fontWeight={800} sx={{ letterSpacing: 0.2, flexGrow: 1 }}>
+                                    行事曆
+                                </Typography>
 
-                            sx={{
-                                padding: 2,
-                                borderRadius: 4,
-                                marginBottom: 2,
-                                transition: "all 0.3s",
-
-                                backgroundColor: theme === "light" ? "rgba(255, 255, 255, 0.92)" : "rgba(18, 18, 18, 0.92)",
-                                boxShadow: 4,
-                                width: "100%",
-                                textAlign: "center",
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 1,
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: 1,
-                                    }}
+                                <Button
+                                    variant="outlined"
+                                    size="small"
+                                    href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=cyc.cs14@nycu.edu.tw"
+                                    target="_blank"
+                                    rel="noopener"
+                                    endIcon={<SendIcon />}
+                                    sx={(t) => ({
+                                        textTransform: "none",
+                                        fontWeight: 700,
+                                        letterSpacing: 0.3,
+                                        px: 1.5,
+                                        py: 0.5,
+                                        borderRadius: 1.25,
+                                        borderColor: t.palette.divider,
+                                        color: t.palette.text.primary,
+                                        bgcolor: "transparent",
+                                        "&:hover": {
+                                            bgcolor: t.palette.action.hover,
+                                            borderColor: t.palette.text.secondary,
+                                            boxShadow: t.shadows[1],
+                                        },
+                                    })}
                                 >
-                                    <Typography
-                                        gutterBottom
-                                        variant="h4"
-                                        sx={{
-                                            color: themeObject.palette.text.primary,
-                                            whiteSpace: "nowrap", // 防止換行
-                                        }}
-                                    >
-                                        行事曆
-                                    </Typography>
-                                </Box>
-                                <Tooltip title="點擊可編輯郵件" placement="left">
-                                    <Button
-                                        variant="outlined"
-                                        sx={{ marginLeft: 'auto' }}
-                                        href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=C110110157@nkust.edu.tw"
-                                        target="_blank"
-                                        rel="noopener"
-                                        endIcon={<SendIcon />}    // 圖示放文字右側
-                                    >
-                                        寄信
-                                    </Button>
-                                </Tooltip>
-                            </Box>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "left",
-                                    marginBottom: 1,
-                                }}
-                            >*
-                                <Mimictypingeffects
-                                    textList={[
-                                        "以下為忙碌時間，有事請寄信。",
-                                        "繁忙的日子，讓人無心空閑懊惱。",
-                                        "人生旅途中有陽光、有風雨雷電。",
-                                    ]}
-                                    speed={150}
-                                    variant="body2"
-                                    repeat={1}
-                                    sx={{
-                                        color: themeObject.palette.primary.main,
-                                    }}
-                                />
+                                    寄信
+                                </Button>
+                            </Stack>
+                        </SpySection>
+                        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                            以下為忙碌時段，若需聯繫請來信。
+                        </Typography>
+                    </Box>
+                    {isMobile ? <PhoneMyCalendar /> : <PcMyCalendar />}
 
-                            </Box>
-                            <Box
-                                sx={{
-                                    border: `0.5px solid ${themeObject.palette.divider}`,
-                                    borderRadius: "10px",
-                                    overflow: "hidden",
-                                    padding: 0.5,
-                                }}
-                            >
-                                <MyCalendar />
-                            </Box>
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </ThemeProvider>
-        </Container>
+                </Container>
+                <Toc sidebarWidth={260} collapsedWidth={18} containerMaxWidth={1200} />
+            </ScrollSpyProvider>
+        </ThemeProvider>
     );
 };
 

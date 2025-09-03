@@ -9,7 +9,7 @@ import EmojiEventsRounded from "@mui/icons-material/EmojiEventsRounded";
 import CalendarMonthRounded from "@mui/icons-material/CalendarMonthRounded";
 import PeopleAltRounded from "@mui/icons-material/PeopleAltRounded";
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded";
-
+import useMediaQuery from "@mui/material/useMediaQuery";
 import {
     Container,
     Grid,
@@ -29,7 +29,7 @@ import {
     Chip,
 } from "@mui/material";
 
-import { ThemeContext } from "../App";
+import { ThemeContext } from "../../App";
 import {
     ComposedChart, Line, Area, ReferenceLine,
     XAxis, YAxis, CartesianGrid,
@@ -283,7 +283,7 @@ const AWARD_LIST = [
     { title: "全國科技大專校院程式競賽", awards: ["銀獎", "銅獎"], author: "金鴻翔、詹宇宸" },
 ];
 
-const About = () => {
+const PhoneAboutMe = () => {
     const { theme } = useContext(ThemeContext);
     const muiTheme = useMemo(
         () =>
@@ -292,7 +292,7 @@ const About = () => {
             }),
         [theme]
     );
-
+    const isPhone = useMediaQuery(muiTheme.breakpoints.down("sm"));
     // chart & table data
     const College_grades = [
         { semester: "大一上", GPA: 3.56, PR: 83.6, Credits: 27 },
@@ -473,9 +473,8 @@ const About = () => {
                                         ))}
                                     </Stack>
                                     <Typography variant="subtitle2" sx={{ mt: 2, mb: 0.5, fontWeight: 700, color: "text.secondary" }}>
-                                        工作技能
+                                        核心技能
                                     </Typography>
-                                    {/* 工作技能 */}
                                     <Stack direction="row" sx={{ flexWrap: "wrap", columnGap: 1, rowGap: { xs: 1.25, sm: 1.5 } }}>
                                         {WORK_SKILL.map((t, i) => (
                                             <Button key={`${t}-${i}`} variant="outlined" size="small" disableElevation sx={(th) => codeBtnSx(th)}>
@@ -571,6 +570,9 @@ const About = () => {
                                 }}
                                 textColor="primary"
                                 indicatorColor="primary"
+                                variant="scrollable"
+                                allowScrollButtonsMobile
+                                scrollButtons="auto"
                                 sx={{
                                     mb: 1.5,
                                     "& .MuiTab-root": { px: 1.5, minWidth: "auto" },
@@ -586,9 +588,9 @@ const About = () => {
                                 <Grid item xs={12} md={6}>
                                     <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2, bgcolor: "transparent" }}>
                                         {chartData.length ? (
-                                            <ResponsiveContainer width="100%" height={300}>
-                                                <ComposedChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                                                    {/* 漸層定義 */}
+                                            <ResponsiveContainer width="100%" height={isPhone ? 220 : 300}>
+                                                <ComposedChart data={chartData} margin={{ top: 8, right: 8, left: isPhone ? -6 : 0, bottom: isPhone ? 8 : 0 }}>
+
                                                     <defs>
                                                         <linearGradient id="gpaGrad" x1="0" y1="0" x2="0" y2="1">
                                                             <stop offset="0%" stopColor={muiTheme.palette.primary.main} stopOpacity={0.35} />
@@ -603,39 +605,48 @@ const About = () => {
                                                     <CartesianGrid strokeDasharray="3 3" stroke={muiTheme.palette.divider} />
                                                     <XAxis
                                                         dataKey="semester"
-                                                        tick={{ fill: muiTheme.palette.text.secondary }}
+                                                        tick={{ fill: muiTheme.palette.text.secondary, fontSize: isPhone ? 11 : 12 }}
                                                         tickMargin={8}
-                                                        interval={0}
+                                                        interval={isPhone ? 1 : 0}         // 手機只顯示隔一個
+                                                        angle={isPhone ? -30 : 0}
+                                                        textAnchor={isPhone ? "end" : "middle"}
                                                     />
                                                     <YAxis
                                                         yAxisId="left"
                                                         domain={[0, 4.3]}
                                                         ticks={[0, 1, 2, 3, 4]}
-                                                        tick={{ fill: muiTheme.palette.text.secondary }}
+                                                        tick={{ fill: muiTheme.palette.text.secondary, fontSize: isPhone ? 11 : 12 }}
                                                     />
                                                     <YAxis
                                                         yAxisId="right"
                                                         orientation="right"
                                                         domain={[0, 100]}
                                                         allowDecimals={false}
-                                                        tick={{ fill: muiTheme.palette.text.secondary }}
+                                                        tick={{ fill: muiTheme.palette.text.secondary, fontSize: isPhone ? 11 : 12 }}
+                                                        hide={isPhone}
                                                     />
 
                                                     <RechartsTooltip content={<ChartTooltip theme={muiTheme} />} />
-                                                    <Legend wrapperStyle={{ color: muiTheme.palette.text.primary }} />
+                                                    <Legend
+                                                        wrapperStyle={{ color: muiTheme.palette.text.primary, display: isPhone ? "none" : "block" }}
+                                                        payload={[
+                                                            { value: "GPA", type: "line", color: muiTheme.palette.primary.main, id: "legend-gpa" },
+                                                            { value: "PR", type: "line", color: muiTheme.palette.secondary.main, id: "legend-pr" }
+                                                        ]}
+                                                    />
                                                     <ReferenceLine yAxisId="left" y={4.0} stroke={muiTheme.palette.success.main} strokeDasharray="4 4" />
 
-                                                    <Area yAxisId="left" type="monotone" dataKey="GPA" fill="url(#gpaGrad)" stroke="none" />
-                                                    <Area yAxisId="right" type="monotone" dataKey="PR" fill="url(#prGrad)" stroke="none" />
+                                                    {!isPhone && <Area yAxisId="left" type="monotone" dataKey="GPA" fill="url(#gpaGrad)" stroke="none" />}
+                                                    {!isPhone && <Area yAxisId="right" type="monotone" dataKey="PR" fill="url(#prGrad)" stroke="none" />}
                                                     <Line
                                                         yAxisId="left"
                                                         type="monotone"
                                                         name="GPA"
                                                         dataKey="GPA"
                                                         stroke={muiTheme.palette.primary.main}
-                                                        strokeWidth={2.2}
-                                                        dot={{ r: 3 }}
-                                                        activeDot={{ r: 5 }}
+                                                        strokeWidth={isPhone ? 2 : 2.2}
+                                                        dot={{ r: isPhone ? 2.5 : 3 }}
+                                                        activeDot={{ r: isPhone ? 4 : 5 }}
                                                     />
                                                     <Line
                                                         yAxisId="right"
@@ -643,9 +654,9 @@ const About = () => {
                                                         name="PR"
                                                         dataKey="PR"
                                                         stroke={muiTheme.palette.secondary.main}
-                                                        strokeWidth={2.2}
-                                                        dot={{ r: 3 }}
-                                                        activeDot={{ r: 5 }}
+                                                        strokeWidth={isPhone ? 2 : 2.2}
+                                                        dot={{ r: isPhone ? 2.5 : 3 }}
+                                                        activeDot={{ r: isPhone ? 4 : 5 }}
                                                     />
                                                 </ComposedChart>
                                             </ResponsiveContainer>
@@ -666,6 +677,9 @@ const About = () => {
                                         onChange={(_, v) => setTab(v)}
                                         textColor="primary"
                                         indicatorColor="primary"
+                                        variant="scrollable"
+                                        allowScrollButtonsMobile
+                                        scrollButtons="auto"
                                         sx={{
                                             mb: 1,
                                             "& .MuiTab-root": { px: 1.5, minWidth: "auto" },
@@ -738,4 +752,4 @@ const About = () => {
     );
 };
 
-export { About };
+export { PhoneAboutMe };

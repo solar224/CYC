@@ -1,0 +1,74 @@
+[
+    {
+        "id": "evt-001",
+        "title": "開源核心網路設計與實作",
+        "start": "2025-09-01T13:20:00+08:00",
+        "end": "2025-12-25T16:20:00+08:00",
+        "location": "ED201",
+        "allDay": false,
+        "color": "#4F46E5",
+        "tags": [],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-002",
+        "title": "圖形識別",
+        "start": "2025-09-02T10:10:00+08:00",
+        "end": "2025-12-25T12:00:00+08:00",
+        "location": "ED301",
+        "allDay": false,
+        "color": "#4F46E5",
+        "tags": [],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-003",
+        "title": "資料探勘",
+        "start": "2025-09-03T10:10:00+08:00",
+        "end": "2025-12-25T12:00:00+08:00",
+        "location": "EC022",
+        "allDay": false,
+        "color": "#4F46E5",
+        "tags": [],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-004",
+        "title": "數據科學系列演講",
+        "start": "2025-09-03T15:30:00+08:00",
+        "end": "2025-12-25T17:20:00+08:00",
+        "location": "EC115",
+        "allDay": false,
+        "color": "#4F46E5",
+        "tags": [],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-005",
+        "title": "實驗室開會",
+        "start": "2025-09-03T17:30:00+08:00",
+        "end": "2027-09-03T19:30:00+08:00",
+        "location": "",
+        "allDay": false,
+        "color": "#FFD000",
+        "tags": [
+            "Lab",
+            "Meeting"
+        ],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-006",
+        "title": "實驗室開會",
+        "start": "2025-09-03T11:00:00+08:00",
+        "end": "2027-09-03T12:00:00+08:00",
+        "location": "",
+        "allDay": false,
+        "color": "#FFD000",
+        "tags": [
+            "Lab",
+            "Meeting"
+        ],
+        "repeatWeekly": true
+    }
+]

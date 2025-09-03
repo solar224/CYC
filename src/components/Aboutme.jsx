@@ -1,14 +1,17 @@
 import React from "react";
-import { About } from "./Aboutme_Cmp";
+import { PcAboutMe } from "./aboutMeComponents/PcAboutMe";
+import { PhoneAboutMe } from "./aboutMeComponents/PhoneAboutMe";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Aboutme = () => {
+    const isMobile = useMediaQuery("(max-width: 965px)");
+
     return (
         <div
-            className="Aboutme"
+            className="PcAboutMe"
             style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
         >
-            <About />
-
+            {isMobile ? <PhoneAboutMe /> : <PcAboutMe />}
         </div>
     );
 };
