@@ -32,8 +32,15 @@ export default function NoteDetail() {
 
                 {/* 標題 + 標籤 */}
                 <Typography variant="h4" fontWeight={900} sx={{ mb: 1 }}>{note.title}</Typography>
-                <Stack direction="row" spacing={1} sx={{ mb: 2, flexWrap: "wrap" }}>
-                    {note.tags?.map((t) => <Chip key={t} size="small" label={t} />)}
+                <Stack
+                    direction="row"
+                    flexWrap="wrap"
+                    useFlexGap
+                    sx={{ mb: 2, columnGap: 1, rowGap: 1 }} // 8px x 8px 間距，可改成 0.5、1.5...
+                >
+                    {note.tags?.map((t) => (
+                        <Chip key={t} size="small" label={t} sx={{ flexShrink: 0 }} />
+                    ))}
                 </Stack>
 
                 {/* 封面：固定 16:9，避免彈跳 */}
