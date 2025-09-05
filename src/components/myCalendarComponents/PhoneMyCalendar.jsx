@@ -1,7 +1,7 @@
 // src/components/phone/PhoneMyCalendar.jsx
 import React, { useMemo, useState } from "react";
 import { alpha, useTheme } from "@mui/material/styles";
-import { Box, Paper, Typography, IconButton, Stack, Tooltip, Button } from "@mui/material";
+import { Box, Paper, Typography, IconButton, Stack, Tooltip, ButtonBase } from "@mui/material";
 import ArrowBackIosNew from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
 import TodayRounded from "@mui/icons-material/TodayRounded";
@@ -103,39 +103,79 @@ export default function PhoneMyCalendar() {
 
     const hLabel = (h) => `${String(h).padStart(2, "0")}:00`;
 
-    /** Header：週快速切換 */
-    const DateChips = () => (
-        <Box sx={{ display: "flex", gap: 0.75, overflowX: "auto", pb: 0.5 }}>
+    const WeekSwitcher = () => (
+        <Box sx={{ display: "flex", gap: 0.5, overflowX: "auto", pb: 0.5 }}>
             {weekDays.map((d) => {
                 const active = d.isSame(selected, "day");
                 const today = d.isSame(dayjs(), "day");
                 return (
-                    <Button
+                    <ButtonBase
                         key={d.format("YYYY-MM-DD")}
-                        size="small"
-                        variant={active ? "contained" : "outlined"}
                         onClick={() => setSelected(d)}
-                        sx={{
+                        sx={(t) => ({
+                            position: "relative",
                             flex: "0 0 auto",
                             borderRadius: 999,
-                            px: 1.25,
-                            minWidth: 0,
-                            fontWeight: 800,
-                            letterSpacing: 0.2,
-                            ...(active ? {} : { borderColor: alpha(t.palette.divider, 0.6), color: t.palette.text.primary }),
-                        }}
+                            minWidth: 56,
+                            height: 44,
+                            px: 1,
+                            display: "grid",
+                            placeItems: "center",
+                            rowGap: 0.25,
+                            fontWeight: 900,
+                            userSelect: "none",
+                            outline: "none",
+                            bgcolor: active
+                                ? t.palette.primary.main
+                                : alpha(t.palette.text.primary, t.palette.mode === "dark" ? 0.08 : 0.06),
+                            color: active
+                                ? t.palette.primary.contrastText
+                                : today
+                                    ? t.palette.primary.main
+                                    : t.palette.text.primary,
+                            boxShadow: active ? t.shadows[2] : "none",
+                            border: active
+                                ? "none"
+                                : `1px solid ${today ? alpha(t.palette.primary.main, 0.65) : alpha(t.palette.divider, 0.6)
+                                }`,
+                            transition: "background-color .15s ease, box-shadow .15s ease, transform .05s ease",
+                            "&:hover": {
+                                bgcolor: active
+                                    ? t.palette.primary.main
+                                    : alpha(t.palette.text.primary, t.palette.mode === "dark" ? 0.14 : 0.12),
+                            },
+                            "&:active": { transform: "scale(0.98)" },
+
+                            // 今天（未選中）顯示底線，不會壓到文字
+                            ...(today && !active
+                                ? {
+                                    "&::after": {
+                                        content: '""',
+                                        position: "absolute",
+                                        left: 10,
+                                        right: 10,
+                                        bottom: -3,
+                                        height: 2,
+                                        borderRadius: 2,
+                                        backgroundColor: t.palette.primary.main,
+                                    },
+                                }
+                                : {}),
+                        })}
                     >
-                        <Box sx={{ display: "grid", placeItems: "center", lineHeight: 1 }}>
-                            <Typography variant="caption" sx={{ fontWeight: 900 }}>{d.format("ddd")}</Typography>
-                            <Typography variant="body2" sx={{ mt: 0.25, fontWeight: today ? 900 : 800, color: today ? t.palette.primary.main : "inherit" }}>
-                                {d.format("M/D")}
-                            </Typography>
-                        </Box>
-                    </Button>
+                        <Typography variant="caption" sx={{ lineHeight: 1, opacity: active ? 0.95 : 0.85 }}>
+                            {d.format("ddd")}
+                        </Typography>
+                        <Typography variant="body2" sx={{ lineHeight: 1, mt: 0.25 }}>
+                            {d.format("M/D")}
+                        </Typography>
+                    </ButtonBase>
                 );
             })}
         </Box>
     );
+
+
 
     return (
         <Paper elevation={0} square sx={{ p: 0, bgcolor: "transparent", backgroundImage: "none", boxShadow: "none", border: "none" }}>
@@ -152,7 +192,7 @@ export default function PhoneMyCalendar() {
             </Stack>
 
             {/* 週快速切換 */}
-            <DateChips />
+            <WeekSwitcher />
 
             {/* ===== 日曆卡：不使用內部滑輪，整塊展開 ===== */}
             <Box

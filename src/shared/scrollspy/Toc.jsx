@@ -1,3 +1,4 @@
+// D:\CYC\src\shared\scrollspy\SpySection.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { Paper, List, ListItemButton, ListItemText, Box } from "@mui/material";
 import { alpha } from "@mui/material/styles";
@@ -141,8 +142,7 @@ export function Toc({
                         }}
                         sx={(t) => ({
                             position: "relative",
-                            // 多留一點左邊空間給「細色條」
-                            pl: (s.level - 2) * 2 + 2.25,
+                            pl: (s.level - 2) * 2 + 4,
                             py: 0.5,
                             my: 0.25,
                             borderRadius: 10,
@@ -158,7 +158,7 @@ export function Toc({
                             "&::before": {
                                 content: '""',
                                 position: "absolute",
-                                left: 10,                // 細色條距離左側
+                                left: 12,                // 細色條距離左側
                                 top: 6,
                                 bottom: 6,
                                 width: 3,
@@ -200,6 +200,7 @@ export function Toc({
                             primary={s.title}
                             primaryTypographyProps={{
                                 noWrap: true,
+                                sx: { pr: 1 },
                                 // 未選到時字重 500，更有資訊層次
                                 fontWeight: s.id === currentId ? 700 : 500,
                             }}

@@ -7,7 +7,9 @@
         "location": "ED201",
         "allDay": false,
         "color": "#4F46E5",
-        "tags": [],
+        "tags": [
+            "114_1_couse"
+        ],
         "repeatWeekly": true
     },
     {
@@ -18,7 +20,9 @@
         "location": "ED301",
         "allDay": false,
         "color": "#4F46E5",
-        "tags": [],
+        "tags": [
+            "114_1_couse"
+        ],
         "repeatWeekly": true
     },
     {
@@ -29,7 +33,9 @@
         "location": "EC022",
         "allDay": false,
         "color": "#4F46E5",
-        "tags": [],
+        "tags": [
+            "114_1_couse"
+        ],
         "repeatWeekly": true
     },
     {
@@ -40,7 +46,9 @@
         "location": "EC115",
         "allDay": false,
         "color": "#4F46E5",
-        "tags": [],
+        "tags": [
+            "114_1_couse"
+        ],
         "repeatWeekly": true
     },
     {
@@ -66,7 +74,7 @@
         "allDay": false,
         "color": "#FFD000",
         "tags": [
-            "Lab",
+            "新生介紹",
             "Meeting"
         ],
         "repeatWeekly": true
