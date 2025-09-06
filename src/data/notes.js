@@ -284,26 +284,28 @@ export const NOTES = [
 ---
 
 ## 專案倉庫結構
-    .
-    ├── labs/
-    │   ├── lab0_warmup/
-    │   ├── lab1_backprop/
-    │   ├── lab2_conv_transformers/
-    │   ├── lab3_maskgit/
-    │   ├── lab4_cvae/
-    │   ├── lab5_discrete_rl/
-    │   ├── lab6_diffusion/
-    │   └── lab7_continuous_rl/
-    ├── paper_presentation/
-    │   ├── slides/
-    │   └── report/
-    ├── final_project/
-    │   ├── proposal/
-    │   ├── code/
-    │   └── paper/
-    ├── docs/              # notes, additional references
-    ├── .gitignore
-    └── README.md
+~~~text
+.
+├── labs/
+│   ├── lab0_warmup/
+│   ├── lab1_backprop/
+│   ├── lab2_conv_transformers/
+│   ├── lab3_maskgit/
+│   ├── lab4_cvae/
+│   ├── lab5_discrete_rl/
+│   ├── lab6_diffusion/
+│   └── lab7_continuous_rl/
+├── paper_presentation/
+│   ├── slides/
+│   └── report/
+├── final_project/
+│   ├── proposal/
+│   ├── code/
+│   └── paper/
+├── docs/              # notes, additional references
+├── .gitignore
+└── README.md
+~~~
 `
 },
 // *******************************************************************
