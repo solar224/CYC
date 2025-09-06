@@ -1,19 +1,27 @@
 // src/components/MarkdownWithToc.jsx
 import React, { useMemo, useRef } from "react";
 import { Box, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+// ⬇️ 新增：語法上色
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import go from "react-syntax-highlighter/dist/esm/languages/prism/go";
+import oneLight from "react-syntax-highlighter/dist/esm/styles/prism/one-light";
+import vscDarkPlus from "react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus";
+
 import { SpySection } from "../shared/scrollspy";
 
-// 取得所有子節點的純文字（處理斜體/粗體/行內碼等）
+// 登錄需要的語言（你也可再加 js/py/bash…）
+SyntaxHighlighter.registerLanguage("go", go);
+
+// ---- 下面維持你原本的工具函式 ----
 function getText(node) {
     if (typeof node === "string") return node;
     if (Array.isArray(node)) return node.map(getText).join("");
     if (node && node.props && node.props.children) return getText(node.props.children);
     return "";
 }
-
-// 乾淨的 slug 化（同文字多次出現時自動加 -1, -2…）
 const useSlugger = () => {
     const mapRef = useRef(new Map());
     return (raw) => {
@@ -30,10 +38,11 @@ const useSlugger = () => {
 
 export default function MarkdownWithToc({ children }) {
     const slug = useSlugger();
+    const t = useTheme(); // <- 取 MUI mode 以切換亮/暗 code theme
 
     const components = useMemo(
         () => ({
-            // 只把 h1~h3 納入章節（你也可放寬到 h4）
+            // 只把 h1~h3 納入章節
             h1: ({ children, ...rest }) => {
                 const title = getText(children);
                 const id = slug(title);
@@ -68,7 +77,7 @@ export default function MarkdownWithToc({ children }) {
                 );
             },
 
-            // 其他常見標籤：維持一致的閱讀樣式
+            // 其他常見標籤
             p: (props) => <Typography sx={{ lineHeight: 1.8, mb: 1 }} {...props} />,
             li: (props) => <li style={{ lineHeight: 1.8, marginBottom: 6 }} {...props} />,
             a: ({ href, children, ...rest }) => (
@@ -103,39 +112,54 @@ export default function MarkdownWithToc({ children }) {
                     {...props}
                 />
             ),
-            code: ({ inline, children, ...rest }) =>
-                inline ? (
-                    <code style={{ padding: "0 6px", borderRadius: 6, background: "rgba(128,128,128,.15)" }} {...rest}>
-                        {children}
-                    </code>
-                ) : (
-                    <Box
-                        component="pre"
-                        sx={(t) => ({
-                            p: 1.5,
-                            borderRadius: 2,
-                            overflow: "auto",
-                            my: 1.5,
-                            fontSize: 14,
-                            border: `1px solid ${t.palette.divider}`,
-                            background: t.palette.mode === "dark" ? "rgba(255,255,255,.04)" : "rgba(0,0,0,.03)",
-                        })}
+
+            // ✅ 語法上色的 code renderer
+            code: ({ inline, className, children, ...rest }) => {
+                const code = String(children ?? "").replace(/\n$/, "");
+                const match = /language-(\w+)/.exec(className || "");
+
+                if (!inline && match) {
+                    const lang = match[1]; // 例如 'go'
+                    return (
+                        <Box sx={{ my: 1.5, "& pre": { m: 0 } }}>
+                            <SyntaxHighlighter
+                                language={lang}
+                                PreTag="div"
+                                style={t.palette.mode === "dark" ? vscDarkPlus : oneLight}
+                                customStyle={{
+                                    margin: 0,
+                                    borderRadius: 8,
+                                    fontSize: 14,
+                                    lineHeight: 1.6,
+                                }}
+                                showLineNumbers
+                                {...rest}
+                            >
+                                {code}
+                            </SyntaxHighlighter>
+                        </Box>
+                    );
+                }
+                // 行內程式碼
+                return (
+                    <code
+                        style={{
+                            padding: "0 6px",
+                            borderRadius: 6,
+                            background: "rgba(128,128,128,.15)",
+                        }}
                         {...rest}
                     >
-                        <code>{children}</code>
-                    </Box>
-                ),
+                        {children}
+                    </code>
+                );
+            },
         }),
-        [slug]
+        [slug, t.palette.mode]
     );
 
     return (
-        <Box
-            sx={{
-                // 整體 Markdown 區塊樣式
-                "& ul, & ol": { paddingLeft: 3, marginTop: 0.5, marginBottom: 1 },
-            }}
-        >
+        <Box sx={{ "& ul, & ol": { pl: 3, mt: 0.5, mb: 1 } }}>
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
                 {children}
             </ReactMarkdown>
