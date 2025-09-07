@@ -11,8 +11,5 @@ v
 npm run deploy
 
 //localStorage
-const [theme, setTheme] = useState(() => { return localStorage.getItem('theme') || "light" });
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+
 
