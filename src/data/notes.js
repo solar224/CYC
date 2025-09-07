@@ -2,6 +2,9 @@
 // 依分區：school-curriculum / coding-practice / other-practice
 export const NOTES = [
   // *******************************************************************
+    // *******************************************************************
+      // *******************************************************************
+
   {
     id: "n-114-grad-csie",
     slug: "114-csie-grad-admission",
@@ -309,6 +312,9 @@ export const NOTES = [
 `
 },
 // *******************************************************************
+  // *******************************************************************
+    // *******************************************************************
+
 {
     id: "n-free5gc-lab0",
     slug: "free5gc-lab0-network-programming-basics",
@@ -519,6 +525,9 @@ ok      github.com/ianchen0119/free5GLab/lab0   8.371s
 `
   },
     // *******************************************************************
+      // *******************************************************************
+        // *******************************************************************
+
 
   {
     id: "n-free5gc-lab1",
@@ -1154,132 +1163,319 @@ ok      github.com/ianchen0119/free5GLab/lab0   8.371s
       "```",
       "---"
     ].join("\n")
-  }
+  },
+    // *******************************************************************
+  // *******************************************************************
+  // *******************************************************************
+  // *******************************************************************
+
+    {
+    id: "n-free5gc-lab2",
+    slug: "free5gc-lab2-linux-kernel-networking-basics",
+    title: "free5GC Lab2：Linux 核心中的網路基礎（ip / netlink / sk_buff / NAPI）",
+    date: "2025-09-07",
+    category: "school-curriculum",
+    tags: ["free5GC", "Linux", "Kernel", "Networking", "Netlink", "sk_buff", "NAPI", "iproute2", "Routing", "SoftIRQ", "L2", "L3", "PFCP"],
+    cover: `${process.env.PUBLIC_URL}/free5gc.png`, // 有圖就打開；沒圖可留空走預設
+    summary:
+      "理解 Linux 核心的網路資料路徑：從中斷→NAPI→sk_buff 佇列、L2/L3 收送流程，到使用者空間透過 sysctl / ioctl / netlink 與核心互動；搭配 ip(8) 指令與 strace 觀察系統呼叫。",
+    content: `
+  # free5GC Lab
+
+  GitHub Repo：[free5GLab](https://github.com/free5gc/free5GLabs)
+
+  > **本 Lab2 目標**：用「觀察與理解」為主，帶你掌握 Linux 核心如何處理網路行為，包含資料結構（\\\`sk_buff\\\`）、收送路徑、使用者空間如何透過 sysctl / ioctl / netlink 與核心互動，以及 \\\`ip\\\` 指令族背後的系統呼叫。**非**著重於實作大型系統，實務 free5GC 資料平面可參考 gtp5g 相關文件。
+
+  **延伸閱讀（free5GC / gtp5g）**  
+  1) [gtp5g Architecture](https://free5gc.org/guide/Gtp5g/design/#introduction)  
+  2) [gtp5g PFCP Architecture](https://free5gc.org/guide/Upf_PFCP/design/) 
+  3) [Introduction to gtp5g and kernel concepts](https://free5gc.org/blog/20230920/Introduction_of_gtp5g_and_some_kernel_concepts/)  
+  4) [gtp5g 原始碼解說](https://ithelp.ithome.com.tw/articles/10302887)
+
+  ---
+
+  ## 1. 實驗目標（Goals）
+
+  - 了解 Linux 核心在 L2/L3/L4 對封包的處理流程（收包、傳包、轉送、佇列、分片/組裝、檢查等）。
+  - 認識關鍵資料結構：**\\\`sk_buff\\\`**（網路子系統中最常配置/釋放的結構）。
+  - 學會觀察 **使用者空間 ↔ 核心空間** 的互動方式：**sysctl、ioctl、netlink**。
+  - 以 **\\\`ip\\\` 指令族（iproute2）** 搭配 **\\\`strace\\\`** 追蹤系統呼叫，理解其背後的 netlink 訊息交換。
+  - 整理 L2/L3 之 **NAPI、softirq、ksoftirqd、qdisc、dev_queue_xmit、netfilter hooks、路由查表** 等要點。
+
+  > 本 Lab 側重「觀察／筆記」，你可以把它當作 free5GC UPF 資料平面（gtp5g）的前置知識地圖。
+
+  ---
+
+  ## 2. 核心知識點（Cheat Sheet）
+
+  - **\\\`sk_buff\\\`**：每個封包一個 \\\`sk_buff\\\`。內含指向資料區塊的 \\\`head/data/tail/end\\\`，長度、分片資訊、所屬裝置 \\\`dev\\\`、私有控制區 \\\`cb\\\`、協定欄位 \\\`protocol\\\`、QoS \\\`priority\\\` 等。
+  - **使用者空間 ↔ 核心空間**：  
+    - **sysctl**：讀/改核心變數（如 \\\`/proc/sys/net/ipv4/ip_forward\\\`）。  
+    - **ioctl**：傳統裝置控制介面，功能強但格式不彈性。  
+    - **netlink**：面向網路設定/事件的訊息式通道，支援多播、彈性屬性、可靠傳遞，是 iproute2 與核心對話的主力。
+  - **\\\`ip\\\` 指令族**：  
+    - \\\`ip link\\\`（介面）、\\\`ip addr\\\`（位址）、\\\`ip route\\\`（路由）、\\\`ip neigh\\\`（ARP/NDISC）、\\\`ip rule\\\`（PBR）。  
+    - 內部多以 **netlink（NETLINK_ROUTE）** 與核心溝通。
+  - **中斷→軟中斷（softirq）→NAPI**：  
+    NIC 觸發 IRQ → 驅動 ISR 略處理後排程 **NET_RX_SOFTIRQ** → NAPI 混合中斷/輪詢降低高負載 IRQ 風暴，ksoftirqd 每 CPU 執行延後工作。
+  - **L2 / L3 混搭重點**：  
+    - L2 收包：驅動把 frame 複製到 \\\`sk_buff\\\`，設定 \\\`skb->protocol\\\`，排程 RX softirq，放入每 CPU 的 \\\`softnet_data\\\`。  
+    - L2 送包：\\\`dev_queue_xmit\\\` 透過 qdisc 或直接丟給 \\\`hard_start_xmit\\\`，不足資源時以 \\\`netif_stop_queue\\\` 停佇列。  
+    - L3 收包：\\\`ip_rcv\\\` 做 sanity check→NF\_HOOK(PREROUTING)→路由判斷：本機/轉送→\\\`ip_rcv_finish\\\`。  
+    - L3 轉送：\\\`ip_forward\\\`（遞減 TTL、依 MTU 分片）→\\\`ip_forward_finish\\\`→送出。
+
+  ---
+
+  ## 3. 重要資料結構：\\\`sk_buff\\\`
+
+  > 每個封包都有自己的 \\\`sk_buff\\\`。定義於 \\\`include/linux/skbuff.h\\\`；生命週期跨 L2~L4，各層會改動其欄位或前置/剝除標頭。
+
+  ### 記憶體佈局（概念示意）
+
+  \`\`\` text
+                                  ---------------
+                                | sk_buff       |
+                                  ---------------
+    ,---------------------------  + head
+    /          ,-----------------  + data
+  /          /      ,-----------  + tail
+  |          |      |            , + end
+  |          |      |           |
+  v          v      v           v
+  -----------------------------------------------
+  | headroom | data |  tailroom | skb_shared_info |
+  -----------------------------------------------
+                                + [page frag] ...
+                                + frag_list  -->  sk_buff
+  \`\`\`
+
+  - \\\`sk_buff_head\\\` + \\\`sk_buff\\\` 組成雙向鏈結串列，代表收/送佇列（RX/TX）。  
+  - 重要欄位摘錄：  
+    - **鏈結**：\\\`next/prev\\\`  
+    - **所屬 socket/裝置**：\\\`sk\\\`（L4 需要時）、\\\`dev\\\`（收：驅動填入入端介面；送：依虛擬/實體裝置轉換可能變動）  
+    - **資料指標/長度**：\\\`head/data/tail/end\\\`、\\\`len\\\`、\\\`data_len\\\`  
+    - **控制區 \\\`cb\\\`（48 bytes）**：各層臨時資訊儲存，例如 \\*IP\_CB*、\\*TCP\_SKB\_CB*。  
+    - **協定/QoS**：\\\`protocol\\\`（上層 demux）、\\\`priority\\\`（QoS），\\\`mark\\\` 等。  
+    - **分片/校驗**：\\\`frag_list\\\`、\\\`gso_size\\\`、\\\`csum\\\` 等。
+
+  **\\\`cb\\\` 使用範例：**（概念）
+  \`\`\`c
+  #define TCP_SKB_CB(__skb) ((struct tcp_skb_cb *)&((__skb)->cb[0]))
+  // tcb->seq, tcb->end_seq, tcb->flag ... 供 TCP 層在收送路徑存取臨時欄位
+  \`\`\`
+
+  ---
+
+  ## 4. 使用者空間 ↔ 核心空間
+
+  ### 4.1 sysctl
+  - 讀寫核心變數：例如啟用路由功能  
+    \`\`\`bash
+    sudo sysctl -w net.ipv4.ip_forward=1
+    # 對應檔案：/proc/sys/net/ipv4/ip_forward
+    \`\`\`
+
+  ### 4.2 ioctl（input/output control）
+  - 早期常用於網路/裝置控制的系統呼叫，功能強但在複雜資料結構傳遞上較不彈性。
+
+  ### 4.3 netlink（推薦）
+  - 專為網路設定/事件設計的訊息式 IPC：**可靠、可多播、屬性彈性**。  
+  - 典型流程：
+    \`\`\`c
+    fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_GENERIC /*或 NETLINK_ROUTE*/);
+    send(fd, &request, sizeof(request));
+    recv(fd, &response, RSP_BUFFER_SIZE);
+    \`\`\`
+  - 訊息標頭：
+    \`\`\`c
+    struct nlmsghdr {
+      __u32 nlmsg_len;
+      __u16 nlmsg_type;
+      __u16 nlmsg_flags;
+      __u32 nlmsg_seq;
+      __u32 nlmsg_pid;  // 傳送端 port ID（通常是 PID）
+    };
+    \`\`\`
+    > **注意**：多播群組是 \\\`sockaddr_nl\\\`（bind/connect 時）的 \\\`nl_groups\\\`，**不是** \\\`nlmsghdr\\\` 欄位。
+  - 常見族群：
+    - **NETLINK_ROUTE**：介面/路由/鄰居/流量控制
+    - **NETLINK_NETFILTER**：防火牆/封包處理
+    - **NETLINK_KOBJECT_UEVENT**：核心事件通知
+    - **NETLINK_GENERIC**：自定族群
+
+  **ioctl vs netlink**（簡記）  
+  ioctl：命令式、一對一、格式偏固定；  
+  netlink：訊息式、多播、屬性化、擅長複雜拓撲與批次查詢（iproute2 即以此為主）。
+
+  ---
+
+  ## 5. \\\`ip\\\` 指令族與 strace 觀察
+
+  ### 常見子命令
+  - **\\\`ip link\\\`**：列示/設定網路介面（UP/DOWN、MTU、建立 veth/bridge...）
+  - **\\\`ip addr\\\`**：指派/刪除 IP、顯示位址
+  - **\\\`ip route\\\`**：管理路由表
+  - **\\\`ip neigh\\\`**：ARP / NDISC
+  - **\\\`ip rule\\\`**：PBR（策略式路由，決定查哪張表）；\\\`ip route\\\` 是在 **某張表** 裡新增/查詢路由
+
+  > **多數 \\\`ip\\\` 子命令都會透過 \\\`NETLINK_ROUTE\\\` 與核心互動。**
+
+  ### 5.1 快速體驗（建議用非生產 VM）
+
+  \`\`\`bash
+  # 僅印出與 netlink 互動相關的系統呼叫
+  strace -e socket,bind,getsockopt,setsockopt,sendto,sendmsg,recvmsg ip link show
+
+  # 將介面打開
+  sudo strace -e getsockopt,setsockopt,bind,sendto,recvmsg ip link set enp0s3 up
+
+  # 顯示位址
+  sudo strace -e socket,setsockopt,bind,sendto,recvmsg ip addr show
+
+  # 新增路由（示例：經 enp0s8 直連 192.168.55.0/24）
+  sudo strace -e socket,setsockopt,sendmsg,recvmsg ip route add 192.168.55.0/24 dev enp0s8
+  \`\`\`
+
+  **解讀重點**  
+  - \\\`socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE)\\\`：ip(8) 與核心開 netlink。  
+  - \\\`setsockopt SOL_NETLINK NETLINK_EXT_ACK\\\`：開啟擴充 ACK。  
+  - \\\`bind(... nl_groups=00000000)\\\`：綁定 netlink，選擇訂閱群組（多為 0）。  
+  - \\\`sendmsg/recvmsg\\\`：發送/接收 netlink 訊息（如 \\\`RTM_GETLINK\\\`、\\\`RTM_NEWLINK\\\`、\\\`RTM_NEWROUTE\\\`）。  
+  - \\\`ip rule show\\\` 與 \\\`ip route show table <tbl>\\\` 可對照 PBR 與實際路由表內容。
+
+  ---
+
+  ## 6. 核心如何「收包/送包」
+
+  ### 6.1 中斷與驅動（IRQ → ISR）
+  1. NIC 收到 frame 產生 **IRQ**。  
+  2. CPU 切入 **ISR**（驅動層），進行最小化處理（快進快出）。  
+  3. 驅動將資料放入 \\\`sk_buff\\\`、設定欄位（如 \\\`skb->protocol\\\`），並排程 **NET_RX_SOFTIRQ**；frame 進入每 CPU 的 \\\`softnet_data\\\` 佇列。
+
+  > **為何要 softirq？** 讓耗時工作延後到可被排程的上下文執行（\\\`ksoftirqd/N\\\` 每 CPU 一條），降低 IRQ 占用時間與抖動。
+
+  ### 6.2 NAPI（New API）
+  - 混合「中斷 + 輪詢」：高負載時減少 IRQ 風暴，透過 poll 批次拉取封包。  
+  - 設備未消化完上一批封包前，不再觸發新的 IRQ。
+
+  ### 6.3 L2 收包關鍵
+  - **通知核心（舊）**：\\\`netif_rx\\\`（多在中斷上下文，可能暫時關中斷）  
+  - **通知核心（新）**：**NAPI**（建議）  
+  - **核心入口**：\\\`netif_receive_skb\\\` → demux → 依 \\\`skb->protocol\\\` 分派至 L3。
+
+  ### 6.4 L2 送包關鍵
+  - **送出排程**：\\\`dev_queue_xmit\\\`  
+    - 走 **qdisc**（QoS/排程），\`qdisc_run\`；或  
+    - 直接呼叫驅動的 \\\`hard_start_xmit\\\`。  
+  - **佇列控制**：資源不足（如 MTU 大小快取不夠）→ \\\`netif_stop_queue\\\` 暫停 egress 佇列；可用 \\\`netif_wake_queue\\\` 恢復。  
+  - **NET_TX_SOFTIRQ／\\\`net_tx_action\\\`**：處理可延後的 TX 任務；送畢用 \\\`dev_kfree_skb_irq\\\` 釋放 skb。
+
+  ---
+
+  ## 7. L3（IPv4）處理流程
+
+  ### 7.1 初始化
+  - \\\`ip_init\\\`：註冊處理器、初始化路由子系統、端點管理。
+
+  ### 7.2 與 Netfilter 的互動
+  - 多個掛點（hooks）：**PREROUTING**、**INPUT**、**FORWARD**、**OUTPUT**、**POSTROUTING**。  
+  - 防火牆/NAT/策略可能在這些點改變封包命運。
+
+  ### 7.3 與路由子系統互動
+  - \\\`ip_route_input\\\`：決定本機遞送或轉送。  
+  - \\\`ip_route_output_flow\\\`：查出下一跳與 egress 裝置。  
+  - \\\`dst_pmtu\\\`：查詢路徑 MTU（PMTU），避免不必要分片。
+
+  ### 7.4 收包處理（關鍵程式）
+  - **入口**：\\\`ip_rcv\\\`  
+    - 先做 sanity check / checksum  
+    - 呼叫 **NF\_HOOK(PREROUTING)**  
+    - 交由 \\\`ip_rcv_finish\\\` 完成後續：判斷發送至本機或下一跳、處理 IP options
+
+  ### 7.5 轉送（Forwarding）
+  - \\\`ip_forward\\\`：檢查能否轉送、TTL--、依 MTU 分片、選擇 egress dev。  
+  - \\\`ip_forward_finish\\\`：檢查完畢，交給 L2 走送出路徑。
+
+  > **分片成本**：CPU 與延遲皆上升；建議依 **Path MTU Discovery** 避免分片，路徑 MTU 會緩存於路由項目。
+
+  ---
+
+  ## 8. 實作/觀察任務（一步一步做）
+
+  > 建議在 VM/容器進行，避免影響主機網路；多數指令需 \\\`sudo\\\`。
+
+  1. **觀察介面列表（\\\`ip link show\\\`）**  
+    \`\`\`bash
+    strace -e socket,bind,getsockopt,setsockopt,sendto,recvmsg ip link show
+    \`\`\`  
+    - 你會看到 \\\`NETLINK_ROUTE\\\` 的 socket 與 \\\`RTM_GETLINK\\\` 訊息。
+
+  2. **將介面拉起（\\\`ip link set <if> up\\\`）**  
+    \`\`\`bash
+    sudo strace -e getsockopt,setsockopt,bind,sendto,recvmsg ip link set enp0s3 up
+    \`\`\`  
+    - 核心收到 \\\`RTM_NEWLINK\\\`，更新介面 state。
+
+  3. **檢視位址（\\\`ip addr show\\\`）**  
+    \`\`\`bash
+    sudo strace -e socket,setsockopt,bind,sendto,recvmsg ip addr show
+    \`\`\`
+
+  4. **新增直連路由（\\\`ip route add\\\`）**  
+    \`\`\`bash
+    sudo strace -e socket,setsockopt,sendmsg,recvmsg \\
+      ip route add 192.168.55.0/24 dev enp0s8
+    \`\`\`  
+    - 可再用 \\\`ip rule show\\\` 與 \\\`ip route show table main\\\` 對照。
+
+  5. **觀察 softirq/ksoftirqd**  
+    \`\`\`bash
+    ps aux | grep soft
+    # 你應該會看到 [ksoftirqd/0], [ksoftirqd/1] ... 每 CPU 一條
+    \`\`\`
+
+  ---
+
+  ## 9. 常見實務注意
+
+  - **權限**：多數網路設定需 \\\`CAP_NET_ADMIN\\\`（sudo）。  
+  - **MTU/PMTU**：錯誤 MTU 會導致分片或通訊失敗。  
+  - **loopback 特性**：\\\`lo\\\` 常不經 qdisc。  
+  - **高負載 IRQ 風暴**：啟用 NAPI、調整中斷合併（NIC 功能）。  
+  - **黏包/拆包**（應用層協定）：若不用 \\\`ReadString\\\` 類 API，需自行定義訊框邊界（長度前綴或分隔符）。
+
+  ---
+
+  ## 10. 思考題（Questions）
+
+  1. **什麼是 \\\`sk_buff\\\`？** 詳述其儲存資訊、用途，以及在哪些層（L2~L4）被使用。  
+  2. **什麼是 Linux 網路中的 Netlink？** 說明其目的、典型通訊流程、訊息格式，並比較 ioctl 與 netlink 的差異。  
+  3. **說明 \\\`ip\\\` 指令在 Linux 網路管理中的主要功能**，以及它是透過哪些系統呼叫與核心互動完成工作的。  
+  4. **解釋 Linux 中的網路相關中斷處理流程**：裝置、驅動、CPU 與核心各自的角色；並說明什麼是 **softirq**，以及它在此脈絡中的重要性。  
+  5. **描述 L2 frame 的處理流程**：佇列管理、如何通知核心、接收處理與傳送排程（qdisc / \\\`dev_queue_xmit\\\`）。  
+  6. **說明 L3 IP 封包處理**：初始化、與 Netfilter 的互動、路由查詢，以及轉送（\\\`ip_forward\\\` / \\\`ip_forward_finish\\\`）的過程。
+
+  ---
+
+  ## 11. 參考指引（工具 & man pages）
+
+  - **man pages**：\\\`man 8 ip\\\`、\\\`man 7 netlink\\\`、\\\`man 2 ioctl\\\`、\\\`man 7 packet\\\`  
+  - **原始碼入口**：  
+    - L2 核心：\\\`net/core/dev.c\\\`（\\\`netif_receive_skb\\\`、\\\`dev_queue_xmit\\\` 等）  
+    - IPv4：\\\`net/ipv4/ip_input.c\\\`（\\\`ip_rcv\\\`）、\\\`net/ipv4/ip_forward.c\\\`（\\\`ip_forward\\\`）  
+  - **free5GC / gtp5g**：見本文起始的 4 份連結
+
+  ---
+  `
+  },
+      // *******************************************************************
+  // *******************************************************************
+  // *******************************************************************
+  // *******************************************************************
+
 
 
 
 ];
 
 
-
-
-
-// example
-
-// {
-//   id: "n-nycu-dl-2025",
-//   slug: "nycu-deep-learning-2025",
-//   title: "NYCU Deep Learning (Summer 2025)",
-//   date: "2025-07-01",
-//   category: "school-curriculum",            
-//   cover: `${process.env.PUBLIC_URL}/DL.png`,
-//   tags: ["Deep Learning","NYCU","Course","Labs","Reinforcement Learning","Diffusion"],
-//   // cover 可留空，沒有就會走你卡片的漸層預設
-//   summary:
-//     "NYCU 資工暑期 Deep Learning 課程：主題、評分、時程、參考書與實作倉庫。含 Labs、論文報告與期末專題。",
-//   content: `
-// # NYCU Deep Learning (Summer 2025)
-// > National Yang Ming Chiao Tung University — Department of Computer Science
-
-// **GitHub Repo**：<https://github.com/solar224/NYCU_DL>
-
-// [![Course](https://img.shields.io/badge/Course-Deep%20Learning-blue)]()
-// [![Semester](https://img.shields.io/badge/Semester-Summer%202025-informational)]()
-// [![Language](https://img.shields.io/badge/Language-English-lightgrey)]()
-
-// ---
-
-// ## Table of Contents
-// - [Overview](#課程簡介-overview)
-// - [Instructors](#授課教師與助教-instructors--tas)
-// - [Grading](#評分方式-grading)
-// - [Schedule](#時程與主題-schedule)
-// - [Textbooks & References](#教材與參考-textbooks--references)
-// - [Repo Structure](#專案倉庫建議結構-suggested-repo-structure)
-
-// ---
-
-// ## 課程簡介
-// 本課程兼顧 **理論** 與 **實作**，內容涵蓋：
-// - 深層前饋網路、CNN、RNN/Recursive nets  
-// - Autoencoders、Linear factor models、GANs、Normalizing flows、Diffusion  
-// - 強化學習（值函數、政策、模型式）  
-// - 期末以**論文風格**發表專題
-
-// ---
-
-// ## 授課教師
-// - 彭文孝（Peng）｜wpeng@cs.nctu.edu.tw  
-// - 陳永昇（Chen）｜yschen@nycu.edu.tw  
-// - 謝秉均（Hsieh）｜pinghsieh@cs.nycu.edu.tw  
-
-// ---
-
-// ## 評分方式 
-// **Part I（3 學分）Deep Learning**
-// - 4 Labs（Lab 0、2、5、6；個別完成）80%
-// - 期末考 20%
-
-// **Part II（3 學分）Deep Learning & Practice**
-// - 4 Labs（Lab 1、3、4、7）50%
-// - 論文報告（3 人一組）25%
-// - 期末專題（3 人一組）25%
-
-// ---
-
-// ## 時程與主題
-// > Afternoon 為下午課；Evening 為晚間實作／實驗課。Dates in **2025/7–8**.
-
-// | Date | Afternoon Topic                           | Evening / Lab                     |
-// |-----:|-------------------------------------------|-----------------------------------|
-// | 7/1  | Introduction & ML Basics                  | Warm-up (**Lab 0**)               |
-// | 7/3  | Deep Feedforward Networks                 | Back-Propagation (**Lab 1**)      |
-// | 7/8  | Convolutional Networks                    | ConvNets & Transformers (**Lab 2**) |
-// | 7/10 | Introduction to Reinforcement Learning    | No class                          |
-// | 7/15 | Recurrent & Recursive Nets                | MaskGIT (**Lab 3**)               |
-// | 7/17 | Linear Factor Models, Autoencoders        | No class                          |
-// | 7/22 | Generative Adversarial Networks           | CVAE (**Lab 4**)                  |
-// | 7/24 | Value-Based Reinforcement Learning        | No class                          |
-// | 7/29 | Policy-Based Reinforcement Learning       | Discrete Control (**Lab 5**)      |
-// | 7/31 | Diffusion Models                          | No class                          |
-// | 8/5  | Normalizing Flows                         | Diffusion (**Lab 6**)             |
-// | 8/7  | Final Project Proposal                    | Final Project Proposal            |
-// | 8/12 | Model-Based Reinforcement Learning        | Continuous Control (**Lab 7**)    |
-// | 8/14 | No class                                  | No class                          |
-// | 8/19 | Paper Presentation                        | Paper Presentation                |
-// | 8/21 | Paper Presentation                        | Paper Presentation                |
-// | 8/26 | Final Exam                                | —                                 |
-// | 8/28 | Final Project Demo                        | —                                 |
-
-// ---
-
-// ## 教材與參考
-// - I. Goodfellow, Y. Bengio, A. Courville, *Deep Learning*, MIT Press, 2016.  
-// - R. S. Sutton, A. G. Barto, *Reinforcement Learning: An Introduction*, 2020.  
-// - 課程材料約自編與既有教材各佔 50%（for reference only）
-
-// ---
-
-// ## 專案倉庫結構
-//     .
-//     ├── labs/
-//     │   ├── lab0_warmup/
-//     │   ├── lab1_backprop/
-//     │   ├── lab2_conv_transformers/
-//     │   ├── lab3_maskgit/
-//     │   ├── lab4_cvae/
-//     │   ├── lab5_discrete_rl/
-//     │   ├── lab6_diffusion/
-//     │   └── lab7_continuous_rl/
-//     ├── paper_presentation/
-//     │   ├── slides/
-//     │   └── report/
-//     ├── final_project/
-//     │   ├── proposal/
-//     │   ├── code/
-//     │   └── paper/
-//     ├── docs/              # notes, additional references
-//     ├── .gitignore
-//     └── README.md
-// `
-// }

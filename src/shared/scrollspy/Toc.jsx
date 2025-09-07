@@ -1,4 +1,4 @@
-// D:\CYC\src\shared\scrollspy\SpySection.jsx
+// D:\CYC\src\shared\scrollspy\Toc.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { Paper, List, ListItemButton, ListItemText, Box } from "@mui/material";
 import { alpha } from "@mui/material/styles";
@@ -13,31 +13,40 @@ export function Toc({
 }) {
     const { sections, activeId, scrollTo } = useScrollSpy();
     const [open, setOpen] = useState(false);
-    const [lockedId, setLockedId] = useState(null); // 點擊後暫時鎖定的目標
-    const currentId = lockedId ?? activeId;         // UI 一律用這個來決定高亮
+    const [lockedId, setLockedId] = useState(null);
+    const currentId = lockedId ?? activeId;
+
     const stableSinceRef = useRef(null);
+    const scrollRef = useRef(null); // ⬅️ 新增：清單可滾動容器
+
     useEffect(() => {
         if (!lockedId) return;
         if (activeId === lockedId) {
             if (stableSinceRef.current == null) stableSinceRef.current = Date.now();
             const held = Date.now() - (stableSinceRef.current ?? Date.now());
-            if (held >= 1000) {               // 400ms 穩定才解鎖
+            if (held >= 1000) {
                 setLockedId(null);
                 stableSinceRef.current = null;
             }
         } else {
-            // 一旦不相等就重置計時
             stableSinceRef.current = null;
         }
     }, [activeId, lockedId]);
-    // 保障機制：若內容太短沒有觸發 spy，也在一段時間後自動解鎖
+
     useEffect(() => {
         if (!lockedId) return;
         const fallback = setTimeout(() => setLockedId(null), 5000);
         return () => clearTimeout(fallback);
     }, [lockedId]);
-    const rightAtLg = `max(16px, calc((100vw - ${containerMaxWidth}px)/2 - ${sidebarWidth + 16
-        }px))`;
+
+    // ⬅️ 新增：當 active/locked 改變時，自動把該項目捲到可視範圍
+    useEffect(() => {
+        if (!scrollRef.current || !currentId) return;
+        const el = scrollRef.current.querySelector(`[data-toc-id="${currentId}"]`);
+        if (el) el.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }, [currentId, open]);
+
+    const rightAtLg = `max(16px, calc((100vw - ${containerMaxWidth}px)/2 - ${sidebarWidth + 16}px))`;
 
     return (
         <Paper
@@ -57,11 +66,10 @@ export function Toc({
                 transform: fixedRight ? { md: "translateY(-50%)" } : "none",
                 right: fixedRight ? { md: 16, lg: rightAtLg } : "auto",
                 width: { md: open ? sidebarWidth : collapsedWidth },
-                maxHeight: { md: "70vh" },
-                overflow: "hidden",
+                maxHeight: { md: "70vh" },          // 高度限制維持在 70vh
+                overflow: "hidden",                 // 讓外框維持乾淨；真正的滾動交給內層
                 zIndex: 1100,
                 display: hiddenOnMobile ? { xs: "none", md: "block" } : "block",
-
                 p: { md: open ? 1 : 0 },
 
                 bgcolor: "transparent",
@@ -86,7 +94,6 @@ export function Toc({
                     "width .25s ease, padding .25s ease, background-color .2s ease, box-shadow .2s ease",
                 cursor: open ? "default" : "pointer",
             })}
-
         >
             {/* 收合：垂直短杠 */}
             <Box
@@ -129,86 +136,98 @@ export function Toc({
                 ))}
             </Box>
 
-            {/* 展開：完整目錄（點選後不會自動關閉） */}
-            <List dense disablePadding sx={{ display: { md: open ? "block" : "none" } }}>
-                {sections.map((s) => (
-                    <ListItemButton
-                        key={s.id}
-                        disableRipple
-                        selected={s.id === currentId}
-                        onClick={() => {
-                            setLockedId(s.id);
-                            scrollTo(s.id);
-                        }}
-                        sx={(t) => ({
-                            position: "relative",
-                            pl: (s.level - 2) * 2 + 4,
-                            py: 0.5,
-                            my: 0.25,
-                            borderRadius: 10,
-                            transition:
-                                "background-color .18s ease, transform .18s ease, color .18s ease",
-
-                            // 未選時的 hover：很淡的底色
-                            "&:hover": {
-                                backgroundColor: alpha(t.palette.primary.main, 0.06),
-                            },
-
-                            // 左側細色條（僅在 hover/selected 時實心）
-                            "&::before": {
-                                content: '""',
-                                position: "absolute",
-                                left: 12,                // 細色條距離左側
-                                top: 6,
-                                bottom: 6,
-                                width: 3,
-                                borderRadius: 2,
-                                backgroundColor: "transparent",
-                                transform: "scaleY(0.6)",
-                                transition:
-                                    "transform .18s ease, background-color .18s ease, box-shadow .18s ease",
-                            },
-
-                            // 鍵盤可及性：聚焦時有淡淡外框
-                            "&.Mui-focusVisible": {
-                                outline: `2px solid ${alpha(t.palette.primary.main, 0.25)}`,
-                                outlineOffset: 2,
-                            },
-
-                            // ✅ 選到的樣式：左側細色條 + 文字顏色微提升 + 很淡底色
-                            "&.Mui-selected": {
-                                backgroundColor: alpha(t.palette.primary.main, 0.08),
-                                "&:hover": { backgroundColor: alpha(t.palette.primary.main, 0.12) },
-                                "&::before": {
-                                    backgroundColor: t.palette.primary.main,
-                                    boxShadow:
-                                        t.palette.mode === "dark"
-                                            ? "0 0 0 1px rgba(255,255,255,.08)"
-                                            : "0 0 0 1px rgba(0,0,0,.04)",
-                                    transform: "scaleY(1)",
-                                },
-                                // 讓字更穩重一些
-                                "& .MuiListItemText-primary": {
-                                    color: t.palette.text.primary,
-                                    fontWeight: 700,
-                                    letterSpacing: 0.1,
-                                },
-                            },
-                        })}
-                    >
-                        <ListItemText
-                            primary={s.title}
-                            primaryTypographyProps={{
-                                noWrap: true,
-                                sx: { pr: 1 },
-                                // 未選到時字重 500，更有資訊層次
-                                fontWeight: s.id === currentId ? 700 : 500,
+            {/* 展開：完整目錄（可垂直滾動） */}
+            <Box
+                ref={scrollRef}
+                sx={(t) => ({
+                    display: { md: open ? "block" : "none" },
+                    maxHeight: { md: "70vh" },     // 與外層同高，確保內層成為滾動容器
+                    overflowY: "auto",
+                    pr: 0.5,                       // 滾動條不壓文字
+                    // 些微捲軸樣式（可移除）
+                    "&::-webkit-scrollbar": { width: 8 },
+                    "&::-webkit-scrollbar-thumb": {
+                        backgroundColor: alpha(t.palette.text.primary, 0.25),
+                        borderRadius: 8,
+                    },
+                    "&:hover::-webkit-scrollbar-thumb": {
+                        backgroundColor: alpha(t.palette.text.primary, 0.4),
+                    },
+                    // 上下淡淡遮罩，視覺上提示可滾動（非必要）
+                    maskImage:
+                        "linear-gradient(to bottom, transparent 0, black 12px, black calc(100% - 12px), transparent 100%)",
+                })}
+            >
+                <List dense disablePadding>
+                    {sections.map((s) => (
+                        <ListItemButton
+                            key={s.id}
+                            data-toc-id={s.id}          // ⬅️ 用來 auto scroll 的定位
+                            disableRipple
+                            selected={s.id === currentId}
+                            onClick={() => {
+                                setLockedId(s.id);
+                                scrollTo(s.id);
                             }}
-                        />
-                    </ListItemButton>
-                ))}
-            </List>
-
+                            sx={(t) => ({
+                                position: "relative",
+                                pl: (s.level - 2) * 2 + 4,
+                                py: 0.5,
+                                my: 0.25,
+                                borderRadius: 10,
+                                transition:
+                                    "background-color .18s ease, transform .18s ease, color .18s ease",
+                                "&:hover": {
+                                    backgroundColor: alpha(t.palette.primary.main, 0.06),
+                                },
+                                "&::before": {
+                                    content: '""',
+                                    position: "absolute",
+                                    left: 12,
+                                    top: 6,
+                                    bottom: 6,
+                                    width: 3,
+                                    borderRadius: 2,
+                                    backgroundColor: "transparent",
+                                    transform: "scaleY(0.6)",
+                                    transition:
+                                        "transform .18s ease, background-color .18s ease, box-shadow .18s ease",
+                                },
+                                "&.Mui-focusVisible": {
+                                    outline: `2px solid ${alpha(t.palette.primary.main, 0.25)}`,
+                                    outlineOffset: 2,
+                                },
+                                "&.Mui-selected": {
+                                    backgroundColor: alpha(t.palette.primary.main, 0.08),
+                                    "&:hover": { backgroundColor: alpha(t.palette.primary.main, 0.12) },
+                                    "&::before": {
+                                        backgroundColor: t.palette.primary.main,
+                                        boxShadow:
+                                            t.palette.mode === "dark"
+                                                ? "0 0 0 1px rgba(255,255,255,.08)"
+                                                : "0 0 0 1px rgba(0,0,0,.04)",
+                                        transform: "scaleY(1)",
+                                    },
+                                    "& .MuiListItemText-primary": {
+                                        color: t.palette.text.primary,
+                                        fontWeight: 700,
+                                        letterSpacing: 0.1,
+                                    },
+                                },
+                            })}
+                        >
+                            <ListItemText
+                                primary={s.title}
+                                primaryTypographyProps={{
+                                    noWrap: true,
+                                    sx: { pr: 1 },
+                                    fontWeight: s.id === currentId ? 700 : 500,
+                                }}
+                            />
+                        </ListItemButton>
+                    ))}
+                </List>
+            </Box>
         </Paper>
     );
 }
