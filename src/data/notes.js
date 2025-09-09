@@ -1169,7 +1169,7 @@ ok      github.com/ianchen0119/free5GLab/lab0   8.371s
   // *******************************************************************
   // *******************************************************************
 
-    {
+  {
     id: "n-free5gc-lab2",
     slug: "free5gc-lab2-linux-kernel-networking-basics",
     title: "free5GC Lab2：Linux 核心中的網路基礎（ip / netlink / sk_buff / NAPI）",
@@ -1472,9 +1472,349 @@ ok      github.com/ianchen0119/free5GLab/lab0   8.371s
   // *******************************************************************
   // *******************************************************************
   // *******************************************************************
+{
+  id: "n-free5gc-lab3",
+  slug: "free5gc-lab3-deploy-with-docker-compose",
+  title: "free5GC Lab3：用 Docker Compose 部署與排錯（含 MongoDB/UPF/n6gw）",
+  date: "2025-09-10",
+  category: "school-curriculum",
+  tags: ["free5GC", "5G", "Docker", "Docker Compose", "MongoDB", "GTP5G", "UERANSIM", "iptables", "NAT"],
+  cover: `${process.env.PUBLIC_URL}/free5gc.png`,
+  summary:
+    "一步一步把 free5GC 用 Docker Compose 跑起來，處理 MongoDB（AVX）、UPF/n6gw 腳本權限與 CRLF、SNAT、PFCP/GTP-U 封包驗證，並提供常見錯誤對照與健檢清單。",
+  content: `
+# free5GC Lab 3 部署筆記（步驟＋問題排查）
+
+## TL;DR（這次修正重點）
+
+- **MongoDB 掛掉（缺 AVX）** → 把 \\\`db\\\` 改用 \\\`mongo:4.4\\\`。
+- **UPF / n6gw \\\`Permission denied\\\`** → 對 \\\`upf-iptables.sh\\\`、\\\`n6gw_iptables.sh\\\` 加 \\\`+x\\\`，並把 CRLF 轉 LF。
+- **重建服務** → \\\`docker compose ... up -d --force-recreate\\\` 後，NRF/WEBUI/AMF/SMF 全部恢復。
+- （可選）移除 \\\`version: "3.8"\\\` 警告，不影響功能。
+
+---
+
+## 0) 前置檢查（強烈建議先做）
+
+> 這些檢查能省下 80% 排錯時間。
+
+### 0.1 Host 端（非容器）  
+\`\`\`bash
+# CPU 是否支援 AVX（若沒有，MongoDB 5.x 會炸）
+lscpu | grep -i avx || echo "No AVX (use mongo:4.4)"
+
+# 內核版本與 gtp5g（UPF 需）
+uname -r
+lsmod | grep gtp5g || echo "gtp5g not loaded"
+# 若未載入：sudo modprobe gtp5g ；若沒有模組需先編譯安裝（參考 gtp5g 專案）
+\`\`\`
+
+### 0.2 Netfilter/iptables（容器內會調用）
+\`\`\`bash
+# 有些環境預設走 nftables，腳本若用 iptables-legacy 需切回（可視情況）
+sudo update-alternatives --config iptables   # 選擇 iptables-legacy（若腳本需要）
+\`\`\`
+
+### 0.3 防火牆
+\`\`\`bash
+# 若 Host 開了 UFW，建議暫時關閉或放行容器橋接網（避免 PFCP/GTP-U 被擋）
+sudo ufw status verbose
+\`\`\`
+
+---
+
+## 1) 拓撲與 IP 規劃（本次沿用）
+
+- \\\`privnet\\\`（10.100.200.0/24）：SBI（NRF/AMF/SMF/PCF/UDM/UDR/CHF/WebUI/MongoDB）  
+- \\\`n2net\\\`（10.100.2.0/24）：AMF ↔ gNB（UERANSIM）  
+- \\\`n3net\\\`（10.100.3.0/24）：gNB ↔ UPF（GTP-U）  
+- \\\`n4net\\\`（10.100.4.0/24）：SMF ↔ UPF（PFCP）  
+- \\\`n6net\\\`（10.100.6.0/24）：UPF ↔ n6gw（DN 出口做 SNAT）
+
+> 例：UPF(N3)=10.100.3.100、UPF(N4)=10.100.4.100、UPF(N6)=10.100.6.100、SMF(N4)=10.100.4.20、AMF(N2)=10.100.2.20、UERANSIM gNB(N2/N3)=10.100.2.10/10.100.3.10
+
+---
+
+## 2) 這次實作的實際變更
+
+### 2.1 將 MongoDB 固定版本到 4.4（避免 AVX 需求）
+
+編輯 \\\`deploy_exercise.yaml\\\` 中的 \\\`db\\\` 服務：
+\`\`\`yaml
+services:
+  db:
+    container_name: mongodb
+    image: mongo:4.4   # ← 原本是 mongo（5.x 需 AVX），改成 4.4
+    command: mongod --port 27017
+    expose: ["27017"]
+    volumes: [ dbdata:/data/db ]
+    networks:
+      privnet:
+        aliases: [ db ]
+\`\`\`
+
+> **若先前用過新版 MongoDB 的 volume**，建議把 \\\`dbdata\\\` 清掉重建（避免資料檔格式不相容）：
+> \`\`\`bash
+> docker compose -f deploy_exercise.yaml down -v   # 會刪容器＋volume（謹慎）
+> \`\`\`
+
+### 2.2 修正 iptables 腳本不可執行
+
+在 \\\`~/free5gc-compose\\\`：
+\`\`\`bash
+chmod +x ./config/upf-iptables.sh ./config/n6gw_iptables.sh
+
+# 若曾在 Windows 編輯，順手去 CRLF：
+sed -i 's/\\r$//' ./config/upf-iptables.sh
+sed -i 's/\\r$//' ./config/n6gw_iptables.sh
+\`\`\`
+> 你的 log：\\\`Permission denied\\\`（exit 126）就是因為沒有 \\\`+x\\\` 或行尾 CRLF。
+
+### 2.3（可選）移除 Compose \\\`version\\\` 警告
+
+把檔頭 \\\`version: "3.8"\\\` 刪掉即可（Compose v2 會自動判斷）。
+
+### 2.4 重建關鍵服務
+
+\`\`\`bash
+docker compose -f deploy_exercise.yaml down
+docker compose -f deploy_exercise.yaml up -d --force-recreate \\
+  db nrf webui upf n6gw amf smf ausf udr udm pcf nssf chf ueransim
+\`\`\`
+
+---
+
+## 3) 健檢與驗證（起來後立刻檢查）
+
+### 3.1 MongoDB 是否正常
+\`\`\`bash
+docker logs -f mongodb | tail -n +1
+# 期待：沒有 AVX 警告，並出現 "Waiting for connections" 類訊息
+\`\`\`
+
+### 3.2 NRF 是否不再 500 / server selection timeout
+\`\`\`bash
+docker logs -f nrf | egrep -i "error|500|timeout|Register" | tail -n 100
+# 期待：不再看到 "server selection timeout" / "connection refused"
+\`\`\`
+
+### 3.3 upf / n6gw 路由與 NAT 是否生效
+\`\`\`bash
+docker exec -it upf  bash -lc 'ip r; iptables -S | head'
+docker exec -it n6gw bash -lc 'ip r; iptables -t nat -S | grep POSTROUTING'
+
+# 期待（UPF）：default via 10.100.6.101 dev dn0
+# 期待（n6gw）：對 10.60.0.0/16、10.61.0.0/16 有 route；nat 表有 MASQUERADE
+\`\`\`
+
+> **補充：** 在 n6gw 內確認轉送、反向路由檢查  
+> \`\`\`bash
+> docker exec -it n6gw bash -lc 'sysctl -w net.ipv4.ip_forward=1; sysctl -w net.ipv4.conf.all.rp_filter=0'
+> \`\`\`
+
+### 3.4 N2 信令（你已經正常）
+AMF log 會看到 \\\`Handle InitialUEMessage\\\`、\\\`RRC connection established\\\` 等。
+
+### 3.5 UE 連線 & 出網測試
+\`\`\`bash
+docker exec -it ueransim bash
+./nr-ue -c config/uecfg.yaml
+ip a | grep uesimtun0 -n
+ping -I uesimtun0 8.8.8.8
+\`\`\`
+
+> 可用 \\\`traceroute -i uesimtun0 8.8.8.8\\\` 看看是否經過 n6gw 出口；或用 \\\`iperf3\\\` 做吞吐測試。
+
+### 3.6 需要時觀察封包
+\`\`\`bash
+# GTP-U（UPF 上）
+docker exec -it upf bash -lc \\
+ 'apt-get update >/dev/null 2>&1; apt-get install -y tcpdump >/dev/null 2>&1 || true; tcpdump -ni any udp port 2152 -c 5'
+
+# PFCP（SMF/UPF）
+docker exec -it upf bash -lc 'tcpdump -ni any udp port 8805 -c 5'
+docker exec -it smf bash -lc 'tcpdump -ni any udp port 8805 -c 5'
+\`\`\`
+
+---
+
+## 4) 這次遇到的問題與解法（對照錯誤訊息）
+
+### 問題 A：MongoDB AVX 導致容器退出
+**症狀**
+\`\`\`
+mongodb | WARNING: MongoDB 5.0+ requires a CPU with AVX support ...
+mongodb exited with code 132
+\`\`\`
+**影響**
+- NRF/WEBUI/UDR/UDM/PCF/NSSF/SMF/AUSF 都連不到 DB →
+  \\\`server selection timeout\\\`、\\\`connection refused\\\`、\\\`server misbehaving\\\`、WEBUI login 500、AMF「can not select an AUSF by NRF」→ UE 註冊被拒（CONGESTION）。
+
+**解法**
+- 將 \\\`db\\\` 改用 \\\`image: mongo:4.4\\\`（不需 AVX）。
+- 如有舊 volume，砍掉 \\\`dbdata\\\` 重來。
+
+---
+
+### 問題 B：UPF / n6gw 腳本無法執行
+**症狀**
+\`\`\`
+bash: line 1: ./n6gw-iptables.sh: Permission denied
+bash: line 1: ./upf-iptables.sh: Permission denied
+... exited with code 126
+\`\`\`
+**原因**
+- bind mount 進容器的檔案是不可執行（缺 \\\`+x\\\`）或 CRLF 行尾。
+
+**解法**
+\`\`\`bash
+chmod +x ./config/upf-iptables.sh ./config/n6gw_iptables.sh
+sed -i 's/\\r$//' ./config/upf-iptables.sh ./config/n6gw_iptables.sh
+\`\`\`
+
+---
+
+### 問題 C：大量 NRF 500 / WEBUI 500 / AMF 選不到 AUSF
+**症狀**
+\`\`\`
+NRF ... server selection timeout / server misbehaving
+WEBUI ... Login err ... server selection timeout
+AMF ... can not select an AUSF by NRF
+\`\`\`
+**原因**
+- 問題 A（DB 掛）連鎖效應。
+
+**解法**
+- 先修 DB（\\\`mongo:4.4\\\`），其餘自然恢復。
+
+---
+
+### （附加）小問題：\\\`no such service: smf\\\`
+**情境**
+- \\\`docker compose logs smf\\\` 報錯。
+
+**說明**
+- Compose 參數要用 **service 名稱**（例如 \\\`free5gc-smf\\\`），不是 \\\`container_name\\\`。
+
+**解法**
+\`\`\`bash
+docker compose -f deploy_exercise.yaml config --services   # 查 service 名
+docker compose -f deploy_exercise.yaml logs -f free5gc-smf
+# 或直接用 container 名稱：
+docker logs -f smf
+\`\`\`
+
+---
+
+## 5) 交付與驗收清單（你已完成 ✅）
+
+- [x] \\\`db\\\` 使用 \\\`mongo:4.4\\\`，MongoDB 正常啟動  
+- [x] \\\`upf-iptables.sh\\\`、\\\`n6gw_iptables.sh\\\` 具備 \\\`+x\\\`，且 LF 行尾  
+- [x] \\\`upf\\\` 預設路由經 \\\`dn0 → 10.100.6.101\\\`；\\\`n6gw\\\` 有 MASQUERADE  
+- [x] NRF 無 \\\`server selection timeout / 500\\\`  
+- [x] AMF 可找到 AUSF → UE 註冊成功  
+- [x] \\\`uesimtun0\\\` 介面存在，可 \\\`ping -I uesimtun0 8.8.8.8\\\`  
+- [x] 需要時觀察到 GTP-U(2152)/PFCP(8805) 封包
+
+---
+
+## 6) 常用指令附錄
+
+\`\`\`bash
+# 列出 service 名稱
+docker compose -f deploy_exercise.yaml config --services
+
+# 查看服務網路 IP
+docker inspect upf | jq '.[0].NetworkSettings.Networks'
+docker inspect smf | jq '.[0].NetworkSettings.Networks'
+docker inspect amf | jq '.[0].NetworkSettings.Networks'
+docker inspect ueransim | jq '.[0].NetworkSettings.Networks'
+
+# 只看某些服務的 log
+docker compose -f deploy_exercise.yaml logs -f --tail=200 free5gc-smf free5gc-upf free5gc-amf
+
+# 直接用 container 名稱
+docker logs -f smf upf amf
+
+# 整個環境重建
+docker compose -f deploy_exercise.yaml down
+docker compose -f deploy_exercise.yaml up -d --force-recreate
+\`\`\`
+
+---
+
+## 7) 進階補充與「常見踩雷」
+
+- **rp_filter**：在做隧道/多路由時，Linux 的反向路由檢查可能擋掉回程。對 **n6gw** 及需要多路由的容器（若有）設 \\\`net.ipv4.conf.all.rp_filter=0\\\`。  
+- **PBR（策略路由）**：若 DN 出口複雜，可用 \\\`ip rule\\\` + \\\`ip route\\\` 分流（但本 Lab 默認不需）。  
+- **MTU**：GTP-U 封裝會吃掉部分 MTU。若跨網段出網不穩定，可在 \\\`dn0\\\` 或對外口調整 MTU，或確保路徑支援 PMTU。  
+- **容器時鐘**：NFs 之間的 JWT/TLS/Token 與日誌排序需時間一致；Host NTP 要正常。  
+- **持久化資料**：MongoDB 升/降版本後，舊資料不相容會造成奇怪的 500；不確定時清空 volume 重來最乾淨。  
+- **iptables/nftables**：腳本若用 \\\`iptables-legacy\\\`，但系統是 nftables，規則可能沒真正生效；可用 \\\`iptables -S\\\` 與 \\\`nft list ruleset\\\` 交叉確認。  
+- **Host 防火牆/安全組**：PFCP(8805)/GTP-U(2152) 一定要通；若在雲端 VM，還要檢查雲端防火牆規則。  
+- **UERANSIM 配置**：\\\`gnb.yaml\\\` 的 N2/N3 IP 要與 Compose 網段一致；\\\`ue.yaml\\\` 的 DNN/PLMN 與 SMF/AMF 相符。  
+
+---
+
+## 8) 參考 minimal 片段（僅示意）
+
+> 實際以你的 \\\`deploy_exercise.yaml\\\` 為準，以下只標示關鍵位址與網路。
+
+\`\`\`yaml
+networks:
+  privnet: { ipam: { config: [ { subnet: 10.100.200.0/24 } ] } }
+  n2net:   { ipam: { config: [ { subnet: 10.100.2.0/24   } ] } }
+  n3net:   { ipam: { config: [ { subnet: 10.100.3.0/24   } ] } }
+  n4net:   { ipam: { config: [ { subnet: 10.100.4.0/24   } ] } }
+  n6net:   { ipam: { config: [ { subnet: 10.100.6.0/24   } ] } }
+
+services:
+  db:
+    image: mongo:4.4
+    networks: { privnet: { ipv4_address: 10.100.200.10 } }
+
+  nrf:
+    networks: { privnet: { ipv4_address: 10.100.200.11 } }
+
+  amf:
+    networks:
+      privnet: { ipv4_address: 10.100.200.21 }
+      n2net:   { ipv4_address: 10.100.2.20  }
+
+  smf:
+    networks:
+      privnet: { ipv4_address: 10.100.200.31 }
+      n4net:   { ipv4_address: 10.100.4.20  }
+
+  upf:
+    networks:
+      n3net: { ipv4_address: 10.100.3.100 }
+      n4net: { ipv4_address: 10.100.4.100 }
+      n6net: { ipv4_address: 10.100.6.100 }
+
+  n6gw:
+    networks:
+      n6net: { ipv4_address: 10.100.6.101 }
+\`\`\`
+
+---
+
+## 9) 小結（Learnings）
+
+- **核心依賴優先**：DB 掛掉會讓整個 SBA 服務鏈一連串 500；先看 MongoDB、再看 NRF。  
+- **權限與行尾**：在容器內執行腳本時，\\\`+x\\\` 與 LF 很關鍵；Permission denied/126 幾乎都是這個。  
+- **網路與路由**：UPF/N6GW 的預設路由與 SNAT 決定 UE 是否能出網；N2/N3/N4 正常不代表 N6 OK。  
+- **日誌定位**：\\\`server selection timeout\\\` 幾乎直指 DB，\\\`can not select AUSF\\\` 多半是 NRF/DB 問題造成的發現失敗。  
+
+---
+`
+},
 
 
-
+// *******************************************************************
+  // *******************************************************************
+  // *******************************************************************
+  // *******************************************************************
 
 ];
 
