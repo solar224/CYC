@@ -316,164 +316,175 @@ export const NOTES = [
     // *******************************************************************
 
 {
-    id: "n-free5gc-lab0",
-    slug: "free5gc-lab0-network-programming-basics",
-    title: "free5GC Lab0：網路程式設計的基礎（Go/TCP Echo）",
-    date: "2025-09-06",
-    category: "school-curriculum",
-    tags: ["free5GC", "5G", "Networking", "Go", "TCP", "Goroutine", "Lab0"],
-    cover: `${process.env.PUBLIC_URL}/free5gc.png`, // 有圖就打開；沒圖可留空走預設
-    summary:
-      "用 Go 的 net 套件實作 TCP Echo 伺服器：Client-Server 模型、goroutine 併發、資源釋放與 go test/-race 驗證，支援多連線與正確回應。",
-    content: `
+  id: "n-free5gc-lab0",
+  slug: "free5gc-lab0-network-programming-basics",
+  title: "free5GC Lab0：網路程式設計的基礎（Go/TCP Echo）",
+  date: "2025-09-06",
+  category: "school-curriculum",
+  tags: ["free5GC", "5G", "Networking", "Go", "TCP", "Goroutine", "Lab0"],
+  cover: `${process.env.PUBLIC_URL}/free5gc.png`, // 有圖就打開；沒圖可留空走預設
+  summary:
+    "用 Go 的 net 套件實作 TCP Echo 伺服器：Client-Server 模型、goroutine 併發、資源釋放與 go test/-race 驗證，支援多連線與正確回應。",
+  content: `
 # free5GC Lab
 
-GitHub Repo：[free5GLab](https://github.com/free5gc/free5GLabs)
+GitHub Repo：free5GLab (https://github.com/free5gc/free5GLabs)
 
-# Lab0 網路程式設計的基礎
+# Lab0 網路程式設計的基礎（Go / TCP Echo）
 
-### **1. 實驗目標**
+> 目標：使用 Go 的 net 套件，實作一個可同時處理多連線的 TCP Echo 伺服器，並以 go test 與 -race 驗證正確性與併發安全。
 
-- 理解網路程式設計的基本模型 (Client-Server)。
-- 學習使用 Go 的 \`net\` 套件來建立一個 TCP 伺服器。
-- 掌握使用 Goroutine (\`go\` 關鍵字) 實現併發處理客戶端連線的方法。
-- 學會使用 \`go test\` 指令來對網路程式進行自動化測試。
+---
 
-### **2. 核心知識點**
+## 0) 前置準備
 
-- **TCP/IP**:
-    - **IP (\`0.0.0.0\` vs \`127.0.0.1\`)**:
-    
-    \`127.0.0.1\` (localhost) 指的是本機，只有本機上的程式可以連線。
-    
-    \`0.0.0.0\` 代表監聽本機上所有的網路介面，讓其他電腦也可以透過區域網路連線進來。
-    
-    - **TCP**: 一種**連線導向**、**可靠的**傳輸協議。在傳輸資料前必須先建立連線 (三次握手)，能保證資料依序、無錯誤地送達。
-- **Go 網路程式設計關鍵函式**:
-    - \`net.Listen(network, address)\`: 建立一個伺服器監聽器。
-    - \`listener.Accept()\`: 等待並接受一個新的客戶端連線，回傳 \`net.Conn\` 物件。
-    - \`conn.Read(b []byte)\` / \`conn.Write(b []byte)\`: 從連線中讀取/寫入位元組資料。
-    - \`bufio.NewReader(conn).ReadString('\\n')\`: 一個方便的輔助函式，可以讀取直到特定分隔符的字串。
-    - \`defer\`: 用於確保資源 (如網路連線 \`net.Conn\` 或監聽器 \`net.Listener\`) 在函式結束時被正確關閉。
-- **Go 併發 (Concurrency)**:
-    - **Goroutine**: Go 語言實現併發的核心。使用 \`go\` 關鍵字可以非常輕易地啟動一個併發執行的函式。在本例中，\`go handler(conn)\` 讓我們的主迴圈不必等待客戶端處理完畢，從而實現高併發。
+- Go 版本：建議 1.20+（任一近期 LTS 版本皆可）。
+- 作業系統：Linux / macOS / Windows 皆可（Windows 使用者請注意 CRLF；可用 git config core.autocrlf=false 或以 WSL 執行）。
+- 防火牆：本機測試使用 127.0.0.1:8080 或 0.0.0.0:8080；如需跨機連線，請開放對應埠。
+- 目錄結構（建議）：
+  ~~~text
+  lab0/
+  ├─ go.mod
+  ├─ Makefile
+  ├─ tcp.go          
+  ├─ tcp_test.go     
+  └─ main.go
+  ~~~
+---
 
-### **3. 程式碼架構**
+## 1) 實驗目標
 
-- **\`TCPListener\` (監聽者)**:
-    1. **綁定** IP 和 Port (\`net.Listen\`)。
-    2. 進入**無限迴圈**。
-    3. 在迴圈中**等待**新的連線 (\`server.Accept\`)。
-    4. 每當有新連線進來，就**啟動一個新的 Goroutine** (\`go TCPHandler\`) 將連線交給它處理。
-- **\`TCPHandler\` (處理者)**:
-    1. 接收一個 \`net.Conn\` 物件作為參數。
-    2. 進入**無限迴圈**來持續服務這個客戶端。
-    3. 在迴圈中**讀取**客戶端傳來的資料 (\`ReadString\`)。
-    4. 將讀到的資料**寫回**給客戶端 (\`Write\`)。
-    5. 如果讀寫出錯 (如客戶端斷線)，則結束迴圈並**關閉連線**。
+- 理解網路程式設計的基本模型（Client-Server）。
+- 學習使用 Go 的 **net** 套件來建立一個 TCP 伺服器。
+- 掌握使用 Goroutine（關鍵字 *go*）實現併發處理客戶端連線的方法。
+- 學會使用 **go test** 指令來對網路程式進行自動化測試。
 
-### **4. 驗證方法**
+---
 
-- 使用 \`make test\` 命令，它會執行 \`go test\`。
-- 測試腳本會模擬多個客戶端同時連線到你的伺服器，並發送訊息，然後檢查伺服器的回應是否正確。
-- 看到 \`PASS\` 和 \`ok\` 即代表實驗成功。
+## 2) 核心知識點
 
-### 5. 實現 \`TcpListener()\` 和 \`TcpHandler()\` 這兩個函式，並滿足以下行為：
+- **TCP/IP**
+  - **IP（0.0.0.0 vs 127.0.0.1）**  
+    127.0.0.1（localhost）表示本機，只有本機程式能連線。  
+    0.0.0.0 代表監聽本機上所有網路介面，其他電腦也能從區網連入。
+  - **TCP**  
+    連線導向、可靠傳輸。傳資料前要完成三向交握，能保證資料有序且無錯。
 
-- **同時處理多個連線**：伺服器不能因為服務一個客戶端就卡住，必須能同時接受新的客戶端連線。
-- **回應收到的訊息**：伺服器要把從客戶端收到的任何訊息，原封不動地送回去。這通常被稱為 "Echo Server"。
+- **Go 網路程式設計關鍵函式**
+  - *net.Listen(network, address)*：建立伺服器監聽器。
+  - *listener.Accept()*：阻塞等候新的客戶端連線，回傳 *net.Conn*。
+  - *conn.Read(b)/conn.Write(b)*：從連線讀寫位元組資料。
+  - *bufio.NewReader(conn).ReadString(\\n)*：讀到分隔符為止的高階讀取。
+  - *defer*：確保資源（*net.Conn*、*net.Listener*）在函式結束時被關閉。
 
-解析 \`tcp.go\` 程式碼
+- **Go 併發（Concurrency）**
+  - **Goroutine**：以 *go* 關鍵字啟動並行任務。主迴圈可持續 *Accept()*，每個連線交由新的 goroutine 處理，實現高併發。
 
-\`TCPListener\` 函式:
-負責**監聽**指定的 IP 和 port，並**接受**新的客戶端連線。
+---
 
-\`\`\`go
+## 3) 程式碼架構
+
+- **TCPListener（監聽者）**
+  1) 綁定 IP 與 Port（*net.Listen*）。  
+  2) 進入無限迴圈。  
+  3) 等待新連線（*server.Accept*）。  
+  4) 每有新連線，就啟動一個新的 goroutine（*go TCPHandler*）處理。
+
+- **TCPHandler（處理者）**
+  1) 接收一個 *net.Conn* 作為參數。  
+  2) 進入無限迴圈服務此客戶端。  
+  3) 讀取客戶端傳來的資料（*ReadString* 等）。  
+  4) 將資料原封不動寫回（Echo）。  
+  5) 若讀寫錯誤（如對端關閉），結束迴圈並關閉連線。
+
+---
+
+## 4) 參考實作
+
+> 下面示範一個最小可行版本，包含監聽、接受、處理與 Echo；並定義一個簡單的 handler 函式型別以符合你在說明中的用法。
+
+~~~go
+// tcp.go
+package lab0
+
+import (
+\t"bufio"
+\t"fmt"
+\t"log"
+\t"net"
+)
+
+type handlerInterface func(net.Conn)
+
 func TCPListener(host string, port int, handler handlerInterface) {
-    // 1. 建立監聽器 (Listener)
-    // net.Listen("tcp", ...) 會在指定的 host 和 port 上開始監聽 TCP 連線。
-    // 如果成功，它會回傳一個 listener 物件；如果失敗 (例如 port 已被佔用)，則回傳 error。
-    server, err := net.Listen("tcp", fmt.Sprintf("%s:%d", host, port))
-    if err != nil {
-        log.Fatalf("Server can't listening on port %d: %v", port, err)
-    }
-    // 2. 確保函式結束時關閉監聽器
-    // defer server.Close() 它保證不論函式如何結束，
-    // server.Close() 都會被執行，確保資源被釋放。
-    defer server.Close()
+\tserver, err := net.Listen("tcp", fmt.Sprintf("%s:%d", host, port))
+\tif err != nil {
+\t\tlog.Fatalf("Server can't listen on port %d: %v", port, err)
+\t}
+\tdefer server.Close()
 
-    log.Printf("TCP is listening on %s:%d", host, port)
+\tlog.Printf("TCP is listening on %s:%d", host, port)
 
-    // 3. 無窮迴圈，持續接受新連線
-    for {
-        // server.Accept() 會在這裡「卡住」(block)，直到有一個新的客戶端連線進來。
-        // 連線成功後，它會回傳一個代表這個連線的 conn 物件。
-        conn, err := server.Accept()
-        if err != nil {
-            log.Fatalf("Accept failed: %v", err)
-        }
+\tfor {
+\t\tconn, err := server.Accept()
+\t\tif err != nil {
+\t\t\t// 這裡選擇 Fatalf 會直接結束；若想更健壯可改為 log.Printf 後繼續
+\t\t\tlog.Fatalf("Accept failed: %v", err)
+\t\t}
 
-        log.Printf("new client accepted: %s", conn.RemoteAddr().String())
-        
-        // 4. 關鍵！併發處理連線
-        // 這裡就是「支援同時處理多個連線」的魔法所在！
-        // \`go handler(conn)\` 會啟動一個新的 goroutine (可以想成是一個輕量級的執行緒)。
-        // 這讓主迴圈不用等待 \`handler\` 處理完畢，可以立刻回去繼續執行 \`server.Accept()\`，
-        // 等待下一個客戶端連線。
-        go handler(conn)
-    }
+\t\tlog.Printf("new client accepted: %s", conn.RemoteAddr().String())
+\t\tgo handler(conn)
+\t}
 }
-\`\`\`
 
-\`TCPHandler\` 函式:
-這個函式負責處理**單一**的客戶端連線。
-
-\`\`\`go
 func TCPHandler(conn net.Conn) {
-    // 1. 確保函式結束時關閉連線
-    // 與 listener 一樣，確保與這個客戶端的連線最終會被關閉。
-    defer conn.Close()
-    clientAddr := conn.RemoteAddr().String()
-    log.Printf("Handle Request from [%s]", clientAddr)
+\tdefer conn.Close()
+\tclientAddr := conn.RemoteAddr().String()
+\tlog.Printf("Handle Request from [%s]", clientAddr)
 
-    // 2. 無窮迴圈，持續處理來自此客戶端的訊息
-    for {
-        // 3. 讀取資料
-        // bufio.NewReader(conn).ReadString('\\n') 會從連線中讀取資料，
-        // 直到讀到換行符號 \`\\n\` 為止。
-        data, err := bufio.NewReader(conn).ReadString('\\n')
-        if err != nil {
-            // 如果讀取時發生錯誤 (例如客戶端斷線了，會收到 EOF 錯誤)，
-            // 就印出 log 並結束這個 handler。
-            log.Printf("Client [%s] Error: %v", clientAddr, err)
-            return
-        }
-        
-        // 4. 回傳資料 (Echo)
-        // conn.Write([]byte(data)) 將剛剛收到的資料轉換成 byte 陣列，
-        // 然後再寫回給同一個客戶端，完成「Echo」的任務。
-        _, err = conn.Write([]byte(data))
-        if err != nil {
-            log.Printf("Reply to Client [%s] failed: %v", clientAddr, err)
-            return
-        }
-    }
+\treader := bufio.NewReader(conn)
+\tfor {
+\t\tdata, err := reader.ReadString('\\n')
+\t\tif err != nil {
+\t\t\tlog.Printf("Client [%s] Error: %v", clientAddr, err)
+\t\t\treturn
+\t\t}
+\t\tif _, err := conn.Write([]byte(data)); err != nil {
+\t\t\tlog.Printf("Reply to Client [%s] failed: %v", clientAddr, err)
+\t\t\treturn
+\t\t}
+\t}
 }
-\`\`\`
+~~~
 
-已經理解了程式碼，\`README.md\` 和 \`Makefile\` 告訴我該如何驗證它。
+~~~go
+// cmd/server/main.go
+package main
 
-- **開啟你的終端機 (Terminal)**。
-- **切換到 Lab 0 的專案目錄下**。
-- **執行命令**：
+import (
+\t"github.com/yourname/free5GLab/lab0"
+)
 
-\`\`\`go
+func main() {
+\tlab0.TCPListener("127.0.0.1", 8080, lab0.TCPHandler)
+}
+~~~
+
+---
+
+## 5) 驗證方法
+
+- 使用 *make test*（或直接 *go test*）。
+- 測試腳本會模擬多個客戶端同時連線，發送訊息並檢查回應是否正確。
+- 看到 PASS 和 ok 表示通過。
+
+~~~bash
 go test -v -race -timeout 30s ./...
-\`\`\`
+~~~
 
-結果:
+結果：
 
-\`\`\`go
+~~~text
 PS D:\\Labs\\free5GLabs\\Lab0> go test -v -race -timeout 30s ./...
 === RUN   TestTcpFunction
 2025/09/06 18:51:32 TCP is listening on 127.0.0.1:8080
@@ -511,19 +522,93 @@ PASS
 2025/09/06 18:51:37 Client [127.0.0.1:52403] Error: EOF
 ok      github.com/ianchen0119/free5GLab/lab0   8.371s
 ?       github.com/ianchen0119/free5GLab/lab0/ans       [no test files]
-\`\`\`
+~~~
 
 ---
 
-## 補充｜實務注意事項（可之後逐步擴充）
-- **黏包/拆包**：若改為 \`Read\`/自訂協議，務必處理訊框邊界（長度前綴、分隔符、或使用 \`bufio.Scanner\` 自訂 Split）。  
-- **逾時/存活**：為避免連線掛住，加上 \`conn.SetReadDeadline\` / \`SetWriteDeadline\` 或 idle timeout。  
-- **優雅關閉**：用 \`context\` + \`server.Close()\` 終止 accept 迴圈，並追蹤 goroutines 等待收斂。  
-- **-race 的意義**：資料競賽偵測器對併發程式很有幫助，測試時保持開啟。  
-- **0.0.0.0 與 127.0.0.1**：本地測試用 \`127.0.0.1\`；若要被其他主機連到請改 \`0.0.0.0\` 並注意防火牆/安全性。  
-- **壓測**：可用 \`hey\`、\`wrk\` 或自寫 goroutines 客戶端做多連線壓力測試，觀察 CPU/記憶體與 accept/handler 行為。
+## 6) 手動驗證
+
+- 使用 netcat（或 telnet）發送一行字串並確認回回來：
+  ~~~bash
+  # 視 OS 而定，macOS 可用 nc；Windows 可用 PowerShell 的 Test-NetConnection 或安裝 ncat
+  nc 127.0.0.1 8080
+  hello world<Enter>
+  # 預期伺服器原樣回傳 hello world
+  ~~~
+
+- 也可寫簡單 Go 用戶端：
+  ~~~go
+  package main
+
+  import (
+  \t"bufio"
+  \t"fmt"
+  \t"net"
+  )
+
+  func main() {
+  \tconn, _ := net.Dial("tcp", "127.0.0.1:8080")
+  \tdefer conn.Close()
+  \tfmt.Fprintf(conn, "ping\\n")
+  \tresp, _ := bufio.NewReader(conn).ReadString('\\n')
+  \tfmt.Println("got:", resp)
+  }
+  ~~~
+
+---
+
+## 7) 逾時與關閉
+
+- **逾時**：避免連線掛住，可對讀寫設定期限。
+  ~~~go
+  // 在 TCPHandler 迴圈內每次讀前設定期限
+  _ = conn.SetReadDeadline(time.Now().Add(30 * time.Second))
+  ~~~
+
+- **關閉**：用訊號觸發停止接受新連線，等待現有 goroutines 完成。
+  ~~~go
+  // 範例：在 main() 中用 context 控制，這裡僅示意
+  ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+  defer stop()
+
+  go func() {
+  \t<-ctx.Done()
+  \tserver.Close() // 讓 Accept 返回錯誤，主迴圈可跳出
+  }()
+  ~~~
+
+---
+
+## 8) 常見錯誤與排查
+
+- 埠被占用：listen 失敗，確認是否已有程式佔用 8080（可改用 0 埠讓系統指派）。
+- CRLF 問題（Windows）：若讀取以 \\n 收尾，請確保用戶端不要只送 \\r；或在伺服器端用 TrimRight 處理 \\r\\n。
+- 防火牆：跨主機連線測試請確認 OS/網路設備防火牆放行 TCP/8080。
+- 沒有 go.mod：跑測試前在專案根目錄執行 go mod init。
+- 測試輸出中的 EOF：通常是測試端主動關閉連線導致，屬正常現象（如上方日誌所示）。
+- Race 報告：如果在 handler 內存取共享變數，請加鎖或使用 channel；保持 -race 長開可提早發現問題。
+
+---
+
+## 9) 延伸任務
+
+- 併發上限：以帶緩衝的 channel 或 semaphore 限制同時處理數。
+- 指標與監控：簡單計數（連線數、錯誤數、RTT），或加入 pprof。
+- 協議邊界：若改用底層 Read/Write，請設計封包格式（長度前綴或分隔符）避免黏包/拆包問題。
+- 日誌：以結構化日誌（例如 log/slog）記錄 time、remoteAddr、錯誤與處理時間。
+- 安全：跨機連線測試時請避免監聽到對外未受保護介面，或加上 ACL/反向代理限制。
+
+---
+
+## 10) 小結
+
+- 以 net.Listen 建立 TCP 監聽、用 Accept 取得連線、goroutine 做併發、bufio 高階讀寫。
+- 測試用 go test -race 驗證併發正確性，日誌中的 EOF 多屬預期收尾。
+- 逐步加入逾時、優雅關閉、併發上限與基礎監控，可讓 Echo 伺服器更貼近實務。
+
 `
-  },
+},
+
     // *******************************************************************
       // *******************************************************************
         // *******************************************************************
