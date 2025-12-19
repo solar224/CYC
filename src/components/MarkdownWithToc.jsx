@@ -1,16 +1,13 @@
-// src/components/MarkdownWithToc.jsx
 import React, { useMemo, useRef } from "react";
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-// ⬇️ PrismLight + 語法主題
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import oneLight from "react-syntax-highlighter/dist/esm/styles/prism/one-light";
 import vscDarkPlus from "react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus";
 
-// ⬇️ 登錄各語言（主流 + 常見 DevOps / 資料格式）
 import go from "react-syntax-highlighter/dist/esm/languages/prism/go";
 import c from "react-syntax-highlighter/dist/esm/languages/prism/c";
 import cpp from "react-syntax-highlighter/dist/esm/languages/prism/cpp";
@@ -39,45 +36,43 @@ import toml from "react-syntax-highlighter/dist/esm/languages/prism/toml";
 
 import { SpySection } from "../shared/scrollspy";
 
-// ⬇️ 註冊語言（含一些常見別名）
 SyntaxHighlighter.registerLanguage("go", go);
 SyntaxHighlighter.registerLanguage("c", c);
 SyntaxHighlighter.registerLanguage("cpp", cpp);
 SyntaxHighlighter.registerLanguage("java", java);
 SyntaxHighlighter.registerLanguage("python", python);
-SyntaxHighlighter.registerLanguage("py", python); // 別名
+SyntaxHighlighter.registerLanguage("py", python);
 SyntaxHighlighter.registerLanguage("javascript", javascript);
-SyntaxHighlighter.registerLanguage("js", javascript); // 別名
+SyntaxHighlighter.registerLanguage("js", javascript);
 SyntaxHighlighter.registerLanguage("typescript", typescript);
-SyntaxHighlighter.registerLanguage("ts", typescript); // 別名
+SyntaxHighlighter.registerLanguage("ts", typescript);
 SyntaxHighlighter.registerLanguage("jsx", jsx);
 SyntaxHighlighter.registerLanguage("tsx", tsx);
 SyntaxHighlighter.registerLanguage("bash", bash);
-SyntaxHighlighter.registerLanguage("shell", bash); // 別名
-SyntaxHighlighter.registerLanguage("sh", bash);    // 別名
+SyntaxHighlighter.registerLanguage("shell", bash);
+SyntaxHighlighter.registerLanguage("sh", bash);
 SyntaxHighlighter.registerLanguage("json", json);
 SyntaxHighlighter.registerLanguage("yaml", yaml);
-SyntaxHighlighter.registerLanguage("yml", yaml); // 別名
+SyntaxHighlighter.registerLanguage("yml", yaml);
 SyntaxHighlighter.registerLanguage("markdown", markdown);
-SyntaxHighlighter.registerLanguage("md", markdown); // 別名
+SyntaxHighlighter.registerLanguage("md", markdown);
 SyntaxHighlighter.registerLanguage("sql", sql);
 SyntaxHighlighter.registerLanguage("rust", rust);
 SyntaxHighlighter.registerLanguage("csharp", csharp);
-SyntaxHighlighter.registerLanguage("cs", csharp); // 別名
+SyntaxHighlighter.registerLanguage("cs", csharp);
 SyntaxHighlighter.registerLanguage("php", php);
 SyntaxHighlighter.registerLanguage("ruby", ruby);
-SyntaxHighlighter.registerLanguage("rb", ruby); // 別名
+SyntaxHighlighter.registerLanguage("rb", ruby);
 SyntaxHighlighter.registerLanguage("swift", swift);
 SyntaxHighlighter.registerLanguage("kotlin", kotlin);
-SyntaxHighlighter.registerLanguage("kt", kotlin); // 別名
+SyntaxHighlighter.registerLanguage("kt", kotlin);
 SyntaxHighlighter.registerLanguage("scala", scala);
 SyntaxHighlighter.registerLanguage("docker", docker);
-SyntaxHighlighter.registerLanguage("dockerfile", docker); // 別名
+SyntaxHighlighter.registerLanguage("dockerfile", docker);
 SyntaxHighlighter.registerLanguage("diff", diff);
 SyntaxHighlighter.registerLanguage("ini", ini);
 SyntaxHighlighter.registerLanguage("toml", toml);
 
-// ---- 下面維持你原本的工具函式 ----
 function getText(node) {
     if (typeof node === "string") return node;
     if (Array.isArray(node)) return node.map(getText).join("");
@@ -99,7 +94,6 @@ const useSlugger = () => {
     };
 };
 
-// ⬇️ 統一處理語言別名（避免 code fence 標籤不一致）
 const LANG_ALIASES = {
     "c++": "cpp",
     "h++": "cpp",
@@ -126,11 +120,10 @@ const SUPPORTED = new Set([
 
 export default function MarkdownWithToc({ children }) {
     const slug = useSlugger();
-    const t = useTheme(); // 取 MUI mode 以切換亮/暗 code theme
+    const t = useTheme();
 
     const components = useMemo(
         () => ({
-            // 只把 h1~h3 納入章節
             h1: ({ children, ...rest }) => {
                 const title = getText(children);
                 const id = slug(title);
@@ -165,7 +158,6 @@ export default function MarkdownWithToc({ children }) {
                 );
             },
 
-            // 其他常見標籤
             p: (props) => <Typography sx={{ lineHeight: 1.8, mb: 1 }} {...props} />,
             li: (props) => <li style={{ lineHeight: 1.8, marginBottom: 6 }} {...props} />,
             a: ({ href, children, ...rest }) => (
@@ -201,7 +193,6 @@ export default function MarkdownWithToc({ children }) {
                 />
             ),
 
-            // ✅ 語法上色的 code renderer（含別名、fallback）
             code: ({ inline, className, children, ...rest }) => {
                 const raw = String(children ?? "").replace(/\n$/, "");
                 if (inline) {

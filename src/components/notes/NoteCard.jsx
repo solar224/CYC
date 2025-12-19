@@ -1,4 +1,3 @@
-// src/components/notes/NoteCard.jsx
 import React from "react";
 import {
     Card, CardActionArea, CardContent, Chip, Stack, Typography, Box
@@ -18,7 +17,6 @@ export default function NoteCard({ note }) {
                 display: "flex",
                 flexDirection: "column",
                 borderRadius: 3,
-                // ✅ 背景改為完全透明
                 bgcolor: "transparent",
                 borderColor: alpha(t.palette.divider, 0.6),
                 overflow: "hidden",
@@ -35,7 +33,6 @@ export default function NoteCard({ note }) {
                 to={`/notes/${note.slug}`}
                 sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" }}
             >
-                {/* 封面：固定 16:9，避免版面跳動 */}
                 <Box sx={{ position: "relative" }}>
                     <Box sx={{ width: 1, aspectRatio: "16 / 9", overflow: "hidden" }}>
                         {note.cover ? (
@@ -69,7 +66,6 @@ export default function NoteCard({ note }) {
                         )}
                     </Box>
 
-                    {/* 漸層壓黑 + 日期 pill */}
                     <Box
                         sx={{
                             position: "absolute",
@@ -89,7 +85,6 @@ export default function NoteCard({ note }) {
                                 py: 0.25,
                                 borderRadius: 1,
                                 fontWeight: 700,
-                                // 用 paper 當基準做半透明底 + 邊框，透明卡片也清楚可讀
                                 color: t.palette.getContrastText(t.palette.background.paper),
                                 bgcolor: alpha(t.palette.background.paper, 0.65),
                                 backdropFilter: "blur(4px)",
@@ -101,14 +96,11 @@ export default function NoteCard({ note }) {
                     )}
                 </Box>
 
-                {/* 內容區：兩行標題＋兩行摘要，維持卡片等高 */}
                 <CardContent sx={{ width: 1, flexGrow: 1, pb: 2 }}>
-                    {/* 類別 */}
                     <Typography variant="overline" sx={{ opacity: 0.7 }}>
                         {note.categoryLabel || note.category || "未分類"}
                     </Typography>
 
-                    {/* 標題（最多 2 行） */}
                     <Typography
                         variant="h6"
                         fontWeight={900}
@@ -125,7 +117,6 @@ export default function NoteCard({ note }) {
                         {note.title}
                     </Typography>
 
-                    {/* 摘要（最多 2 行） */}
                     {note.summary && (
                         <Typography
                             variant="body2"
@@ -142,7 +133,6 @@ export default function NoteCard({ note }) {
                         </Typography>
                     )}
 
-                    {/* 標籤 */}
                     {!!note.tags?.length && (
                         <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap sx={{ mt: 1 }}>
                             {note.tags.slice(0, 3).map((tag) => (

@@ -1,4 +1,3 @@
-// src/pages/Notes.jsx
 import React, { useMemo, useState } from "react";
 import { NOTES } from "../data/notes";
 import {
@@ -21,19 +20,16 @@ const CATS = [
     { label: "其他", value: "other-practice" },
 ];
 
-// 文字長度上限（可自行調整）
 const SUMMARY_MAX = 80;
 const truncate = (s = "", n = SUMMARY_MAX) => {
-    const arr = [...s]; // 正確處理中英混雜與 emoji
+    const arr = [...s];
     return arr.length > n ? arr.slice(0, n).join("") + "…" : s;
 };
 
 export default function Notes() {
-    // UI 狀態：分類 + 關鍵字
     const [cat, setCat] = useState("all");
     const [q, setQ] = useState("");
 
-    // ⭐ 收藏狀態（存 localStorage）
     const [stars, setStars] = useState(() => {
         try {
             return JSON.parse(localStorage.getItem("note_stars") || "{}");
@@ -51,20 +47,17 @@ export default function Notes() {
         });
     };
 
-    // 先依日期新到舊排序
     const sorted = useMemo(
         () => [...NOTES].sort((a, b) => (b.date || "").localeCompare(a.date || "")),
         []
     );
 
-    // 各分類數量（Tab 顯示用）
     const catCounts = useMemo(() => {
         const obj = { all: sorted.length };
         for (const n of sorted) obj[n.category] = (obj[n.category] || 0) + 1;
         return obj;
     }, [sorted]);
 
-    // 關鍵字比對（標題／摘要／標籤）
     const matchQ = (note, kw) => {
         if (!kw) return true;
         const k = kw.trim().toLowerCase();
@@ -72,7 +65,6 @@ export default function Notes() {
         return hay.includes(k);
     };
 
-    // 套用分類與搜尋的結果
     const filtered = useMemo(() => {
         return sorted.filter(n => (cat === "all" || n.category === cat) && matchQ(n, q));
     }, [sorted, cat, q]);
@@ -81,7 +73,7 @@ export default function Notes() {
         <Box
             component="main"
             sx={{
-                minHeight: { xs: "100svh", md: "100vh" }, // svh 行動裝置更準確
+                minHeight: { xs: "100svh", md: "100vh" },
                 display: "flex",
                 flexDirection: "column",
             }}

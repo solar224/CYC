@@ -1,8 +1,9 @@
 // src/pages/NoteDetail.jsx
 import { useParams, Link as RouterLink } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { NOTES } from "../data/notes";
 import {
-    Container, Box, Typography, Chip, Stack, Divider, Button, Paper
+    Container, Box, Typography, Chip, Stack, Divider, Button, Paper, CircularProgress
 } from "@mui/material";
 
 import MarkdownWithToc from "../components/MarkdownWithToc";
@@ -11,6 +12,25 @@ import { ScrollSpyProvider, Toc } from "../shared/scrollspy";
 export default function NoteDetail() {
     const { slug } = useParams();
     const note = NOTES.find((n) => n.slug === slug);
+    const [content, setContent] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!note) return;
+        setLoading(true);
+        import(`../data/notes/${note.slug}.md`)
+            .then((module) => fetch(module.default))
+            .then((res) => res.text())
+            .then((text) => {
+                setContent(text);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error("Failed to load markdown:", err);
+                setContent("# 載入失敗\n\n找不到此筆記的內容檔案。");
+                setLoading(false);
+            });
+    }, [note]);
 
     if (!note) {
         return (
@@ -58,12 +78,14 @@ export default function NoteDetail() {
                 )}
 
                 <Divider sx={{ my: 2 }} />
-
-                {/* Markdown + ScrollSpy */}
-                <MarkdownWithToc>{note.content}</MarkdownWithToc>
+                {loading ? (
+                    <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <MarkdownWithToc>{content}</MarkdownWithToc>
+                )}
             </Container>
-
-            {/* 右側 TOC：與本頁寬度對齊（MUI md ≈ 900px） */}
             <Toc sidebarWidth={260} collapsedWidth={18} containerMaxWidth={900} />
         </ScrollSpyProvider>
     );

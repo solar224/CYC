@@ -1,4 +1,3 @@
-// src/components/phone/PhoneMyCalendar.jsx
 import React, { useMemo, useState } from "react";
 import { alpha, useTheme } from "@mui/material/styles";
 import { Box, Paper, Typography, IconButton, Stack, Tooltip, ButtonBase } from "@mui/material";
@@ -11,22 +10,20 @@ import { getEventsBetween } from "../../shared/calendar/eventStore";
 
 dayjs.extend(isoWeek);
 
-/** ===== 手機優化參數 ===== **/
 const START_HOUR = 8;
-const END_HOUR = 22; // 不含
+const END_HOUR = 22;
 const DAY_MIN = START_HOUR * 60;
-const DAY_SPAN = (END_HOUR - START_HOUR) * 60; // 分鐘
+const DAY_SPAN = (END_HOUR - START_HOUR) * 60;
 const HOURS = Array.from({ length: END_HOUR - START_HOUR }, (_, i) => i + START_HOUR);
 
-const HOUR_HEIGHT = 64;                  // 1 小時高度（可依喜好調）
+const HOUR_HEIGHT = 64;
 const GRID_HEIGHT = (END_HOUR - START_HOUR) * HOUR_HEIGHT;
-const LEFT_GUTTER = 52;                  // 左側時間欄寬
-const CARD_MIN_PX = 28;                  // 事件最小高度
+const LEFT_GUTTER = 52;
+const CARD_MIN_PX = 28;
 
 const topPx = (min) => Math.max(0, Math.min(DAY_SPAN, min - DAY_MIN)) * (HOUR_HEIGHT / 60);
 const heightPx = (durMin) => Math.max(CARD_MIN_PX, (durMin * HOUR_HEIGHT) / 60);
 
-/** 重疊事件分欄（單日用） */
 function layoutTimedEventsOneDay(events) {
     const evts = [...events].sort((a, b) => new Date(a.start) - new Date(b.start));
     const clusters = [];
@@ -40,7 +37,7 @@ function layoutTimedEventsOneDay(events) {
 
     for (const e of evts) {
         const s = startMin(e);
-        const ee = Math.max(s + 1, endMin(e)); // 允許 1 分鐘起跳
+        const ee = Math.max(s + 1, endMin(e));
         if (!cur.length || s < curEnd) {
             cur.push({ ...e, __s: s, __e: ee });
             curEnd = Math.max(curEnd, ee);
@@ -146,7 +143,6 @@ export default function PhoneMyCalendar() {
                             },
                             "&:active": { transform: "scale(0.98)" },
 
-                            // 今天（未選中）顯示底線，不會壓到文字
                             ...(today && !active
                                 ? {
                                     "&::after": {
@@ -179,7 +175,6 @@ export default function PhoneMyCalendar() {
 
     return (
         <Paper elevation={0} square sx={{ p: 0, bgcolor: "transparent", backgroundImage: "none", boxShadow: "none", border: "none" }}>
-            {/* 工具列 */}
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
                 <Stack direction="row" alignItems="center" spacing={1}>
                     <IconButton size="small" onClick={() => setSelected((p) => p.subtract(1, "day"))}><ArrowBackIosNew fontSize="small" /></IconButton>
@@ -191,19 +186,15 @@ export default function PhoneMyCalendar() {
                 <IconButton size="small" onClick={() => setSelected(dayjs())}><TodayRounded fontSize="small" /></IconButton>
             </Stack>
 
-            {/* 週快速切換 */}
             <WeekSwitcher />
 
-            {/* ===== 日曆卡：不使用內部滑輪，整塊展開 ===== */}
             <Box
                 sx={{
-                    // border: `1px solid ${alpha(t.palette.divider, 0.6)}`,
                     borderRadius: 12,
                     overflow: "visible",
                     bgcolor: "transparent",
                 }}
             >
-                {/* 第一行：日期＋星期 */}
                 <Box
                     sx={{
                         height: 44,
@@ -218,7 +209,6 @@ export default function PhoneMyCalendar() {
                     </Typography>
                 </Box>
 
-                {/* All-day 區：自動換行（不水平滑動） */}
                 <Box
                     sx={{
                         display: "flex",
@@ -259,9 +249,7 @@ export default function PhoneMyCalendar() {
                     ))}
                 </Box>
 
-                {/* 時間軸：整塊展開（無內部 overflow） */}
                 <Box sx={{ position: "relative", width: "100%", height: GRID_HEIGHT }}>
-                    {/* 小時水平線 */}
                     {HOURS.map((h) => (
                         <Box
                             key={`line-${h}`}
@@ -275,7 +263,6 @@ export default function PhoneMyCalendar() {
                         />
                     ))}
 
-                    {/* 左側時間標籤 */}
                     {HOURS.map((h) => (
                         <Box
                             key={`label-${h}`}
@@ -294,9 +281,7 @@ export default function PhoneMyCalendar() {
                         </Box>
                     ))}
 
-                    {/* 事件容器（扣掉左側時間欄） */}
                     <Box sx={{ position: "absolute", left: LEFT_GUTTER, right: 0, top: 0, bottom: 0 }}>
-                        {/* 若為今天：現在時間線 */}
                         {selected.isSame(dayjs(), "day") && dayjs().hour() >= START_HOUR && dayjs().hour() < END_HOUR && (
                             <Box sx={{ position: "absolute", left: 4, right: 4, top: topPx(dayjs().hour() * 60 + dayjs().minute()), height: 0 }}>
                                 <Box sx={{ height: 2, bgcolor: t.palette.error.main, borderRadius: 2 }} />
