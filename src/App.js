@@ -1,5 +1,5 @@
 // App.jsx
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { createContext, useState, useEffect, useMemo } from "react";
 
 import Home from "./components/Home";
@@ -68,7 +68,7 @@ export default function App() {
 
             <div className="app">
               <DynamicBackground theme={theme} />
-              <Router>
+              <Router basename={process.env.PUBLIC_URL}>
                 <Header />
                 <Routes>
                   <Route path="/" element={<Home />} />
