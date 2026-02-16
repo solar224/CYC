@@ -1,13 +1,8 @@
-import React, { useContext, useMemo } from "react";
-import { LanguageContext } from "../../App";
+import React, { useMemo } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import { AppBar, Toolbar, Typography, Container, Tabs, Tab, Box } from "@mui/material";
-import { keyframes } from "@mui/system";
-const shimmer = keyframes`
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-`;
+import { AppBar, Toolbar, Container, Tabs, Tab, Box } from "@mui/material";
+import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
 function ElevationScroll({ children }) {
     const trigger = useScrollTrigger({ threshold: 8 });
     return React.cloneElement(children, {
@@ -30,11 +25,10 @@ const navItems = [
 
 const PcHeader = () => {
     const location = useLocation();
-    const { language } = useContext(LanguageContext);
 
     const current = useMemo(() => {
         const p = location.pathname;
-        return p.startsWith("/note") ? "/note" : p;
+        return p.startsWith("/note") || p.startsWith("/notes") ? "/note" : p;
     }, [location.pathname]);
 
     return (
@@ -42,52 +36,24 @@ const PcHeader = () => {
             <AppBar position="fixed">
                 <Container maxWidth="lg">
                     <Toolbar disableGutters sx={{ minHeight: 64 }}>
-                        <Typography
-                            variant="h6"
-                            component={NavLink}
-                            to="/"
+                        <Box
                             sx={{
                                 display: "flex",
-                                alignItems: "left",
-                                gap: 1.5,
-                                fontWeight: 700,
-                                color: "inherit",
-                                textDecoration: "none",
-                                px: 1,
-                                borderRadius: 1.5,
-                                "&:hover": { backgroundColor: "rgba(255,255,255,0.06)" },
+                                alignItems: "center",
+                                minWidth: 0,
+                                flexGrow: 1,
+                                pr: 2,
                             }}
                         >
-                            {/* <img
-                                src={`${process.env.PUBLIC_URL}/logo.png`}
-                                alt={language === "zh" ? "詹宇宸" : "YC-Chan"}
-                                style={{ width: 40, height: 40, borderRadius: 8 }}
-                            /> */}
-                            <Box
-                                component="span"
-                                sx={{
-                                    ml: 1,
-                                    fontWeight: 800,
-                                    letterSpacing: .5,
-                                    background:
-                                        "linear-gradient(90deg, #fff, #b388ff, #80d8ff, #fff)",
-                                    backgroundSize: "200% 100%",
-                                    WebkitBackgroundClip: "text",
-                                    color: "transparent",
-                                    animation: `${shimmer} 3s linear infinite`,
-                                    "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-                                }}
-                            >
-                                YC-Chan
-                            </Box>
-                        </Typography>
+                            <DynamicBreadcrumbs variant="desktop" />
+                        </Box>
 
                         <Tabs
                             value={navItems.some((n) => n.to === current) ? current : false}
                             textColor="inherit"
                             indicatorColor="secondary"
                             aria-label="primary navigation"
-                            sx={{ ml: "auto", minHeight: 48 }}
+                            sx={{ ml: "auto", minHeight: 48, flexShrink: 0 }}
                         >
                             {navItems.map((item) => (
                                 <Tab

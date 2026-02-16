@@ -5,7 +5,6 @@ import useScrollTrigger from "@mui/material/useScrollTrigger";
 import {
     AppBar,
     Toolbar,
-    Typography,
     IconButton,
     Drawer,
     List,
@@ -15,13 +14,10 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { keyframes } from "@mui/system";
+import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
 const pulseBar = keyframes`
   0%, 100% { opacity: .85; transform: translateY(-50%) scaleY(.96); }
   50%      { opacity: 1;   transform: translateY(-50%) scaleY(1); }
-`;
-const shimmer = keyframes`
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
 `;
 function ElevationScroll({ children }) {
     const trigger = useScrollTrigger({ threshold: 8 });
@@ -53,7 +49,7 @@ const PhoneHeader = () => {
     // 將 /note/xxx 正規化為 /note，保證選中狀態
     const current = useMemo(() => {
         const p = location.pathname;
-        return p.startsWith("/note") ? "/note" : p;
+        return p.startsWith("/note") || p.startsWith("/notes") ? "/note" : p;
     }, [location.pathname]);
 
     const DrawerList = (
@@ -160,49 +156,19 @@ const PhoneHeader = () => {
                         <MenuIcon />
                     </IconButton>
 
-                    <Typography
-                        variant="h6"
-                        component={NavLink}
-                        to="/"
+                    <Box
                         sx={{
                             display: "flex",
-                            alignItems: "left",
-                            gap: 1.5,
-                            fontWeight: 700,
-                            color: "inherit",
-                            textDecoration: "none",
-                            px: 1,
-                            borderRadius: 1.5,
-                            "&:hover": { backgroundColor: "rgba(255,255,255,0.06)" },
+                            alignItems: "center",
+                            minWidth: 0,
+                            flexGrow: 1,
+                            px: 0.5,
                         }}
-                        aria-label={language === "zh" ? "返回首頁" : "Go Home"}
                     >
-                        {/* <img
-                                src={`${process.env.PUBLIC_URL}/logo.png`}
-                                alt={language === "zh" ? "詹宇宸" : "YC-Chan"}
-                                style={{ width: 40, height: 40, borderRadius: 8 }}
-                            /> */}
-                        <Box
-                            component="span"
-                            sx={{
-                                ml: 1,
-                                fontWeight: 800,
-                                letterSpacing: .5,
-                                background:
-                                    "linear-gradient(90deg, #fff, #b388ff, #80d8ff, #fff)",
-                                backgroundSize: "200% 100%",
-                                WebkitBackgroundClip: "text",
-                                color: "transparent",
-                                animation: `${shimmer} 3s linear infinite`,
-                                "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-                            }}
-                        >
-                            YC-Chan
+                        <Box aria-label={language === "zh" ? "返回首頁" : "Go Home"} sx={{ minWidth: 0 }}>
+                            <DynamicBreadcrumbs variant="mobile" />
                         </Box>
-                    </Typography>
-
-                    {/* 占位讓標題不被擠壓 */}
-                    <Box sx={{ flexGrow: 1 }} />
+                    </Box>
                 </Toolbar>
 
                 {/* Drawer */}

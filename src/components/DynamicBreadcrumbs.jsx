@@ -1,61 +1,142 @@
-//***********************************************************************
-// header：URL links
-// 
-//parameter：activePage (URL strings)
-//
-//***********************************************************************
-import { Breadcrumbs, Button } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import React, { useMemo } from "react";
+import { Breadcrumbs, Link, Typography } from "@mui/material";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import { NOTES } from "../data/notes";
 
+const STATIC_NAME_MAP = {
+    "about-me": "關於我",
+    "contact-me": "聯絡",
+    note: "筆記",
+    notes: "筆記",
+    "school-curriculum": "學校課程",
+    "coding-practice": "程式練習",
+    "other-practice": "其他",
+};
 
-export default function DynamicBreadcrumbs({ activePage }) {
-    const pathnames = activePage.split('/').filter(x => x);
-    const nameMap = {
-        "about-me": "關於我",
-        "contact-me": "聯絡",
-        "note": "筆記",
+const toFriendlyName = (value) => {
+    if (!value) return "";
+    return decodeURIComponent(value).replace(/-/g, " ");
+};
 
-        "school-curriculum": "學校課程",
-        "coding-practice": "程式練習",
-        "other-practice": "其他",
-    };
+export default function DynamicBreadcrumbs({ variant = "desktop" }) {
+    const location = useLocation();
+
+    const items = useMemo(() => {
+        const pathnames = location.pathname.split("/").filter(Boolean);
+        const crumbs = [
+            { label: "YC-Chan", to: "/" },
+            { label: "首頁", to: "/" },
+        ];
+
+        pathnames.forEach((segment, index) => {
+            const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
+            let label = STATIC_NAME_MAP[segment];
+
+            if (!label && pathnames[index - 1] === "notes") {
+                const note = NOTES.find((n) => n.slug === segment);
+                label = note?.title || toFriendlyName(segment);
+            }
+
+            crumbs.push({
+                label: label || toFriendlyName(segment),
+                to: routeTo,
+            });
+        });
+
+        return crumbs;
+    }, [location.pathname]);
+
+    const mobileItems = useMemo(() => {
+        if (items.length <= 2) return items;
+        return [items[0], items[items.length - 1]];
+    }, [items]);
+
+    const renderItems = variant === "mobile" ? mobileItems : items;
+
     return (
         <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" sx={{ color: '#AAAAAA', margin: "0px" }} // 這裡設定顏色
-            />}
-            aria-label="breadcrumb" >
-            <Button component={RouterLink} underline="hover" color="inherit" to="/" sx={{ color: '#FFFFFF', minWidth: '0px' }}>
-                首頁
-            </Button>
-            {
-                pathnames.map((name, index) => {
-                    const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
-                    const isLast = index === pathnames.length - 1;
-                    return isLast ? (
-                        <Button
-                            key={routeTo}
-                            underline="hover"
-                            sx={{
-                                color: "#f39212",
-                            }}>
-                            {nameMap[name] || name}
-                        </Button>
-                    ) : (
-                        <Button
-                            component={RouterLink}
-                            underline="hover"
-                            to={routeTo}
-                            key={routeTo}
-                            sx={{
-                                color: '#FFFFFF',
-                                margin: "0px",
-                            }}>
-                            {nameMap[name] || name}
-                        </Button>
-                    );
-                })
+            separator={
+                <NavigateNextIcon
+                    fontSize="small"
+                    sx={{
+                        color: "rgba(255,255,255,0.28)",
+                        fontSize: 15,
+                    }}
+                />
             }
-        </Breadcrumbs >
-    )
+            aria-label="breadcrumb"
+            sx={{
+                minWidth: 0,
+                "& .MuiBreadcrumbs-ol": {
+                    flexWrap: "nowrap",
+                    alignItems: "center",
+                    gap: 0.15,
+                },
+                "& .MuiBreadcrumbs-separator": {
+                    mx: 0.02,
+                    lineHeight: 1,
+                },
+                "& .MuiBreadcrumbs-li": {
+                    minWidth: 0,
+                },
+            }}
+        >
+            {renderItems.map((item, index) => {
+                const isLast = index === renderItems.length - 1;
+                if (!isLast) {
+                    return (
+                        <Link
+                            key={`${item.to}-${item.label}-${index}`}
+                            component={RouterLink}
+                            to={item.to}
+                            underline="none"
+                            color="inherit"
+                            sx={{
+                                whiteSpace: "nowrap",
+                                fontWeight: 500,
+                                fontSize: variant === "mobile" ? "0.9rem" : "0.92rem",
+                                letterSpacing: 0,
+                                color: "rgba(255,255,255,0.66)",
+                                px: 0.5,
+                                py: 0.2,
+                                borderRadius: 1,
+                                textDecoration: "none",
+                                transition: "all .18s ease",
+                                "&:hover": {
+                                    color: "rgba(255,255,255,0.92)",
+                                    backgroundColor: "rgba(255,255,255,0.05)",
+                                    textDecoration: "none",
+                                },
+                            }}
+                        >
+                            {item.label}
+                        </Link>
+                    );
+                }
+
+                return (
+                    <Typography
+                        key={`${item.to}-${item.label}-${index}`}
+                        sx={{
+                            whiteSpace: "nowrap",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                            maxWidth: variant === "mobile" ? "42vw" : "24vw",
+                            fontWeight: 600,
+                            fontSize: variant === "mobile" ? "0.9rem" : "0.92rem",
+                            color: "rgba(255,255,255,0.95)",
+                            px: 0.5,
+                            py: 0.2,
+                            borderRadius: 1,
+                            backgroundColor: "rgba(255,255,255,0.03)",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                        }}
+                    >
+                        {item.label}
+                    </Typography>
+                );
+            })}
+        </Breadcrumbs>
+    );
 }
