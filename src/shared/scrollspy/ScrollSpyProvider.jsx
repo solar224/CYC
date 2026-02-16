@@ -1,9 +1,14 @@
 // D:\CYC\src\shared\scrollspy
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { appTokens } from "../../theme/tokens";
 
 const Ctx = createContext(null);
 
-export function ScrollSpyProvider({ children, headerOffset = 72, rootMargin = "-72px 0px -60% 0px" }) {
+export function ScrollSpyProvider({
+    children,
+    headerOffset = appTokens.layout.scrollSpyOffset,
+    rootMargin = `-${appTokens.layout.scrollSpyOffset}px 0px -60% 0px`,
+}) {
     const [sections, setSections] = useState([]);          // [{id,title,level,el}]
     const [activeId, setActiveId] = useState(null);
     const mapRef = useRef(new Map());                      // id -> { id,title,level, el }

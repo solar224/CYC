@@ -8,6 +8,7 @@ import {
 
 import MarkdownWithToc from "../components/MarkdownWithToc";
 import { ScrollSpyProvider, Toc } from "../shared/scrollspy";
+import { appTokens } from "../theme/tokens";
 
 export default function NoteDetail() {
     const { slug } = useParams();
@@ -42,7 +43,10 @@ export default function NoteDetail() {
     }
 
     return (
-        <ScrollSpyProvider headerOffset={72} rootMargin="-72px 0px -60% 0px">
+        <ScrollSpyProvider
+            headerOffset={appTokens.layout.scrollSpyOffset}
+            rootMargin={`-${appTokens.layout.scrollSpyOffset}px 0px -60% 0px`}
+        >
             <Container maxWidth="md" sx={{ py: { xs: 3, md: 6 } }}>
                 {/* 上方導覽列 */}
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>

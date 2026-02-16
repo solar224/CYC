@@ -4,7 +4,7 @@ import { PhoneAboutMe } from "./aboutMeComponents/PhoneAboutMe";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Aboutme = () => {
-    const isMobile = useMediaQuery("(max-width: 965px)");
+    const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
     return (
         <div

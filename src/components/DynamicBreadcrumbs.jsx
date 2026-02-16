@@ -3,6 +3,7 @@ import { Breadcrumbs, Link, Typography } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { NOTES } from "../data/notes";
+import { appTokens } from "../theme/tokens";
 
 const STATIC_NAME_MAP = {
     "about-me": "關於我",
@@ -61,7 +62,7 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                     fontSize="small"
                     sx={{
                         color: "rgba(255,255,255,0.28)",
-                        fontSize: 15,
+                        fontSize: appTokens.typography.size.md,
                     }}
                 />
             }
@@ -71,10 +72,10 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                 "& .MuiBreadcrumbs-ol": {
                     flexWrap: "nowrap",
                     alignItems: "center",
-                    gap: 0.15,
+                    gap: 0.25,
                 },
                 "& .MuiBreadcrumbs-separator": {
-                    mx: 0.02,
+                    mx: 0.25,
                     lineHeight: 1,
                 },
                 "& .MuiBreadcrumbs-li": {
@@ -94,12 +95,15 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                             color="inherit"
                             sx={{
                                 whiteSpace: "nowrap",
-                                fontWeight: 500,
-                                fontSize: variant === "mobile" ? "0.9rem" : "0.92rem",
+                                fontWeight: appTokens.typography.weight.medium,
+                                fontSize:
+                                    variant === "mobile"
+                                        ? appTokens.typography.size.md
+                                        : appTokens.typography.size.lg,
                                 letterSpacing: 0,
-                                color: "rgba(255,255,255,0.66)",
-                                px: 0.5,
-                                py: 0.2,
+                                color: appTokens.color.header.textSubtle,
+                                px: 1,
+                                py: 0.5,
                                 borderRadius: 1,
                                 textDecoration: "none",
                                 transition: "all .18s ease",
@@ -123,11 +127,14 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                             textOverflow: "ellipsis",
                             overflow: "hidden",
                             maxWidth: variant === "mobile" ? "42vw" : "24vw",
-                            fontWeight: 600,
-                            fontSize: variant === "mobile" ? "0.9rem" : "0.92rem",
-                            color: "rgba(255,255,255,0.95)",
-                            px: 0.5,
-                            py: 0.2,
+                            fontWeight: appTokens.typography.weight.semibold,
+                            fontSize:
+                                variant === "mobile"
+                                    ? appTokens.typography.size.md
+                                    : appTokens.typography.size.lg,
+                            color: appTokens.color.header.textStrong,
+                            px: 1,
+                            py: 0.5,
                             borderRadius: 1,
                             backgroundColor: "rgba(255,255,255,0.03)",
                             border: "1px solid rgba(255,255,255,0.08)",

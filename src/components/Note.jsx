@@ -12,6 +12,7 @@ import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import { Link as RouterLink } from "react-router-dom";
 import { ScrollSpyProvider, SpySection, Toc } from "../shared/scrollspy";
+import { appTokens } from "../theme/tokens";
 
 const CATS = [
     { label: "全部", value: "all" },
@@ -79,7 +80,7 @@ export default function Notes() {
             }}
         >
             <Container sx={{ mt: 4, mb: 6 }}>
-                <ScrollSpyProvider headerOffset={72}>
+                <ScrollSpyProvider headerOffset={appTokens.layout.scrollSpyOffset}>
                     <SpySection id="筆記" title="筆記">
                         <Stack
                             direction={{ xs: "column", sm: "row" }}

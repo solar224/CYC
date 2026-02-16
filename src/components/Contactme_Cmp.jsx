@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import SendIcon from "@mui/icons-material/Send";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { ScrollSpyProvider, SpySection, Toc } from "../shared/scrollspy";
+import { appTokens } from "../theme/tokens";
 
 import PcMyCalendar from "./myCalendarComponents/PcMyCalendar";
 import PhoneMyCalendar from "./myCalendarComponents/PhoneMyCalendar";
@@ -15,12 +16,12 @@ import { ThemeContext } from "../App";
 const Contact = () => {
     const { theme: mode } = useContext(ThemeContext);
     const muiTheme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
-    const isMobile = useMediaQuery("(max-width: 965px)");
+    const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
     return (
         <ThemeProvider theme={muiTheme}>
             <CssBaseline enableColorScheme />
-            <ScrollSpyProvider headerOffset={72}>
+            <ScrollSpyProvider headerOffset={appTokens.layout.scrollSpyOffset}>
                 <Container sx={{ mt: 4, mb: 6 }}>
                     <Box sx={{ mb: 2 }}>
                         <SpySection id="行事曆" title="行事曆">

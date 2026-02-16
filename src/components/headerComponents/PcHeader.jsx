@@ -3,14 +3,15 @@ import { NavLink, useLocation } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { AppBar, Toolbar, Container, Tabs, Tab, Box } from "@mui/material";
 import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
+import { appTokens } from "../../theme/tokens";
 function ElevationScroll({ children }) {
     const trigger = useScrollTrigger({ threshold: 8 });
     return React.cloneElement(children, {
         sx: {
-            backgroundColor: "#121212",
+            backgroundColor: appTokens.color.header.bgDark,
             opacity: trigger ? 0.92 : 1,
             backdropFilter: "saturate(180%) blur(8px)",
-            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            borderBottom: `1px solid ${appTokens.color.header.border}`,
             transition: "opacity .2s ease, background-color .2s ease",
         },
     });
@@ -21,6 +22,7 @@ const navItems = [
     { label: "關於我", to: "/about-me" },
     { label: "聯絡", to: "/contact-me" },
     { label: "筆記", to: "/note" },
+    { label: "小工具", to: "/tools" },
 ];
 
 const PcHeader = () => {
@@ -35,7 +37,7 @@ const PcHeader = () => {
         <ElevationScroll>
             <AppBar position="fixed">
                 <Container maxWidth="lg">
-                    <Toolbar disableGutters sx={{ minHeight: 64 }}>
+                    <Toolbar disableGutters sx={{ minHeight: appTokens.layout.headerHeight.desktop }}>
                         <Box
                             sx={{
                                 display: "flex",
@@ -71,7 +73,7 @@ const PcHeader = () => {
                                         "&.Mui-selected": { opacity: 1 },
                                         "&:hover": {
                                             opacity: 1,
-                                            backgroundColor: "rgba(255,255,255,0.04)",
+                                            backgroundColor: appTokens.color.header.hover,
                                         },
                                         borderRadius: 1.5,
                                         px: 1.5,

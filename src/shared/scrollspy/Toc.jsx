@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Paper, List, ListItemButton, ListItemText, Box } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { useScrollSpy } from "./ScrollSpyProvider";
+import { appTokens } from "../../theme/tokens";
 
 export function Toc({
     fixedRight = true,
@@ -62,7 +63,7 @@ export function Toc({
             elevation={0}
             sx={(t) => ({
                 position: fixedRight ? { xs: "static", md: "fixed" } : "sticky",
-                top: fixedRight ? { md: "50%" } : 80,
+                top: fixedRight ? { md: "50%" } : appTokens.layout.tocTop,
                 transform: fixedRight ? { md: "translateY(-50%)" } : "none",
                 right: fixedRight ? { md: 16, lg: rightAtLg } : "auto",
                 width: { md: open ? sidebarWidth : collapsedWidth },

@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 
 import { ThemeContext } from "../../App";
+import { appTokens } from "../../theme/tokens";
 
 const rowCardSx = (t) => ({
     p: 1.75,
@@ -192,7 +193,7 @@ const PcAboutMe = () => {
     return (
         <ThemeProvider theme={muiTheme}>
             <CssBaseline enableColorScheme />
-            <ScrollSpyProvider headerOffset={72}>
+            <ScrollSpyProvider headerOffset={appTokens.layout.scrollSpyOffset}>
                 <Container sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", mt: 4 }}>
                     <Grid container spacing={2} sx={{ my: 2 }}>
                         <Grid item xs={12}>

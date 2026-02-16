@@ -5,7 +5,7 @@ import PhoneHeader from "./headerComponents/PhoneHeader";
 import PcHeader from "./headerComponents/PcHeader";
 
 const Header = () => {
-    const isMobile = useMediaQuery("(max-width: 965px)");
+    const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
     return isMobile ? <PhoneHeader /> : <PcHeader />;
 };
 

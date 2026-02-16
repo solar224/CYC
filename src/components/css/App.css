@@ -1,9 +1,12 @@
 .app {
     min-height: 100vh;
     transition: background-color 0.3s ease, color 0.3s ease;
-    padding-top: 60px;
-    font-family: "Microsoft JhengHei", sans-serif;
-    letter-spacing: 1px;
-    /* 設定微軟正黑體為主要字體 */
+    padding-top: var(--app-header-mobile, 56px);
+    letter-spacing: 0.4px;
+}
 
+@media (min-width: 900px) {
+    .app {
+        padding-top: var(--app-header-desktop, 64px);
+    }
 }

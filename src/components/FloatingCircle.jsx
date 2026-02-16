@@ -10,9 +10,16 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import TranslateIcon from "@mui/icons-material/Translate";
 import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Slide from "@mui/material/Slide";
 import { useSnackbar } from "notistack";
 import { ThemeContext, LanguageContext } from "../App";
+import { appTokens } from "../theme/tokens";
+import { getAppDialogSx } from "../shared/dialog/dialogStyles";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -20,8 +27,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function FloatingCircleNoLag() {
     const circleRef = useRef(null);
-    const footerSpace = 125; // 與底部距離
-    const defaultBottom = 15;
+    const footerSpace = appTokens.layout.floating.footerSpace;
+    const defaultBottom = appTokens.layout.floating.bottom;
     const [showScrollToTop, setShowScrollToTop] = useState(false);
     const [isOneHovered, setIsOneHovered] = useState(false);
     const [isTwoHovered, setIsTwoHovered] = useState(false);
@@ -32,6 +39,8 @@ export default function FloatingCircleNoLag() {
     const { language, toggleLanguage } = useContext(LanguageContext);
     const [loclang, setLoclang] = useState(language);
     const [loctheme, setLocTheme] = useState(theme);
+    const isDark = theme === "dark";
+    const dialogSx = getAppDialogSx(isDark);
 
     useEffect(() => {
         let ticking = false;
@@ -56,7 +65,7 @@ export default function FloatingCircleNoLag() {
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [defaultBottom, footerSpace]);
 
     const handleScrollToTop = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -85,12 +94,12 @@ export default function FloatingCircleNoLag() {
                 ref={circleRef}
                 style={{
                     position: "fixed",
-                    right: "15px",
+                    right: `${appTokens.layout.floating.right}px`,
                     bottom: `${defaultBottom}px`,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "flex-end",
-                    zIndex: 999,
+                    zIndex: appTokens.layout.floating.zIndex,
                 }}
             >
                 {/* 回到頂部 */}
@@ -98,18 +107,18 @@ export default function FloatingCircleNoLag() {
                     <div
                         className="scroll-to-top-circle"
                         style={{
-                            width: "60px",
-                            height: "60px",
+                            width: `${appTokens.layout.floating.size}px`,
+                            height: `${appTokens.layout.floating.size}px`,
                             borderRadius: "35%",
-                            marginBottom: "10px",
-                            backgroundColor: "#f39212",
+                            marginBottom: `${appTokens.layout.floating.gap}px`,
+                            backgroundColor: appTokens.color.accent.up,
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
                             cursor: "pointer",
                             opacity: showScrollToTop ? 1 : 0,
                             transform: showScrollToTop ? "translateY(0)" : "translateY(70px)",
-                            transition: "all 0.3s ease",
+                            transition: `all ${appTokens.motion.normal}`,
                         }}
                         onClick={handleScrollToTop}
                         onMouseEnter={() => setIsOneHovered(true)}
@@ -128,10 +137,10 @@ export default function FloatingCircleNoLag() {
                     <div
                         className="floating-circle"
                         style={{
-                            width: "60px",
-                            height: "60px",
+                            width: `${appTokens.layout.floating.size}px`,
+                            height: `${appTokens.layout.floating.size}px`,
                             borderRadius: "35%",
-                            backgroundColor: "#28a745",
+                            backgroundColor: appTokens.color.accent.setting,
                             display: "flex",
                             alignItems: "center",
                             zIndex: '1',
@@ -157,254 +166,61 @@ export default function FloatingCircleNoLag() {
                 TransitionComponent={Transition}
                 onClose={handleClose}
                 disableScrollLock
-                PaperProps={{
-                    sx: {
-                        backgroundColor: theme === "dark" ? "#1a1a1a" : "#fafafa",
-                        borderRadius: "16px",
-                        padding: "8px",
-                        minWidth: "280px",
-                        maxWidth: "320px",
-                        boxShadow: theme === "dark"
-                            ? "0 8px 32px rgba(0,0,0,0.4)"
-                            : "0 8px 32px rgba(0,0,0,0.12)",
-                    },
-                }}
+                PaperProps={{ sx: dialogSx.paper }}
             >
-                {/* Header */}
-                <div style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "12px 16px 8px",
-                    borderBottom: `1px solid ${theme === "dark" ? "#333" : "#eee"}`,
-                }}>
-                    <span style={{
-                        fontSize: "15px",
-                        fontWeight: 500,
-                        color: theme === "dark" ? "#e0e0e0" : "#333",
-                        letterSpacing: "0.5px",
-                    }}>
+                <DialogTitle sx={dialogSx.titleRow}>
+                    <Box component="span" sx={dialogSx.titleText}>
                         {language === "en" ? "Settings" : "設定"}
-                    </span>
-                    <IconButton
-                        onClick={handleClose}
-                        size="small"
-                        sx={{
-                            color: theme === "dark" ? "#888" : "#999",
-                            "&:hover": {
-                                backgroundColor: theme === "dark" ? "#333" : "#f0f0f0"
-                            }
-                        }}
-                    >
+                    </Box>
+                    <IconButton onClick={handleClose} size="small" sx={dialogSx.closeButton}>
                         <CloseIcon fontSize="small" />
                     </IconButton>
-                </div>
+                </DialogTitle>
 
-                {/* Content */}
-                <div style={{ padding: "16px" }}>
-                    {/* Language */}
-                    <div style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        marginBottom: "12px",
-                    }}>
-                        <div style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            color: theme === "dark" ? "#b0b0b0" : "#666",
-                        }}>
+                <DialogContent sx={dialogSx.content}>
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, color: dialogSx.bodyText.color }}>
                             <TranslateIcon sx={{ fontSize: 20 }} />
-                            <span style={{ fontSize: "14px" }}>
+                            <Box component="span" sx={{ fontSize: appTokens.typography.size.md }}>
                                 {language === "en" ? "Language" : "語言"}
-                            </span>
-                        </div>
-                        <div style={{
-                            display: "flex",
-                            backgroundColor: theme === "dark" ? "#2a2a2a" : "#f0f0f0",
-                            borderRadius: "8px",
-                            padding: "3px",
-                        }}>
-                            <button
-                                onClick={() => setLoclang("zh")}
-                                style={{
-                                    padding: "6px 14px",
-                                    border: "none",
-                                    borderRadius: "6px",
-                                    fontSize: "13px",
-                                    cursor: "pointer",
-                                    transition: "all 0.2s",
-                                    backgroundColor: loclang === "zh"
-                                        ? (theme === "dark" ? "#444" : "#fff")
-                                        : "transparent",
-                                    color: loclang === "zh"
-                                        ? (theme === "dark" ? "#fff" : "#333")
-                                        : (theme === "dark" ? "#888" : "#888"),
-                                    boxShadow: loclang === "zh"
-                                        ? "0 1px 3px rgba(0,0,0,0.1)"
-                                        : "none",
-                                }}
-                            >
+                            </Box>
+                        </Box>
+                        <Box sx={dialogSx.segmentWrap}>
+                            <Button onClick={() => setLoclang("zh")} sx={dialogSx.segmentButton(loclang === "zh")}>
                                 中文
-                            </button>
-                            <button
-                                onClick={() => setLoclang("en")}
-                                style={{
-                                    padding: "6px 14px",
-                                    border: "none",
-                                    borderRadius: "6px",
-                                    fontSize: "13px",
-                                    cursor: "pointer",
-                                    transition: "all 0.2s",
-                                    backgroundColor: loclang === "en"
-                                        ? (theme === "dark" ? "#444" : "#fff")
-                                        : "transparent",
-                                    color: loclang === "en"
-                                        ? (theme === "dark" ? "#fff" : "#333")
-                                        : (theme === "dark" ? "#888" : "#888"),
-                                    boxShadow: loclang === "en"
-                                        ? "0 1px 3px rgba(0,0,0,0.1)"
-                                        : "none",
-                                }}
-                            >
+                            </Button>
+                            <Button onClick={() => setLoclang("en")} sx={dialogSx.segmentButton(loclang === "en")}>
                                 EN
-                            </button>
-                        </div>
-                    </div>
+                            </Button>
+                        </Box>
+                    </Box>
 
-                    {/* Theme */}
-                    <div style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                    }}>
-                        <div style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            color: theme === "dark" ? "#b0b0b0" : "#666",
-                        }}>
-                            {loctheme === "dark"
-                                ? <DarkModeIcon sx={{ fontSize: 20 }} />
-                                : <LightModeIcon sx={{ fontSize: 20 }} />
-                            }
-                            <span style={{ fontSize: "14px" }}>
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, color: dialogSx.bodyText.color }}>
+                            {loctheme === "dark" ? <DarkModeIcon sx={{ fontSize: 20 }} /> : <LightModeIcon sx={{ fontSize: 20 }} />}
+                            <Box component="span" sx={{ fontSize: appTokens.typography.size.md }}>
                                 {language === "en" ? "Theme" : "主題"}
-                            </span>
-                        </div>
-                        <div style={{
-                            display: "flex",
-                            backgroundColor: theme === "dark" ? "#2a2a2a" : "#f0f0f0",
-                            borderRadius: "8px",
-                            padding: "3px",
-                        }}>
-                            <button
-                                onClick={() => setLocTheme("light")}
-                                style={{
-                                    padding: "6px 12px",
-                                    border: "none",
-                                    borderRadius: "6px",
-                                    fontSize: "13px",
-                                    cursor: "pointer",
-                                    transition: "all 0.2s",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "4px",
-                                    backgroundColor: loctheme === "light"
-                                        ? (theme === "dark" ? "#444" : "#fff")
-                                        : "transparent",
-                                    color: loctheme === "light"
-                                        ? (theme === "dark" ? "#fff" : "#333")
-                                        : (theme === "dark" ? "#888" : "#888"),
-                                    boxShadow: loctheme === "light"
-                                        ? "0 1px 3px rgba(0,0,0,0.1)"
-                                        : "none",
-                                }}
-                            >
+                            </Box>
+                        </Box>
+                        <Box sx={dialogSx.segmentWrap}>
+                            <Button onClick={() => setLocTheme("light")} sx={dialogSx.segmentButton(loctheme === "light")}>
                                 <LightModeIcon sx={{ fontSize: 16 }} />
-                            </button>
-                            <button
-                                onClick={() => setLocTheme("dark")}
-                                style={{
-                                    padding: "6px 12px",
-                                    border: "none",
-                                    borderRadius: "6px",
-                                    fontSize: "13px",
-                                    cursor: "pointer",
-                                    transition: "all 0.2s",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "4px",
-                                    backgroundColor: loctheme === "dark"
-                                        ? (theme === "dark" ? "#444" : "#fff")
-                                        : "transparent",
-                                    color: loctheme === "dark"
-                                        ? (theme === "dark" ? "#fff" : "#333")
-                                        : (theme === "dark" ? "#888" : "#888"),
-                                    boxShadow: loctheme === "dark"
-                                        ? "0 1px 3px rgba(0,0,0,0.1)"
-                                        : "none",
-                                }}
-                            >
+                            </Button>
+                            <Button onClick={() => setLocTheme("dark")} sx={dialogSx.segmentButton(loctheme === "dark")}>
                                 <DarkModeIcon sx={{ fontSize: 16 }} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                            </Button>
+                        </Box>
+                    </Box>
+                </DialogContent>
 
-                {/* Footer */}
-                <div style={{
-                    padding: "12px 16px",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    gap: "8px",
-                    borderTop: `1px solid ${theme === "dark" ? "#333" : "#eee"}`,
-                }}>
-                    <button
-                        onClick={handleClose}
-                        style={{
-                            padding: "8px 16px",
-                            border: "none",
-                            borderRadius: "8px",
-                            fontSize: "13px",
-                            cursor: "pointer",
-                            backgroundColor: "transparent",
-                            color: theme === "dark" ? "#888" : "#666",
-                            transition: "all 0.2s",
-                        }}
-                        onMouseEnter={(e) => {
-                            e.target.style.backgroundColor = theme === "dark" ? "#2a2a2a" : "#f0f0f0";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = "transparent";
-                        }}
-                    >
+                <DialogActions sx={dialogSx.footer}>
+                    <Button onClick={handleClose} sx={dialogSx.cancelButton}>
                         {language === "en" ? "Cancel" : "取消"}
-                    </button>
-                    <button
-                        onClick={handSetting}
-                        style={{
-                            padding: "8px 20px",
-                            border: "none",
-                            borderRadius: "8px",
-                            fontSize: "13px",
-                            fontWeight: 500,
-                            cursor: "pointer",
-                            backgroundColor: theme === "dark" ? "#4a9eff" : "#2196f3",
-                            color: "#fff",
-                            transition: "all 0.2s",
-                        }}
-                        onMouseEnter={(e) => {
-                            e.target.style.backgroundColor = theme === "dark" ? "#3d8be0" : "#1976d2";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = theme === "dark" ? "#4a9eff" : "#2196f3";
-                        }}
-                    >
+                    </Button>
+                    <Button variant="contained" disableElevation onClick={handSetting} sx={dialogSx.primaryButton}>
                         {language === "en" ? "Save" : "儲存"}
-                    </button>
-                </div>
+                    </Button>
+                </DialogActions>
             </Dialog>
         </>
     );
