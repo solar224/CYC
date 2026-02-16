@@ -13,6 +13,7 @@ import NotesHome from "./components/Note";
 import NoteDetail from "./components/NoteDetail";
 import Note from "./components/Note";
 import Tools from "./components/Tools";
+import SketchCanvas from "./components/sketchCanvas/SketchCanvas";
 
 import { SnackbarProvider } from "notistack";
 
@@ -27,14 +28,62 @@ export const LanguageContext = createContext();
 
 function AppFooter() {
   const location = useLocation();
-  if (location.pathname === "/") return null;
+  if (location.pathname === "/" || location.pathname.startsWith("/tools/")) return null;
   return <Footer />;
 }
 
 function AppFloatingCircle() {
   const location = useLocation();
-  if (location.pathname === "/") return null;
+  if (location.pathname === "/" || location.pathname.startsWith("/tools/")) return null;
   return <FloatingCircle />;
+}
+
+function AppHeader() {
+  return <Header />;
+}
+
+function AppBackground({ theme }) {
+  const location = useLocation();
+  if (location.pathname.startsWith("/tools/RoughFrame")) return null;
+  return <DynamicBackground theme={theme} />;
+}
+
+function AppOverflowGuard() {
+  const location = useLocation();
+  const isToolPage = location.pathname.startsWith("/tools/");
+  useEffect(() => {
+    const appDiv = document.querySelector(".app");
+    if (isToolPage) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      if (appDiv) {
+        appDiv.style.height = "100vh";
+        appDiv.style.minHeight = "0";
+        appDiv.style.overflow = "hidden";
+        appDiv.style.boxSizing = "border-box";
+      }
+    } else {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      if (appDiv) {
+        appDiv.style.height = "";
+        appDiv.style.minHeight = "";
+        appDiv.style.overflow = "";
+        appDiv.style.boxSizing = "";
+      }
+    }
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      if (appDiv) {
+        appDiv.style.height = "";
+        appDiv.style.minHeight = "";
+        appDiv.style.overflow = "";
+        appDiv.style.boxSizing = "";
+      }
+    };
+  }, [isToolPage]);
+  return null;
 }
 
 export default function App() {
@@ -90,15 +139,17 @@ export default function App() {
             <CssBaseline enableColorScheme />
 
             <div className="app">
-              <DynamicBackground theme={theme} />
               <Router basename={process.env.PUBLIC_URL}>
-                <Header />
+                <AppOverflowGuard />
+                <AppBackground theme={theme} />
+                <AppHeader />
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/about-me" element={<Aboutme />} />
                   <Route path="/note" element={<Note />} />
                   <Route path="/contact-me" element={<Contactme />} />
                   <Route path="/tools" element={<Tools />} />
+                  <Route path="/tools/RoughFrame" element={<SketchCanvas />} />
                   <Route path="/notes" element={<NotesHome />} />
                   <Route path="/notes/:slug" element={<NoteDetail />} />
                 </Routes>

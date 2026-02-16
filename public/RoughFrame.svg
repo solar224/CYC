@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 260" role="img" aria-label="RoughFrame logo">
+  <defs>
+    <!-- Subtle hand-drawn distortion -->
+    <filter id="rough" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="7" result="noise"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.6" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+
+    <style>
+      .s { stroke: currentColor; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .f { fill: none; }
+      .t { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; }
+    </style>
+  </defs>
+
+  <!-- Set default color; override via CSS in your site if needed -->
+  <g color="#111827">
+    <!-- Icon -->
+    <g filter="url(#rough)" transform="translate(30,30)">
+      <!-- Outer frame -->
+      <rect x="0" y="0" width="200" height="200" rx="26" class="s"></rect>
+      <!-- Inner sketch line -->
+      <path d="M35 55 L165 55" class="s" opacity="0.55"></path>
+      <!-- Node-connector motif -->
+      <circle cx="70" cy="125" r="16" class="s"></circle>
+      <circle cx="145" cy="155" r="16" class="s"></circle>
+      <path d="M86 132 C105 138, 120 145, 129 150" class="s"></path>
+      <!-- Small corner tick to imply 'frame' -->
+      <path d="M35 170 L35 180 L55 180" class="s" opacity="0.7"></path>
+    </g>
+
+    <!-- Wordmark -->
+    <g transform="translate(270,95)">
+      <text class="t" x="0" y="0" font-size="64" font-weight="750" fill="currentColor">RoughFrame</text>
+      <text class="t" x="2" y="56" font-size="22" font-weight="500" fill="currentColor" opacity="0.65">
+        hand-drawn whiteboard
+      </text>
+    </g>
+  </g>
+</svg>

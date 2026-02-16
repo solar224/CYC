@@ -10,6 +10,8 @@ const STATIC_NAME_MAP = {
     "contact-me": "聯絡",
     note: "筆記",
     notes: "筆記",
+    tools: "小工具",
+    RoughFrame: "RoughFrame",
     "school-curriculum": "學校課程",
     "coding-practice": "程式練習",
     "other-practice": "其他",

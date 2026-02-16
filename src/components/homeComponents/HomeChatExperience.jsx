@@ -35,7 +35,7 @@ const SITE_BASE_URL = "https://solar224.github.io/CYC";
 
 const QUICK_PROMPTS_ZH = [
     "你是哪裡畢業的？",
-    "這個網站有什麼工具？",
+    "網站有什麼小工具？",
     "想了解你，可以先看什麼？",
     "如何聯絡你？",
 ];
@@ -72,24 +72,32 @@ const KNOWLEDGE_BASE = [
     },
     {
         id: "tools",
-        keywords: ["工具", "技術", "技術棧", "會什麼", "stack", "tool", "skills", "technology", "framework", "react", "mui"],
+        keywords: ["工具", "技術", "技術棧", "會什麼", "stack", "tool", "skills", "technology", "framework", "react", "mui", "小工具", "roughframe", "白板", "繪圖", "畫圖", "whiteboard", "draw", "sketch"],
         answerZh: [
-            "【網站技術與能力】",
+            "【網站技術與小工具】",
             "- 技術棧：C、C++、Python、JavaScript、Go、Git",
             "- 前端：React + MUI",
             "- 網站功能：聊天首頁、筆記分類/搜尋、行事曆聯絡、主題與語言切換",
             "",
+            "**站內小工具：**",
+            `- [RoughFrame](${SITE_BASE_URL}/tools/RoughFrame) — 無限白板繪圖工具，支援手繪風格、形狀、箭頭、自由筆、文字，可匯出 PNG/SVG/JSON`,
+            "",
             "可直接前往：",
+            `- [小工具](${SITE_BASE_URL}/tools)`,
             `- [筆記](${SITE_BASE_URL}/note)`,
             `- [聯絡我](${SITE_BASE_URL}/contact-me)`,
         ].join("\n"),
         answerEn: [
-            "[Tech Stack & Site Features]",
+            "[Tech Stack & Tools]",
             "- Stack: C, C++, Python, JavaScript, Go, Git",
             "- Frontend: React + MUI",
             "- Features: chat-based home, notes filtering/search, contact calendar, theme/language switching",
             "",
+            "**Built-in Tools:**",
+            `- [RoughFrame](${SITE_BASE_URL}/tools/RoughFrame) — Infinite whiteboard with hand-drawn style, shapes, arrows, freehand drawing, text; export to PNG/SVG/JSON`,
+            "",
             "Quick links:",
+            `- [Tools](${SITE_BASE_URL}/tools)`,
             `- [Notes](${SITE_BASE_URL}/note)`,
             `- [Contact](${SITE_BASE_URL}/contact-me)`,
         ].join("\n"),
@@ -197,6 +205,7 @@ const KNOWLEDGE_BASE = [
             `- [關於我](${SITE_BASE_URL}/about-me) 學歷、經歷、專案、獎項`,
             `- [筆記](${SITE_BASE_URL}/note) 分類、搜尋、收藏`,
             `- [筆記詳情](${SITE_BASE_URL}/notes/) 閱讀完整文章與章節目錄`,
+            `- [小工具](${SITE_BASE_URL}/tools) RoughFrame 無限白板繪圖等工具`,
             `- [聯絡我](${SITE_BASE_URL}/contact-me) 查看忙碌時段並寄信`,
         ].join("\n"),
         answerEn: [
@@ -205,6 +214,7 @@ const KNOWLEDGE_BASE = [
             `- [About](${SITE_BASE_URL}/about-me) education, experience, projects, awards`,
             `- [Notes](${SITE_BASE_URL}/note) categories, search, stars`,
             `- [Note detail](${SITE_BASE_URL}/notes/) full article and table of contents`,
+            `- [Tools](${SITE_BASE_URL}/tools) RoughFrame infinite whiteboard and more`,
             `- [Contact](${SITE_BASE_URL}/contact-me) check busy slots and send email`,
         ].join("\n"),
     },
@@ -314,7 +324,7 @@ function ChatBubble({ role, text }) {
                             "& ul, & ol": { m: 0, pl: 2.5 },
                             "& li": { mb: 0.5 },
                             "& li:last-of-type": { mb: 0 },
-                            "& a": { color: "primary.main", textDecoration: "underline" },
+                            "& a": { color: "primary.main", textDecoration: "none" },
                             "& code": {
                                 fontSize: 12,
                                 px: 0.5,
@@ -328,7 +338,7 @@ function ChatBubble({ role, text }) {
                             remarkPlugins={[remarkGfm]}
                             components={{
                                 a: ({ href, children }) => (
-                                    <a href={href} target="_blank" rel="noopener noreferrer">
+                                    <a href={href}>
                                         {children}
                                     </a>
                                 ),
@@ -551,7 +561,8 @@ export default function HomeChatExperience() {
     const [deleteTarget, setDeleteTarget] = useState(null);
 
     const placeholder = language === "zh" ? "輸入問題，例如：你是哪裡畢業的？" : "Ask something, e.g. where did you graduate from?";
-    const welcomeTitle = language === "zh" ? "嗨，我是詹宇宸" : "Hi, I'm YC bot";
+    const headerTitle = language === "zh" ? "YC Bot" : "YC Bot";
+    const welcomeTitle = language === "zh" ? "嗨，我是詹宇宸 👋" : "Hi, I'm YC-Chan 👋";
     const quickPrompts = useMemo(() => (language === "zh" ? QUICK_PROMPTS_ZH : QUICK_PROMPTS_EN), [language]);
 
     useEffect(() => {
@@ -701,7 +712,7 @@ export default function HomeChatExperience() {
                         </IconButton>
                     )}
                     <Typography variant="subtitle1" fontWeight={700}>
-                        {welcomeTitle}
+                        {headerTitle}
                     </Typography>
                 </Box>
 
