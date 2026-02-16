@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/CYC/static/css/main.e1d16530.css",
-    "main.js": "/CYC/static/js/main.205a0632.js",
+    "main.css": "/CYC/static/css/main.e4716e46.css",
+    "main.js": "/CYC/static/js/main.e465508c.js",
     "static/js/36.4298c0b3.chunk.js": "/CYC/static/js/36.4298c0b3.chunk.js",
     "static/js/488.97278c65.chunk.js": "/CYC/static/js/488.97278c65.chunk.js",
     "static/media/114-csie-grad-admission.md": "/CYC/static/media/114-csie-grad-admission.b320a2c3c16cb584f116.md",
     "index.html": "/CYC/index.html",
-    "main.e1d16530.css.map": "/CYC/static/css/main.e1d16530.css.map",
-    "main.205a0632.js.map": "/CYC/static/js/main.205a0632.js.map",
+    "main.e4716e46.css.map": "/CYC/static/css/main.e4716e46.css.map",
+    "main.e465508c.js.map": "/CYC/static/js/main.e465508c.js.map",
     "488.97278c65.chunk.js.map": "/CYC/static/js/488.97278c65.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e1d16530.css",
-    "static/js/main.205a0632.js"
+    "static/css/main.e4716e46.css",
+    "static/js/main.e465508c.js"
   ]
 }
