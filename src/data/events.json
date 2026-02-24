@@ -56,7 +56,7 @@
         "title": "Lab Meeting",
         "start": "2025-09-03T17:30:00+08:00",
         "end": "2027-09-03T19:30:00+08:00",
-        "location": "",
+        "location": "EC345",
         "allDay": false,
         "color": "#FFD000",
         "tags": [
@@ -74,20 +74,87 @@
         "allDay": false,
         "color": "#FFD000",
         "tags": [
-            "Meeting"
+            "Meeting",
+            "Dev"
         ],
         "repeatWeekly": true
     },
     {
         "id": "evt-007",
         "title": "Dev Meeting",
-        "start": "2025-12-24T14:00:00+08:00",
+        "start": "2025-12-26T14:00:00+08:00",
         "end": "2027-12-23T15:00:00+08:00",
         "location": "",
         "allDay": false,
         "color": "#FFD000",
         "tags": [
-            "Meeting"
+            "Meeting",
+            "Dev"
+        ],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-008",
+        "title": "統計應用方法",
+        "start": "2026-02-25T09:00:00+08:00",
+        "end": "2026-06-11T12:00:00+08:00",
+        "location": "A306",
+        "allDay": false,
+        "color": "#4F46E5",
+        "tags": [
+            "114_2_couse"
+        ],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-009",
+        "title": "電腦視覺",
+        "start": "2026-02-23T13:20:00+08:00",
+        "end": "2026-06-11T15:10:00+08:00",
+        "location": "EC022",
+        "allDay": false,
+        "color": "#4F46E5",
+        "tags": [
+            "114_2_couse"
+        ],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-010",
+        "title": "作業系統",
+        "start": "2026-02-24T13:20:00+08:00",
+        "end": "2026-06-11T16:20:00+08:00",
+        "location": "A305",
+        "allDay": false,
+        "color": "#4F46E5",
+        "tags": [
+            "114_2_couse"
+        ],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-011",
+        "title": "數據科學系列演講",
+        "start": "2026-02-25T15:30:00+08:00",
+        "end": "2026-06-11T17:20:00+08:00",
+        "location": "EC115",
+        "allDay": false,
+        "color": "#4F46E5",
+        "tags": [
+            "114_2_couse"
+        ],
+        "repeatWeekly": true
+    },
+    {
+        "id": "evt-012",
+        "title": "雲原生軟體開發與最佳實踐",
+        "start": "2026-02-25T18:30:00+08:00",
+        "end": "2026-06-11T21:20:00+08:00",
+        "location": "EC122",
+        "allDay": false,
+        "color": "#4F46E5",
+        "tags": [
+            "114_2_couse"
         ],
         "repeatWeekly": true
     }
