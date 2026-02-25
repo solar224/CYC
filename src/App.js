@@ -96,7 +96,6 @@ export default function App() {
   useEffect(() => localStorage.setItem("theme", theme), [theme]);
   useEffect(() => localStorage.setItem("language", language), [language]);
 
-  // 🟡 建立 MUI 主題（跟著你的 theme 字串切換）
   const muiTheme = useMemo(() => {
     let t = createTheme({
       breakpoints: {
@@ -104,7 +103,6 @@ export default function App() {
       },
       palette: {
         mode: theme === "dark" ? "dark" : "light",
-        // 也可在這裡客製 primary/secondary 等色票
         // primary: { main: "#4F46E5" },
       },
       // 常用的全局細節（選擇性）
@@ -133,9 +131,7 @@ export default function App() {
     <SnackbarProvider maxSnack={3} autoHideDuration={800}>
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
         <LanguageContext.Provider value={{ language, toggleLanguage }}>
-          {/* 🟡 把 ThemeProvider 放到最外層包住整個 App */}
           <ThemeProvider theme={muiTheme}>
-            {/* 🟡 這行很關鍵：讓暗色模式在瀏覽器原生元件與滾動條/表單等也跟著換色 */}
             <CssBaseline enableColorScheme />
 
             <div className="app">
