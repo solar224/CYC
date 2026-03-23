@@ -8,6 +8,7 @@ export function ScrollSpyProvider({
     children,
     headerOffset = appTokens.layout.scrollSpyOffset,
     rootMargin = `-${appTokens.layout.scrollSpyOffset}px 0px -60% 0px`,
+    scrollContainerRef,
 }) {
     const [sections, setSections] = useState([]);          // [{id,title,level,el}]
     const [activeId, setActiveId] = useState(null);
@@ -26,24 +27,35 @@ export function ScrollSpyProvider({
     // Observe visible section
     useEffect(() => {
         if (!sections.length) return;
+        const rootEl = scrollContainerRef?.current || null;
         const io = new IntersectionObserver((entries) => {
             const visible = entries
                 .filter(e => e.isIntersecting)
                 .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top);
             if (visible[0]) setActiveId(visible[0].target.id);
-        }, { root: null, rootMargin, threshold: [0, 1] });
+        }, { root: rootEl, rootMargin, threshold: [0, 1] });
 
         sections.forEach(s => s.el && io.observe(s.el));
         return () => io.disconnect();
-    }, [sections, rootMargin]);
+    }, [sections, rootMargin, scrollContainerRef]);
 
     const scrollTo = useCallback((id) => {
         const item = mapRef.current.get(id);
         if (!item?.el) return;
-        const y = item.el.getBoundingClientRect().top + window.scrollY - headerOffset;
-        window.scrollTo({ top: y, behavior: "smooth" });
+        const rootEl = scrollContainerRef?.current;
+        if (rootEl) {
+            const top =
+                item.el.getBoundingClientRect().top -
+                rootEl.getBoundingClientRect().top +
+                rootEl.scrollTop -
+                headerOffset;
+            rootEl.scrollTo({ top: Math.max(top, 0), behavior: "smooth" });
+        } else {
+            const y = item.el.getBoundingClientRect().top + window.scrollY - headerOffset;
+            window.scrollTo({ top: y, behavior: "smooth" });
+        }
         setActiveId(id);
-    }, [headerOffset]);
+    }, [headerOffset, scrollContainerRef]);
 
     const value = useMemo(() => ({ sections, activeId, register, unregister, scrollTo, headerOffset }),
         [sections, activeId, register, unregister, scrollTo, headerOffset]);

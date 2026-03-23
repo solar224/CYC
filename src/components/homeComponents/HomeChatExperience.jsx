@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
-import CloseIcon from "@mui/icons-material/Close";
-import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
+import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
+import PushPinRoundedIcon from "@mui/icons-material/PushPinRounded";
 import {
     Box,
     Stack,
@@ -14,20 +14,19 @@ import {
     Button,
     TextField,
     Paper,
-    Drawer,
     Divider,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    useMediaQuery,
+    Tooltip,
 } from "@mui/material";
-import { alpha, useTheme } from "@mui/material/styles";
+import { alpha } from "@mui/material/styles";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { LanguageContext } from "../../App";
 import Footer from "../Footer";
-import { getAppDialogSx } from "../../shared/dialog/dialogStyles";
+import {
+    getNaturalTypingDelay,
+    getNaturalTypingChunkSize,
+    buildTypingCacheKey,
+} from "../../shared/chat/typingCadence";
 
 const RECENT_CONVERSATIONS_KEY = "home_recent_conversations_v1";
 const MAX_RECENT_CONVERSATIONS = 20;
@@ -281,8 +280,60 @@ function buildAnswer(question, language) {
         ].join("\n");
 }
 
+/* ── Shared Components ─────────────────────────────────── */
+
+const typedAssistantCache = new Set();
+
 function ChatBubble({ role, text }) {
     const isUser = role === "user";
+    const [displayedText, setDisplayedText] = useState(isUser ? text : "");
+    const [isTyping, setIsTyping] = useState(!isUser);
+
+    useEffect(() => {
+        if (isUser) {
+            setDisplayedText(text);
+            setIsTyping(false);
+            return;
+        }
+
+        if (!text) {
+            setDisplayedText("");
+            setIsTyping(false);
+            return;
+        }
+
+        const cacheKey = buildTypingCacheKey(text);
+        const isPersistedTyped = window.sessionStorage.getItem(cacheKey) === "1";
+
+        if (typedAssistantCache.has(text) || isPersistedTyped) {
+            setDisplayedText(text);
+            setIsTyping(false);
+            typedAssistantCache.add(text);
+            return;
+        }
+
+        let i = 0;
+        let timer = null;
+        setDisplayedText("");
+        setIsTyping(true);
+
+        const typeNext = () => {
+            i += getNaturalTypingChunkSize(text, i);
+            setDisplayedText(text.slice(0, i));
+            if (i >= text.length) {
+                typedAssistantCache.add(text);
+                window.sessionStorage.setItem(cacheKey, "1");
+                setIsTyping(false);
+                return;
+            }
+            timer = window.setTimeout(typeNext, getNaturalTypingDelay(text, i));
+        };
+
+        timer = window.setTimeout(typeNext, getNaturalTypingDelay(text, 0));
+
+        return () => window.clearTimeout(timer);
+    }, [isUser, text]);
+
     return (
         <Stack direction="row" spacing={1.25} justifyContent={isUser ? "flex-end" : "flex-start"}>
             {!isUser && (
@@ -297,58 +348,81 @@ function ChatBubble({ role, text }) {
                         bgcolor: alpha(t.palette.primary.main, 0.16),
                     })}
                 >
-                    <SmartToyOutlinedIcon fontSize="small" />
+                    <ChatBubbleOutlineRoundedIcon fontSize="small" />
                 </Box>
             )}
 
-            <Paper
-                elevation={0}
-                sx={(t) => ({
-                    px: 1.5,
-                    py: 1.2,
-                    maxWidth: { xs: "86%", md: "78%" },
-                    borderRadius: 2.5,
-                    border: `1px solid ${t.palette.divider}`,
-                    bgcolor: isUser ? alpha(t.palette.primary.main, 0.18) : "transparent",
-                })}
-            >
-                {isUser ? (
+            {isUser ? (
+                <Paper
+                    elevation={0}
+                    sx={(t) => ({
+                        px: 1.5,
+                        py: 1.2,
+                        maxWidth: { xs: "86%", md: "78%" },
+                        borderRadius: 2.5,
+                        border: `1px solid ${t.palette.divider}`,
+                        bgcolor: alpha(t.palette.primary.main, 0.18),
+                    })}
+                >
                     <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
                         {text}
                     </Typography>
-                ) : (
-                    <Box
-                        sx={{
-                            "& p": { m: 0, mb: 1, lineHeight: 1.7 },
-                            "& p:last-of-type": { mb: 0 },
-                            "& ul, & ol": { m: 0, pl: 2.5 },
-                            "& li": { mb: 0.5 },
-                            "& li:last-of-type": { mb: 0 },
-                            "& a": { color: "primary.main", textDecoration: "none" },
-                            "& code": {
-                                fontSize: 12,
-                                px: 0.5,
-                                py: 0.2,
-                                borderRadius: 0.5,
-                                bgcolor: "action.hover",
-                            },
+                </Paper>
+            ) : (
+                <Box
+                    sx={{
+                        maxWidth: { xs: "86%", md: "78%" },
+                        py: 0.1,
+                        position: "relative",
+                        "& p": { m: 0, mb: 1, lineHeight: 1.7 },
+                        "& p:last-of-type": { mb: 0 },
+                        "& ul, & ol": { m: 0, pl: 2.5 },
+                        "& li": { mb: 0.5 },
+                        "& li:last-of-type": { mb: 0 },
+                        "& a": { color: "primary.main", textDecoration: "none" },
+                        "& code": {
+                            fontSize: 12,
+                            px: 0.5,
+                            py: 0.2,
+                            borderRadius: 0.5,
+                            bgcolor: "action.hover",
+                        },
+                    }}
+                >
+                    <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                            a: ({ href, children }) => (
+                                <a href={href}>
+                                    {children}
+                                </a>
+                            ),
                         }}
                     >
-                        <ReactMarkdown
-                            remarkPlugins={[remarkGfm]}
-                            components={{
-                                a: ({ href, children }) => (
-                                    <a href={href}>
-                                        {children}
-                                    </a>
-                                ),
+                        {displayedText}
+                    </ReactMarkdown>
+
+                    {isTyping && (
+                        <Box
+                            component="span"
+                            sx={{
+                                display: "inline-block",
+                                width: 8,
+                                height: 16,
+                                ml: 0.35,
+                                verticalAlign: "text-bottom",
+                                borderRadius: 0.35,
+                                bgcolor: "text.secondary",
+                                animation: "typingCursor 0.85s ease-in-out infinite",
+                                "@keyframes typingCursor": {
+                                    "0%, 100%": { opacity: 0.2 },
+                                    "50%": { opacity: 0.95 },
+                                },
                             }}
-                        >
-                            {text}
-                        </ReactMarkdown>
-                    </Box>
-                )}
-            </Paper>
+                        />
+                    )}
+                </Box>
+            )}
 
             {isUser && (
                 <Box
@@ -369,7 +443,7 @@ function ChatBubble({ role, text }) {
     );
 }
 
-function Composer({ value, onChange, onSend, placeholder }) {
+function Composer({ value, onChange, onSend, placeholder, inputBorderRadius = 8 }) {
     return (
         <TextField
             fullWidth
@@ -389,12 +463,23 @@ function Composer({ value, onChange, onSend, placeholder }) {
                     </IconButton>
                 ),
             }}
-            sx={{
+            sx={(t) => ({
                 "& .MuiOutlinedInput-root": {
-                    borderRadius: 3.5,
-                    bgcolor: "background.paper",
+                    borderRadius: inputBorderRadius,
+                    bgcolor: alpha(t.palette.background.paper, 0.46),
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    "& fieldset": {
+                        borderColor: alpha(t.palette.divider, 0.9),
+                    },
+                    "&:hover fieldset": {
+                        borderColor: alpha(t.palette.text.primary, 0.45),
+                    },
+                    "&.Mui-focused fieldset": {
+                        borderColor: alpha(t.palette.primary.main, 0.55),
+                    },
                 },
-            }}
+            })}
         />
     );
 }
@@ -403,6 +488,9 @@ function Sidebar({
     language,
     onQuickPrompt,
     onNewChat,
+    showPin = true,
+    sidebarPinned,
+    onToggleSidebarPinned,
     recentConversations,
     activeConversationId,
     onSelectConversation,
@@ -423,15 +511,47 @@ function Sidebar({
                 overflow: "hidden",
             })}
         >
-            <Button
-                onClick={onNewChat}
-                fullWidth
-                startIcon={<AddRoundedIcon />}
-                variant="outlined"
-                sx={{ justifyContent: "flex-start", textTransform: "none", borderRadius: 2 }}
-            >
-                {language === "zh" ? "新對話" : "New chat"}
-            </Button>
+            <Stack direction="row" spacing={0.75} alignItems="center">
+                {showPin && (
+                    <Tooltip
+                        title={
+                            sidebarPinned
+                                ? (language === "zh" ? "取消固定側欄" : "Unpin sidebar")
+                                : (language === "zh" ? "固定側欄" : "Pin sidebar")
+                        }
+                        placement="top"
+                    >
+                        <IconButton
+                            size="small"
+                            onClick={onToggleSidebarPinned}
+                            aria-label={sidebarPinned ? "unpin sidebar" : "pin sidebar"}
+                            sx={(t) => ({
+                                border: `1px solid ${t.palette.divider}`,
+                                borderRadius: 2,
+                                color: sidebarPinned ? t.palette.primary.main : t.palette.text.secondary,
+                                bgcolor: sidebarPinned ? alpha(t.palette.primary.main, 0.1) : "transparent",
+                                "&:hover": {
+                                    bgcolor: sidebarPinned
+                                        ? alpha(t.palette.primary.main, 0.16)
+                                        : alpha(t.palette.action.hover, 0.6),
+                                },
+                            })}
+                        >
+                            {sidebarPinned ? <PushPinRoundedIcon fontSize="small" /> : <PushPinOutlinedIcon fontSize="small" />}
+                        </IconButton>
+                    </Tooltip>
+                )}
+
+                <Button
+                    onClick={onNewChat}
+                    fullWidth
+                    startIcon={<AddRoundedIcon />}
+                    variant="outlined"
+                    sx={{ justifyContent: "flex-start", textTransform: "none", borderRadius: 2 }}
+                >
+                    {language === "zh" ? "新對話" : "New chat"}
+                </Button>
+            </Stack>
 
             <Box sx={{ px: 0.5 }}>
                 <Typography variant="caption" color="text.secondary">
@@ -545,13 +665,10 @@ function Sidebar({
     );
 }
 
-export default function HomeChatExperience() {
-    const muiTheme = useTheme();
-    const isDark = muiTheme.palette.mode === "dark";
-    const dialogSx = getAppDialogSx(isDark);
+/* ── Custom Hook: useChatState ─────────────────────────── */
+
+function useChatState() {
     const { language = "zh" } = useContext(LanguageContext);
-    const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
-    const [drawerOpen, setDrawerOpen] = useState(false);
     const [input, setInput] = useState("");
     const messageViewportRef = useRef(null);
     const [conversations, setConversations] = useState(() => loadRecentConversations());
@@ -561,7 +678,7 @@ export default function HomeChatExperience() {
     const [deleteTarget, setDeleteTarget] = useState(null);
 
     const placeholder = language === "zh" ? "輸入問題，例如：你是哪裡畢業的？" : "Ask something, e.g. where did you graduate from?";
-    const headerTitle = language === "zh" ? "YC Bot" : "YC Bot";
+    const headerTitle = "YC-Chan";
     const welcomeTitle = language === "zh" ? "嗨，我是詹宇宸 👋" : "Hi, I'm YC-Chan 👋";
     const quickPrompts = useMemo(() => (language === "zh" ? QUICK_PROMPTS_ZH : QUICK_PROMPTS_EN), [language]);
 
@@ -650,183 +767,33 @@ export default function HomeChatExperience() {
         setDeleteTarget(null);
     };
 
-    const sidebarContent = (
-        <Sidebar
-            language={language}
-            onQuickPrompt={(question) => {
-                sendMessage(question);
-                setDrawerOpen(false);
-            }}
-            onNewChat={() => {
-                resetConversation();
-                setDrawerOpen(false);
-            }}
-            recentConversations={conversations}
-            activeConversationId={activeConversationId}
-            onSelectConversation={(id) => {
-                setActiveConversationId(id);
-                setDrawerOpen(false);
-            }}
-            onDeleteConversationRequest={(item) => {
-                setDeleteTarget(item);
-            }}
-        />
-    );
-
-    return (
-        <Box
-            sx={(t) => ({
-                height: {
-                    xs: "calc(100dvh - var(--app-header-mobile, 56px))",
-                    md: "calc(100dvh - var(--app-header-desktop, 64px))",
-                },
-                display: "grid",
-                gridTemplateColumns: { xs: "1fr", md: "260px minmax(0, 1fr)" },
-                overflow: "hidden",
-                bgcolor: t.palette.background.default,
-            })}
-        >
-            {isMobile ? (
-                <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} PaperProps={{ sx: { width: 280 } }}>
-                    {sidebarContent}
-                </Drawer>
-            ) : (
-                sidebarContent
-            )}
-
-            <Box sx={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
-                <Box
-                    sx={(t) => ({
-                        px: { xs: 1.2, md: 2 },
-                        py: 1.2,
-                        borderBottom: `1px solid ${t.palette.divider}`,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        bgcolor: alpha(t.palette.background.paper, 0.45),
-                    })}
-                >
-                    {isMobile && (
-                        <IconButton size="small" onClick={() => setDrawerOpen(true)} aria-label="open sidebar">
-                            <MenuRoundedIcon />
-                        </IconButton>
-                    )}
-                    <Typography variant="subtitle1" fontWeight={700}>
-                        {headerTitle}
-                    </Typography>
-                </Box>
-
-                <Box
-                    ref={messageViewportRef}
-                    sx={{
-                        flex: 1,
-                        minHeight: 0,
-                        overflowY: hasStarted ? "auto" : "hidden",
-                        p: { xs: 1.25, md: 2 },
-                        scrollbarWidth: "none",
-                        "&::-webkit-scrollbar": { display: "none" },
-                    }}
-                >
-                    {!hasStarted ? (
-                        <Stack sx={{ height: "100%" }} alignItems="center" justifyContent="center" spacing={2}>
-                            <Typography variant="h4" fontWeight={800} textAlign="center">
-                                {welcomeTitle}
-                            </Typography>
-                            <Typography color="text.secondary" textAlign="center">
-                                {language === "zh"
-                                    ? "輸入任何問題，我會用網站中的資訊即時回答你。"
-                                    : "Ask anything and I will answer from profile knowledge."}
-                            </Typography>
-                            <Box sx={{ width: "100%", maxWidth: 760, mt: 1 }}>
-                                <Composer
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    onSend={() => sendMessage()}
-                                    placeholder={placeholder}
-                                />
-                            </Box>
-                            <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
-                                {quickPrompts.map((prompt) => (
-                                    <Button
-                                        key={prompt}
-                                        variant="outlined"
-                                        onClick={() => sendMessage(prompt)}
-                                        sx={{ textTransform: "none", borderRadius: 99 }}
-                                    >
-                                        {prompt}
-                                    </Button>
-                                ))}
-                            </Stack>
-                        </Stack>
-                    ) : (
-                        <Stack spacing={1.25}>
-                            {messages.map((m, idx) => (
-                                <ChatBubble key={`${m.role}-${idx}`} role={m.role} text={m.text} />
-                            ))}
-                        </Stack>
-                    )}
-                </Box>
-
-                {hasStarted && (
-                    <Box
-                        sx={(t) => ({
-                            borderTop: `1px solid ${t.palette.divider}`,
-                            p: { xs: 1, md: 1.5 },
-                            bgcolor: alpha(t.palette.background.paper, 0.55),
-                        })}
-                    >
-                        <Composer
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onSend={() => sendMessage()}
-                            placeholder={placeholder}
-                        />
-                    </Box>
-                )}
-            </Box>
-
-            <Dialog
-                open={Boolean(deleteTarget)}
-                onClose={() => setDeleteTarget(null)}
-                maxWidth="xs"
-                fullWidth
-                PaperProps={{
-                    sx: dialogSx.paper,
-                }}
-            >
-                <DialogTitle sx={dialogSx.titleRow}>
-                    <Typography sx={dialogSx.titleText}>
-                        {language === "zh" ? "確認刪除對話" : "Confirm Delete"}
-                    </Typography>
-                    <IconButton
-                        onClick={() => setDeleteTarget(null)}
-                        size="small"
-                        sx={dialogSx.closeButton}
-                    >
-                        <CloseIcon fontSize="small" />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent sx={dialogSx.content}>
-                    <Typography variant="body2" sx={dialogSx.bodyText}>
-                        {language === "zh"
-                            ? `確定要刪除「${deleteTarget?.title || "這筆對話"}」嗎？`
-                            : `Are you sure you want to delete "${deleteTarget?.title || "this chat"}"?`}
-                    </Typography>
-                </DialogContent>
-                <DialogActions sx={dialogSx.footer}>
-                    <Button onClick={() => setDeleteTarget(null)} sx={dialogSx.cancelButton}>
-                        {language === "zh" ? "取消" : "Cancel"}
-                    </Button>
-                    <Button
-                        variant="contained"
-                        disableElevation
-                        onClick={confirmDeleteConversation}
-                        sx={dialogSx.primaryButton}
-                    >
-                        {language === "zh" ? "刪除" : "Delete"}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </Box>
-    );
+    return {
+        language,
+        input,
+        setInput,
+        messageViewportRef,
+        conversations,
+        activeConversationId,
+        setActiveConversationId,
+        deleteTarget,
+        setDeleteTarget,
+        placeholder,
+        headerTitle,
+        welcomeTitle,
+        quickPrompts,
+        messages,
+        hasStarted,
+        sendMessage,
+        resetConversation,
+        confirmDeleteConversation,
+    };
 }
+
+export {
+    ChatBubble,
+    Composer,
+    Sidebar,
+    useChatState,
+    QUICK_PROMPTS_ZH,
+    QUICK_PROMPTS_EN,
+};

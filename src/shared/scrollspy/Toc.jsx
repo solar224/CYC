@@ -1,6 +1,6 @@
 // D:\CYC\src\shared\scrollspy\Toc.jsx
 import React, { useState, useEffect, useRef } from "react";
-import { Paper, List, ListItemButton, ListItemText, Box } from "@mui/material";
+import { Paper, List, ListItemButton, ListItemText, Box, Tooltip } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { useScrollSpy } from "./ScrollSpyProvider";
 import { appTokens } from "../../theme/tokens";
@@ -161,71 +161,72 @@ export function Toc({
             >
                 <List dense disablePadding>
                     {sections.map((s) => (
-                        <ListItemButton
-                            key={s.id}
-                            data-toc-id={s.id}          // ⬅️ 用來 auto scroll 的定位
-                            disableRipple
-                            selected={s.id === currentId}
-                            onClick={() => {
-                                setLockedId(s.id);
-                                scrollTo(s.id);
-                            }}
-                            sx={(t) => ({
-                                position: "relative",
-                                pl: (s.level - 2) * 2 + 4,
-                                py: 0.5,
-                                my: 0.25,
-                                borderRadius: 10,
-                                transition:
-                                    "background-color .18s ease, transform .18s ease, color .18s ease",
-                                "&:hover": {
-                                    backgroundColor: alpha(t.palette.primary.main, 0.06),
-                                },
-                                "&::before": {
-                                    content: '""',
-                                    position: "absolute",
-                                    left: 12,
-                                    top: 6,
-                                    bottom: 6,
-                                    width: 3,
-                                    borderRadius: 2,
-                                    backgroundColor: "transparent",
-                                    transform: "scaleY(0.6)",
-                                    transition:
-                                        "transform .18s ease, background-color .18s ease, box-shadow .18s ease",
-                                },
-                                "&.Mui-focusVisible": {
-                                    outline: `2px solid ${alpha(t.palette.primary.main, 0.25)}`,
-                                    outlineOffset: 2,
-                                },
-                                "&.Mui-selected": {
-                                    backgroundColor: alpha(t.palette.primary.main, 0.08),
-                                    "&:hover": { backgroundColor: alpha(t.palette.primary.main, 0.12) },
-                                    "&::before": {
-                                        backgroundColor: t.palette.primary.main,
-                                        boxShadow:
-                                            t.palette.mode === "dark"
-                                                ? "0 0 0 1px rgba(255,255,255,.08)"
-                                                : "0 0 0 1px rgba(0,0,0,.04)",
-                                        transform: "scaleY(1)",
-                                    },
-                                    "& .MuiListItemText-primary": {
-                                        color: t.palette.text.primary,
-                                        fontWeight: 700,
-                                        letterSpacing: 0.1,
-                                    },
-                                },
-                            })}
-                        >
-                            <ListItemText
-                                primary={s.title}
-                                primaryTypographyProps={{
-                                    noWrap: true,
-                                    sx: { pr: 1 },
-                                    fontWeight: s.id === currentId ? 700 : 500,
+                        <Tooltip key={s.id} title={s.title} placement="left" enterDelay={350}>
+                            <ListItemButton
+                                data-toc-id={s.id}          // ⬅️ 用來 auto scroll 的定位
+                                disableRipple
+                                selected={s.id === currentId}
+                                onClick={() => {
+                                    setLockedId(s.id);
+                                    scrollTo(s.id);
                                 }}
-                            />
-                        </ListItemButton>
+                                sx={(t) => ({
+                                    position: "relative",
+                                    pl: (s.level - 2) * 2 + 4,
+                                    py: 0.5,
+                                    my: 0.25,
+                                    borderRadius: 10,
+                                    transition:
+                                        "background-color .18s ease, transform .18s ease, color .18s ease",
+                                    "&:hover": {
+                                        backgroundColor: alpha(t.palette.primary.main, 0.06),
+                                    },
+                                    "&::before": {
+                                        content: '""',
+                                        position: "absolute",
+                                        left: 12,
+                                        top: 6,
+                                        bottom: 6,
+                                        width: 3,
+                                        borderRadius: 2,
+                                        backgroundColor: "transparent",
+                                        transform: "scaleY(0.6)",
+                                        transition:
+                                            "transform .18s ease, background-color .18s ease, box-shadow .18s ease",
+                                    },
+                                    "&.Mui-focusVisible": {
+                                        outline: `2px solid ${alpha(t.palette.primary.main, 0.25)}`,
+                                        outlineOffset: 2,
+                                    },
+                                    "&.Mui-selected": {
+                                        backgroundColor: alpha(t.palette.primary.main, 0.08),
+                                        "&:hover": { backgroundColor: alpha(t.palette.primary.main, 0.12) },
+                                        "&::before": {
+                                            backgroundColor: t.palette.primary.main,
+                                            boxShadow:
+                                                t.palette.mode === "dark"
+                                                    ? "0 0 0 1px rgba(255,255,255,.08)"
+                                                    : "0 0 0 1px rgba(0,0,0,.04)",
+                                            transform: "scaleY(1)",
+                                        },
+                                        "& .MuiListItemText-primary": {
+                                            color: t.palette.text.primary,
+                                            fontWeight: 700,
+                                            letterSpacing: 0.1,
+                                        },
+                                    },
+                                })}
+                            >
+                                <ListItemText
+                                    primary={s.title}
+                                    primaryTypographyProps={{
+                                        noWrap: true,
+                                        sx: { pr: 1 },
+                                        fontWeight: s.id === currentId ? 700 : 500,
+                                    }}
+                                />
+                            </ListItemButton>
+                        </Tooltip>
                     ))}
                 </List>
             </Box>
