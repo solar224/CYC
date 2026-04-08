@@ -21,7 +21,6 @@ const slideFade = keyframes`
   }
 `;
 
-// ✅ 正確過濾 $duration 屬性
 const AnimatedText = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "duration",
 })(({ duration }) => ({

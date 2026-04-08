@@ -15,14 +15,12 @@ import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 
 const TypingEffect = ({ textList, speed, variant, repeat }) => {
-    const [textIndex, setTextIndex] = useState(0); // 追蹤目前顯示的文字
-    const [displayedText, setDisplayedText] = useState(""); // 當前顯示的字
-    const [index, setIndex] = useState(0); // 追蹤打字進度
+    const [textIndex, setTextIndex] = useState(0);
+    const [displayedText, setDisplayedText] = useState("");
+    const [index, setIndex] = useState(0);
     const [showCursor, setShowCursor] = useState(true);
-    const [completed, setCompleted] = useState(false); // 控制非循環模式下的結束狀態
-
+    const [completed, setCompleted] = useState(false);
     useEffect(() => {
-        // 控制光標閃爍
         const cursorInterval = setInterval(() => {
             setShowCursor((prev) => !prev);
         }, 500);
@@ -30,26 +28,24 @@ const TypingEffect = ({ textList, speed, variant, repeat }) => {
     }, []);
 
     useEffect(() => {
-        if (completed) return; // 如果不循環，打完一次就停住
+        if (completed) return;
 
         if (index < textList[textIndex].length) {
-            // 隨機打字速度 (speed ± 50ms)
             const randomSpeed = Math.floor(Math.random() * 50) + speed;
             const timeout = setTimeout(() => {
-                setDisplayedText((prev) => prev + textList[textIndex][index]); // 逐字顯示
+                setDisplayedText((prev) => prev + textList[textIndex][index]);
                 setIndex((prevIndex) => prevIndex + 1);
             }, randomSpeed);
             return () => clearTimeout(timeout);
         } else {
-            // 完成後等待 1.5 秒再切換下一個字
             const waitTimeout = setTimeout(() => {
                 if (repeat === 0 && textIndex === textList.length - 1) {
-                    setCompleted(true); // 停止變更
+                    setCompleted(true);
                     return;
                 }
-                setIndex(0); // 重置字元索引
-                setDisplayedText(""); // 清空顯示文字
-                setTextIndex((prev) => (prev + 1) % textList.length); // 切換下一個字
+                setIndex(0);
+                setDisplayedText("");
+                setTextIndex((prev) => (prev + 1) % textList.length);
             }, 1500);
             return () => clearTimeout(waitTimeout);
         }

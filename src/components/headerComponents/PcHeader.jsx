@@ -18,8 +18,7 @@ function ElevationScroll({ children }) {
 }
 
 const navItems = [
-    { label: "首頁", to: "/" },
-    { label: "關於我", to: "/about-me" },
+    { label: "關於我", to: "/" },
     { label: "聯絡", to: "/contact-me" },
     { label: "筆記", to: "/note" },
     { label: "小工具", to: "/tools" },

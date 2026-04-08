@@ -22,11 +22,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { LanguageContext } from "../../App";
 import Footer from "../Footer";
-import {
-    getNaturalTypingDelay,
-    getNaturalTypingChunkSize,
-    buildTypingCacheKey,
-} from "../../shared/chat/typingCadence";
 
 const RECENT_CONVERSATIONS_KEY = "home_recent_conversations_v1";
 const MAX_RECENT_CONVERSATIONS = 20;
@@ -282,57 +277,8 @@ function buildAnswer(question, language) {
 
 /* ── Shared Components ─────────────────────────────────── */
 
-const typedAssistantCache = new Set();
-
 function ChatBubble({ role, text }) {
     const isUser = role === "user";
-    const [displayedText, setDisplayedText] = useState(isUser ? text : "");
-    const [isTyping, setIsTyping] = useState(!isUser);
-
-    useEffect(() => {
-        if (isUser) {
-            setDisplayedText(text);
-            setIsTyping(false);
-            return;
-        }
-
-        if (!text) {
-            setDisplayedText("");
-            setIsTyping(false);
-            return;
-        }
-
-        const cacheKey = buildTypingCacheKey(text);
-        const isPersistedTyped = window.sessionStorage.getItem(cacheKey) === "1";
-
-        if (typedAssistantCache.has(text) || isPersistedTyped) {
-            setDisplayedText(text);
-            setIsTyping(false);
-            typedAssistantCache.add(text);
-            return;
-        }
-
-        let i = 0;
-        let timer = null;
-        setDisplayedText("");
-        setIsTyping(true);
-
-        const typeNext = () => {
-            i += getNaturalTypingChunkSize(text, i);
-            setDisplayedText(text.slice(0, i));
-            if (i >= text.length) {
-                typedAssistantCache.add(text);
-                window.sessionStorage.setItem(cacheKey, "1");
-                setIsTyping(false);
-                return;
-            }
-            timer = window.setTimeout(typeNext, getNaturalTypingDelay(text, i));
-        };
-
-        timer = window.setTimeout(typeNext, getNaturalTypingDelay(text, 0));
-
-        return () => window.clearTimeout(timer);
-    }, [isUser, text]);
 
     return (
         <Stack direction="row" spacing={1.25} justifyContent={isUser ? "flex-end" : "flex-start"}>
@@ -399,28 +345,8 @@ function ChatBubble({ role, text }) {
                             ),
                         }}
                     >
-                        {displayedText}
+                        {text}
                     </ReactMarkdown>
-
-                    {isTyping && (
-                        <Box
-                            component="span"
-                            sx={{
-                                display: "inline-block",
-                                width: 8,
-                                height: 16,
-                                ml: 0.35,
-                                verticalAlign: "text-bottom",
-                                borderRadius: 0.35,
-                                bgcolor: "text.secondary",
-                                animation: "typingCursor 0.85s ease-in-out infinite",
-                                "@keyframes typingCursor": {
-                                    "0%, 100%": { opacity: 0.2 },
-                                    "50%": { opacity: 0.95 },
-                                },
-                            }}
-                        />
-                    )}
                 </Box>
             )}
 

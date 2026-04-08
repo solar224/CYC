@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from "react-route
 import { createContext, useState, useEffect, useMemo } from "react";
 
 import Home from "./components/Home";
-import Aboutme from "./components/Aboutme";
 import Contactme from "./components/Contactme";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FloatingCircle from "./components/FloatingCircle";
+import FloatingChat from "./components/FloatingChat";
 import DynamicBackground from "./components/DynamicBackground";
 import NotesHome from "./components/Note";
 import NoteDetail from "./components/NoteDetail";
@@ -28,13 +28,13 @@ export const LanguageContext = createContext();
 
 function AppFooter() {
   const location = useLocation();
-  if (location.pathname === "/" || location.pathname.startsWith("/tools/")) return null;
+  if (location.pathname.startsWith("/tools/")) return null;
   return <Footer />;
 }
 
 function AppFloatingCircle() {
   const location = useLocation();
-  if (location.pathname === "/" || location.pathname.startsWith("/tools/")) return null;
+  if (location.pathname.startsWith("/tools/")) return null;
   return <FloatingCircle />;
 }
 
@@ -105,7 +105,6 @@ export default function App() {
         mode: theme === "dark" ? "dark" : "light",
         // primary: { main: "#4F46E5" },
       },
-      // 常用的全局細節（選擇性）
       components: {
         MuiCssBaseline: {
           styleOverrides: {
@@ -122,7 +121,6 @@ export default function App() {
         fontFamily: appTokens.typography.family,
       },
     });
-    // 讓字體在不同斷點更順眼（可選）
     t = responsiveFontSizes(t);
     return t;
   }, [theme]);
@@ -141,7 +139,6 @@ export default function App() {
                 <AppHeader />
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/about-me" element={<Aboutme />} />
                   <Route path="/note" element={<Note />} />
                   <Route path="/contact-me" element={<Contactme />} />
                   <Route path="/tools" element={<Tools />} />
@@ -149,6 +146,7 @@ export default function App() {
                   <Route path="/notes" element={<NotesHome />} />
                   <Route path="/notes/:slug" element={<NoteDetail />} />
                 </Routes>
+                <FloatingChat />
                 <AppFloatingCircle />
                 <AppFooter />
               </Router>
