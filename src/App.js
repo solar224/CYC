@@ -14,7 +14,7 @@ import NotesHome from "./components/Note";
 import NoteDetail from "./components/NoteDetail";
 import Note from "./components/Note";
 import Tools from "./components/Tools";
-import SketchCanvas from "./components/sketchCanvas/SketchCanvas";
+import SketchCanvas from "./project/RoughFrame/SketchCanvas";
 
 import { SnackbarProvider } from "notistack";
 

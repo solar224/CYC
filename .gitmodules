@@ -1,0 +1,3 @@
+[submodule "src/project"]
+	path = src/project
+	url = https://github.com/solar224/project.git
