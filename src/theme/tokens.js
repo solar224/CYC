@@ -17,6 +17,10 @@ const core = {
 
 const semanticByMode = {
 	light: {
+		surface: {
+			canvas: core.gray[50],
+			paper: core.white,
+		},
 		header: {
 			background: core.gray[50],
 			border: "rgba(15,23,42,0.12)",
@@ -34,6 +38,10 @@ const semanticByMode = {
 		},
 	},
 	dark: {
+		surface: {
+			canvas: core.gray[900],
+			paper: "#1e1e1e",
+		},
 		header: {
 			background: core.gray[900],
 			border: "rgba(255,255,255,0.08)",
@@ -123,6 +131,10 @@ export const appTokens = {
 		accent: {
 			up: "var(--app-color-action-up)",
 			setting: "var(--app-color-action-settings)",
+		},
+		surface: {
+			canvas: "var(--app-color-surface-canvas)",
+			paper: "var(--app-color-surface-paper)",
 		},
 	},
 	radius: {

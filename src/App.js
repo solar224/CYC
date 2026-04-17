@@ -11,8 +11,14 @@ import { ThemeContext } from "./context/ThemeContext";
 import { LanguageContext } from "./context/LanguageContext";
 import { ENV } from "./config/env";
 import { usePersistentPreference } from "./hooks/useAppInitialization";
+import useRouteDocumentTitle from "./hooks/useRouteDocumentTitle";
 import AppRoutes from "./routes/AppRoutes";
 import { createAppMuiTheme } from "./theme/muiTheme";
+
+function RoutedApp({ theme }) {
+  useRouteDocumentTitle();
+  return <AppRoutes theme={theme} />;
+}
 
 export default function App() {
   const [theme, setTheme] = usePersistentPreference("theme", "dark");
@@ -56,7 +62,7 @@ export default function App() {
               }}
             >
               <Router basename={routerBasename}>
-                <AppRoutes theme={theme} />
+                <RoutedApp theme={theme} />
               </Router>
             </Box>
           </ThemeProvider>

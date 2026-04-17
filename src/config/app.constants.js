@@ -1,5 +1,12 @@
 import { TOOLS_ROUTE_PATHS } from "./tools.constants";
 
+export const APP_ROUTE_KEYS = {
+  HOME: "home",
+  NOTE: "note",
+  CONTACT: "contact",
+  TOOLS: "tools",
+};
+
 export const APP_ROUTE_PATHS = {
   HOME: "/",
   NOTE: "/note",
@@ -29,19 +36,19 @@ export const APP_SEGMENT_LABEL_KEYS = {
 
 export const MAIN_NAV_ITEMS = [
   {
-    key: "home",
+    key: APP_ROUTE_KEYS.HOME,
     to: APP_ROUTE_PATHS.HOME,
   },
   {
-    key: "contact",
+    key: APP_ROUTE_KEYS.CONTACT,
     to: APP_ROUTE_PATHS.CONTACT,
   },
   {
-    key: "note",
+    key: APP_ROUTE_KEYS.NOTE,
     to: APP_ROUTE_PATHS.NOTE,
   },
   {
-    key: "tools",
+    key: APP_ROUTE_KEYS.TOOLS,
     to: TOOLS_ROUTE_PATHS.ROOT,
   },
 ];

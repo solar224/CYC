@@ -11,8 +11,8 @@ export function createAppMuiTheme(mode) {
     palette: {
       mode,
       background: {
-        default: mode === "dark" ? "#121212" : "#f8fafc",
-        paper: mode === "dark" ? "#1e1e1e" : "#ffffff",
+        default: semantic.surface.canvas,
+        paper: semantic.surface.paper,
       },
       text: {
         primary: semantic.header.textStrong,
@@ -26,6 +26,8 @@ export function createAppMuiTheme(mode) {
             "--app-header-mobile": `${appTokens.layout.headerHeight.mobile}px`,
             "--app-header-desktop": `${appTokens.layout.headerHeight.desktop}px`,
             "--app-font-family": appTokens.typography.family,
+            "--app-color-surface-canvas": semantic.surface.canvas,
+            "--app-color-surface-paper": semantic.surface.paper,
             "--app-color-header-bg": semantic.header.background,
             "--app-color-header-border": semantic.header.border,
             "--app-color-header-hover": semantic.header.hover,
@@ -41,6 +43,15 @@ export function createAppMuiTheme(mode) {
             "--app-space-floating": `${appTokens.layout.floating.size}px`,
             "--app-motion-fast": appTokens.motion.fast,
             "--app-motion-normal": appTokens.motion.normal,
+          },
+          body: {
+            margin: 0,
+            WebkitFontSmoothing: "antialiased",
+            MozOsxFontSmoothing: "grayscale",
+            letterSpacing: "0.2px",
+          },
+          code: {
+            fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace',
           },
         },
       },
