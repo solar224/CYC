@@ -18,6 +18,7 @@ function ElevationScroll({ children }) {
     return React.cloneElement(children, {
         sx: {
             backgroundColor: appTokens.color.header.bgDark,
+            color: appTokens.color.header.textStrong,
             opacity: trigger ? 0.92 : 1,
             backdropFilter: "saturate(180%) blur(8px)",
             borderBottom: `1px solid ${appTokens.color.header.border}`,
@@ -31,7 +32,7 @@ const PhoneHeader = () => {
 
     return (
         <ElevationScroll>
-            <AppBar position="fixed">
+            <AppBar position="fixed" color="transparent" enableColorOnDark>
                 <Toolbar sx={{ minHeight: appTokens.layout.headerHeight.mobile, px: 1 }}>
                     <Box
                         sx={{

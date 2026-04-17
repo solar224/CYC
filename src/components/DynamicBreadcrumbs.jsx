@@ -66,7 +66,7 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                 <NavigateNextIcon
                     fontSize="small"
                     sx={{
-                        color: "rgba(255,255,255,0.28)",
+                        color: appTokens.color.header.textSubtle,
                         fontSize: appTokens.typography.size.md,
                     }}
                 />
@@ -113,8 +113,8 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                                 textDecoration: "none",
                                 transition: "all .18s ease",
                                 "&:hover": {
-                                    color: "rgba(255,255,255,0.92)",
-                                    backgroundColor: "rgba(255,255,255,0.05)",
+                                    color: appTokens.color.header.textStrong,
+                                    backgroundColor: appTokens.color.header.hover,
                                     textDecoration: "none",
                                 },
                             }}
@@ -141,8 +141,8 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                             px: 1,
                             py: 0.5,
                             borderRadius: 1,
-                            backgroundColor: "rgba(255,255,255,0.03)",
-                            border: "1px solid rgba(255,255,255,0.08)",
+                            backgroundColor: appTokens.color.header.hover,
+                            border: `1px solid ${appTokens.color.header.border}`,
                         }}
                     >
                         {item.label}

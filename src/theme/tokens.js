@@ -1,6 +1,12 @@
 const core = {
 	gray: {
+		50: "#f8fafc",
+		100: "#f1f5f9",
+		700: "#334155",
 		900: "#121212",
+	},
+	ink: {
+		900: "#111827",
 	},
 	white: "#ffffff",
 	accent: {
@@ -9,23 +15,46 @@ const core = {
 	},
 };
 
-const semantic = {
-	header: {
-		background: core.gray[900],
-		border: "rgba(255,255,255,0.08)",
-		hover: "rgba(255,255,255,0.04)",
-		textSubtle: "rgba(255,255,255,0.66)",
-		textStrong: "rgba(255,255,255,0.95)",
+const semanticByMode = {
+	light: {
+		header: {
+			background: core.gray[50],
+			border: "rgba(15,23,42,0.12)",
+			hover: "rgba(15,23,42,0.06)",
+			textSubtle: "rgba(15,23,42,0.72)",
+			textStrong: "rgba(15,23,42,0.96)",
+		},
+		footer: {
+			background: core.gray[100],
+			foreground: core.ink[900],
+		},
+		action: {
+			scrollToTop: core.accent.orange,
+			settings: core.accent.green,
+		},
 	},
-	footer: {
-		background: "#222222",
-		foreground: core.white,
-	},
-	action: {
-		scrollToTop: core.accent.orange,
-		settings: core.accent.green,
+	dark: {
+		header: {
+			background: core.gray[900],
+			border: "rgba(255,255,255,0.08)",
+			hover: "rgba(255,255,255,0.04)",
+			textSubtle: "rgba(255,255,255,0.66)",
+			textStrong: "rgba(255,255,255,0.95)",
+		},
+		footer: {
+			background: "#222222",
+			foreground: core.white,
+		},
+		action: {
+			scrollToTop: core.accent.orange,
+			settings: core.accent.green,
+		},
 	},
 };
+
+export function resolveSemanticTokens(mode = "dark") {
+	return semanticByMode[mode] || semanticByMode.dark;
+}
 
 export const appTokens = {
 	breakpoints: {
@@ -76,23 +105,24 @@ export const appTokens = {
 		},
 	},
 	core,
-	semantic,
-	// Backward-compatible aliases for current components.
+	semanticByMode,
+	semantic: resolveSemanticTokens("dark"),
+	// Backward-compatible aliases now read from theme-driven CSS variables.
 	color: {
 		header: {
-			bgDark: semantic.header.background,
-			border: semantic.header.border,
-			hover: semantic.header.hover,
-			textSubtle: semantic.header.textSubtle,
-			textStrong: semantic.header.textStrong,
+			bgDark: "var(--app-color-header-bg)",
+			border: "var(--app-color-header-border)",
+			hover: "var(--app-color-header-hover)",
+			textSubtle: "var(--app-color-header-text-subtle)",
+			textStrong: "var(--app-color-header-text-strong)",
 		},
 		footer: {
-			bg: semantic.footer.background,
-			fg: semantic.footer.foreground,
+			bg: "var(--app-color-footer-bg)",
+			fg: "var(--app-color-footer-fg)",
 		},
 		accent: {
-			up: semantic.action.scrollToTop,
-			setting: semantic.action.settings,
+			up: "var(--app-color-action-up)",
+			setting: "var(--app-color-action-settings)",
 		},
 	},
 	radius: {
