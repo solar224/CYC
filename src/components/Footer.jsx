@@ -1,5 +1,6 @@
 import React from "react";
 import { useContext } from "react";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -16,17 +17,19 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { ThemeContext } from "../context/ThemeContext";
 import { LanguageContext } from "../context/LanguageContext";
-import { appTokens } from "../theme/tokens";
+import { resolveSemanticTokens } from "../theme/tokens";
 const Footer = ({ compact = false, showSettings = false }) => {
     const { theme, toggleTheme } = useContext(ThemeContext);
     const { language, toggleLanguage } = useContext(LanguageContext);
+    const muiTheme = useTheme();
+    const semantic = resolveSemanticTokens(muiTheme.palette.mode);
 
     return (
         <Box
             component="footer"
             sx={{
-                backgroundColor: compact ? "transparent" : appTokens.color.footer.bg,
-                color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                backgroundColor: compact ? "transparent" : semantic.footer.background,
+                color: compact ? "text.secondary" : semantic.footer.foreground,
                 py: compact ? 0 : 3,
                 textAlign: compact ? "left" : "center",
                 mt: compact ? 0 : 2,
@@ -38,7 +41,7 @@ const Footer = ({ compact = false, showSettings = false }) => {
                         <IconButton
                             onClick={toggleLanguage}
                             sx={{
-                                color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                                color: compact ? "text.secondary" : semantic.footer.foreground,
                                 p: compact ? 0.5 : 1,
                             }}
                         >
@@ -49,7 +52,7 @@ const Footer = ({ compact = false, showSettings = false }) => {
                         <IconButton
                             onClick={toggleTheme}
                             sx={{
-                                color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                                color: compact ? "text.secondary" : semantic.footer.foreground,
                                 p: compact ? 0.5 : 1,
                             }}
                         >
@@ -76,7 +79,7 @@ const Footer = ({ compact = false, showSettings = false }) => {
                         target="_blank"
                         rel="noopener"
                         sx={{
-                            color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                            color: compact ? "text.secondary" : semantic.footer.foreground,
                             "&:hover": {
                                 color: "#61dafb",
                             },
@@ -92,7 +95,7 @@ const Footer = ({ compact = false, showSettings = false }) => {
                         target="_blank"
                         rel="noopener"
                         sx={{
-                            color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                            color: compact ? "text.secondary" : semantic.footer.foreground,
                             "&:hover": {
                                 color: "#0e76a8",
                             },
@@ -108,7 +111,7 @@ const Footer = ({ compact = false, showSettings = false }) => {
                         target="_blank"
                         rel="noopener"
                         sx={{
-                            color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                            color: compact ? "text.secondary" : semantic.footer.foreground,
                             "&:hover": {
                                 color: "#db4437",
                             },
@@ -124,7 +127,7 @@ const Footer = ({ compact = false, showSettings = false }) => {
                         target="_blank"
                         rel="noopener"
                         sx={{
-                            color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                            color: compact ? "text.secondary" : semantic.footer.foreground,
                             "&:hover": {
                                 color: "#00FF00",
                             },

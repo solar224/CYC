@@ -1,9 +1,10 @@
 import React, { useContext, useMemo } from "react";
 import { Breadcrumbs, Link, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { NOTES } from "../data/notes";
-import { appTokens } from "../theme/tokens";
+import { appTokens, resolveSemanticTokens } from "../theme/tokens";
 import { LanguageContext } from "../context/LanguageContext";
 import { APP_ROUTE_META, APP_ROUTE_PATHS, APP_SEGMENT_LABEL_KEYS } from "../config/app.constants";
 import { NOTES_SEGMENT_LABEL_KEYS } from "../config/notes.constants";
@@ -18,6 +19,8 @@ const toFriendlyName = (value) => {
 export default function DynamicBreadcrumbs({ variant = "desktop" }) {
     const location = useLocation();
     const { language } = useContext(LanguageContext);
+    const muiTheme = useTheme();
+    const semantic = useMemo(() => resolveSemanticTokens(muiTheme.palette.mode), [muiTheme.palette.mode]);
     const segmentLabelKeys = useMemo(
         () => ({
             ...APP_SEGMENT_LABEL_KEYS,
@@ -66,7 +69,7 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                 <NavigateNextIcon
                     fontSize="small"
                     sx={{
-                        color: appTokens.color.header.textSubtle,
+                        color: semantic.header.textSubtle,
                         fontSize: appTokens.typography.size.md,
                     }}
                 />
@@ -106,15 +109,15 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                                         ? appTokens.typography.size.md
                                         : appTokens.typography.size.lg,
                                 letterSpacing: 0,
-                                color: appTokens.color.header.textSubtle,
+                                color: semantic.header.textSubtle,
                                 px: 1,
                                 py: 0.5,
                                 borderRadius: 1,
                                 textDecoration: "none",
                                 transition: "all .18s ease",
                                 "&:hover": {
-                                    color: appTokens.color.header.textStrong,
-                                    backgroundColor: appTokens.color.header.hover,
+                                    color: semantic.header.textStrong,
+                                    backgroundColor: semantic.header.hover,
                                     textDecoration: "none",
                                 },
                             }}
@@ -137,12 +140,12 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                                 variant === "mobile"
                                     ? appTokens.typography.size.md
                                     : appTokens.typography.size.lg,
-                            color: appTokens.color.header.textStrong,
+                            color: semantic.header.textStrong,
                             px: 1,
                             py: 0.5,
                             borderRadius: 1,
-                            backgroundColor: appTokens.color.header.hover,
-                            border: `1px solid ${appTokens.color.header.border}`,
+                            backgroundColor: semantic.header.hover,
+                            border: `1px solid ${semantic.header.border}`,
                         }}
                     >
                         {item.label}

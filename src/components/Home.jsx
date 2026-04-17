@@ -2,6 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import { PcHome } from "./homeComponents/PcHome";
 import { PhoneHome } from "./homeComponents/PhoneHome";
+import { appTokens } from "../theme/tokens";
 
 function Home({ layoutKind = "desktop" }) {
     const isMobileLayout = layoutKind !== "desktop";
@@ -11,8 +12,8 @@ function Home({ layoutKind = "desktop" }) {
             sx={{
                 width: "100%",
                 minHeight: {
-                    xs: "calc(100dvh - var(--app-header-mobile, 56px))",
-                    md: "calc(100dvh - var(--app-header-desktop, 64px))",
+                    xs: `calc(100dvh - ${appTokens.layout.headerHeight.mobile}px)`,
+                    md: `calc(100dvh - ${appTokens.layout.headerHeight.desktop}px)`,
                 },
                 display: "flex",
                 flexDirection: "column",

@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
+import { useTheme } from "@mui/material/styles";
 import { AppBar, Toolbar, Container, Tabs, Tab, Box } from "@mui/material";
 import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
 import { APP_ROUTE_PATHS, MAIN_NAV_ITEMS } from "../../config/app.constants";
@@ -8,16 +9,17 @@ import { NOTES_ROUTE_PATHS } from "../../config/notes.constants";
 import { TOOLS_ROUTE_PATHS } from "../../config/tools.constants";
 import { LanguageContext } from "../../context/LanguageContext";
 import { getNavLabel } from "../../i18n/navigation";
-import { appTokens } from "../../theme/tokens";
-function ElevationScroll({ children }) {
+import { appTokens, resolveSemanticTokens } from "../../theme/tokens";
+
+function ElevationScroll({ children, semantic }) {
     const trigger = useScrollTrigger({ threshold: 8 });
     return React.cloneElement(children, {
         sx: {
-            backgroundColor: appTokens.color.header.bgDark,
-            color: appTokens.color.header.textStrong,
+            backgroundColor: semantic.header.background,
+            color: semantic.header.textStrong,
             opacity: trigger ? 0.92 : 1,
             backdropFilter: "saturate(180%) blur(8px)",
-            borderBottom: `1px solid ${appTokens.color.header.border}`,
+            borderBottom: `1px solid ${semantic.header.border}`,
             transition: "opacity .2s ease, background-color .2s ease",
         },
     });
@@ -26,6 +28,8 @@ function ElevationScroll({ children }) {
 const PcHeader = () => {
     const location = useLocation();
     const { language } = useContext(LanguageContext);
+    const muiTheme = useTheme();
+    const semantic = useMemo(() => resolveSemanticTokens(muiTheme.palette.mode), [muiTheme.palette.mode]);
 
     const current = useMemo(() => {
         const p = location.pathname;
@@ -39,7 +43,7 @@ const PcHeader = () => {
     }, [location.pathname]);
 
     return (
-        <ElevationScroll>
+        <ElevationScroll semantic={semantic}>
             <AppBar position="fixed" color="transparent" enableColorOnDark>
                 <Container maxWidth="lg">
                     <Toolbar disableGutters sx={{ minHeight: appTokens.layout.headerHeight.desktop }}>
@@ -78,7 +82,7 @@ const PcHeader = () => {
                                         "&.Mui-selected": { opacity: 1 },
                                         "&:hover": {
                                             opacity: 1,
-                                            backgroundColor: appTokens.color.header.hover,
+                                            backgroundColor: semantic.header.hover,
                                         },
                                         borderRadius: 1.5,
                                         px: 1.5,

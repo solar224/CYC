@@ -115,28 +115,6 @@ export const appTokens = {
 	core,
 	semanticByMode,
 	semantic: resolveSemanticTokens("dark"),
-	// Backward-compatible aliases now read from theme-driven CSS variables.
-	color: {
-		header: {
-			bgDark: "var(--app-color-header-bg)",
-			border: "var(--app-color-header-border)",
-			hover: "var(--app-color-header-hover)",
-			textSubtle: "var(--app-color-header-text-subtle)",
-			textStrong: "var(--app-color-header-text-strong)",
-		},
-		footer: {
-			bg: "var(--app-color-footer-bg)",
-			fg: "var(--app-color-footer-fg)",
-		},
-		accent: {
-			up: "var(--app-color-action-up)",
-			setting: "var(--app-color-action-settings)",
-		},
-		surface: {
-			canvas: "var(--app-color-surface-canvas)",
-			paper: "var(--app-color-surface-paper)",
-		},
-	},
 	radius: {
 		sm: 8,
 		md: 12,

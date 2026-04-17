@@ -21,8 +21,8 @@ function RoutedApp({ theme }) {
 }
 
 export default function App() {
-  const [theme, setTheme] = usePersistentPreference("theme", "dark");
-  const [language, setLanguage] = usePersistentPreference("language", "zh");
+  const [theme, setTheme] = usePersistentPreference("theme", "dark", ["light", "dark"]);
+  const [language, setLanguage] = usePersistentPreference("language", "zh", ["zh", "en"]);
 
   const toggleTheme = () => setTheme(prev => (prev === "light" ? "dark" : "light"));
   const toggleLanguage = () => setLanguage(prev => (prev === "zh" ? "en" : "zh"));

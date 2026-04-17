@@ -6,6 +6,7 @@ import DynamicBackground from "../../components/DynamicBackground";
 import PhoneHeader from "../../components/headerComponents/PhoneHeader";
 import PcHeader from "../../components/headerComponents/PcHeader";
 import ResponsiveLayout from "../../components/layout/ResponsiveLayout";
+import { appTokens } from "../../theme/tokens";
 
 function AppHeader() {
     return <ResponsiveLayout mobile={<PhoneHeader />} desktop={<PcHeader />} />;
@@ -20,8 +21,8 @@ export default function DefaultLayout({ theme }) {
                 sx={{
                     minHeight: "100vh",
                     pt: {
-                        xs: "var(--app-header-mobile)",
-                        lg: "var(--app-header-desktop)",
+                        xs: `${appTokens.layout.headerHeight.mobile}px`,
+                        lg: `${appTokens.layout.headerHeight.desktop}px`,
                     },
                 }}
             >

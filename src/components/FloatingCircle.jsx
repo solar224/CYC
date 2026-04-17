@@ -20,7 +20,7 @@ import { useSnackbar } from "notistack";
 import { useTheme as useMuiTheme } from "@mui/material/styles";
 import { ThemeContext } from "../context/ThemeContext";
 import { LanguageContext } from "../context/LanguageContext";
-import { appTokens } from "../theme/tokens";
+import { appTokens, resolveSemanticTokens } from "../theme/tokens";
 import { getAppDialogSx } from "../shared/dialog/dialogStyles";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -40,6 +40,7 @@ export default function FloatingCircleNoLag() {
     const { theme, toggleTheme } = useContext(ThemeContext);
     const { language, toggleLanguage } = useContext(LanguageContext);
     const muiTheme = useMuiTheme();
+    const semantic = resolveSemanticTokens(muiTheme.palette.mode);
     const [loclang, setLoclang] = useState(language);
     const [loctheme, setLocTheme] = useState(theme);
     const dialogSx = getAppDialogSx(theme, muiTheme);
@@ -112,7 +113,7 @@ export default function FloatingCircleNoLag() {
                             height: `${appTokens.layout.floating.size}px`,
                             borderRadius: "35%",
                             marginBottom: `${appTokens.layout.floating.gap}px`,
-                            backgroundColor: appTokens.color.accent.up,
+                            backgroundColor: semantic.action.scrollToTop,
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -140,7 +141,7 @@ export default function FloatingCircleNoLag() {
                             width: `${appTokens.layout.floating.size}px`,
                             height: `${appTokens.layout.floating.size}px`,
                             borderRadius: "35%",
-                            backgroundColor: appTokens.color.accent.setting,
+                            backgroundColor: semantic.action.settings,
                             display: "flex",
                             alignItems: "center",
                             zIndex: '1',
