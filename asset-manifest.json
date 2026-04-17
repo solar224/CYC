@@ -1,17 +1,14 @@
 {
   "files": {
-    "main.css": "/CYC/static/css/main.83fb1f41.css",
-    "main.js": "/CYC/static/js/main.3aea16cb.js",
+    "main.js": "/CYC/static/js/main.980c30fb.js",
     "static/js/36.4298c0b3.chunk.js": "/CYC/static/js/36.4298c0b3.chunk.js",
     "static/js/488.97278c65.chunk.js": "/CYC/static/js/488.97278c65.chunk.js",
     "static/media/114-csie-grad-admission.md": "/CYC/static/media/114-csie-grad-admission.b320a2c3c16cb584f116.md",
     "index.html": "/CYC/index.html",
-    "main.83fb1f41.css.map": "/CYC/static/css/main.83fb1f41.css.map",
-    "main.3aea16cb.js.map": "/CYC/static/js/main.3aea16cb.js.map",
+    "main.980c30fb.js.map": "/CYC/static/js/main.980c30fb.js.map",
     "488.97278c65.chunk.js.map": "/CYC/static/js/488.97278c65.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.83fb1f41.css",
-    "static/js/main.3aea16cb.js"
+    "static/js/main.980c30fb.js"
   ]
 }
