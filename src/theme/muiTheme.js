@@ -15,6 +15,7 @@ export function createAppMuiTheme(mode) {
           ":root": {
             "--app-header-mobile": `${appTokens.layout.headerHeight.mobile}px`,
             "--app-header-desktop": `${appTokens.layout.headerHeight.desktop}px`,
+            "--app-font-family": appTokens.typography.family,
           },
         },
       },

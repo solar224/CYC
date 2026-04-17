@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
 import { APP_ROUTES } from "../../config/constants";
+import { getNavLabel } from "../../i18n/navigation";
 import { appTokens } from "../../theme/tokens";
 
 function ElevationScroll({ children }) {
@@ -41,7 +42,7 @@ const PhoneHeader = () => {
                             px: 0.5,
                         }}
                     >
-                        <Box aria-label={language === "zh" ? "返回首頁" : "Go Home"} sx={{ minWidth: 0 }}>
+                        <Box aria-label={getNavLabel("homeAria", language)} sx={{ minWidth: 0 }}>
                             <DynamicBreadcrumbs variant="mobile" />
                         </Box>
                     </Box>
@@ -59,7 +60,7 @@ const PhoneHeader = () => {
                             whiteSpace: "nowrap",
                         }}
                     >
-                        {language === "zh" ? "小工具" : "Tools"}
+                        {getNavLabel("tools", language)}
                     </Button>
                 </Toolbar>
             </AppBar>

@@ -1,9 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { AppBar, Toolbar, Container, Tabs, Tab, Box } from "@mui/material";
 import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
 import { APP_ROUTES, MAIN_NAV_ITEMS } from "../../config/constants";
+import { LanguageContext } from "../../context/LanguageContext";
+import { getNavLabel } from "../../i18n/navigation";
 import { appTokens } from "../../theme/tokens";
 function ElevationScroll({ children }) {
     const trigger = useScrollTrigger({ threshold: 8 });
@@ -20,6 +22,7 @@ function ElevationScroll({ children }) {
 
 const PcHeader = () => {
     const location = useLocation();
+    const { language } = useContext(LanguageContext);
 
     const current = useMemo(() => {
         const p = location.pathname;
@@ -61,7 +64,7 @@ const PcHeader = () => {
                                     key={item.to}
                                     value={item.to}
                                     disableRipple
-                                    label={item.labelZh}
+                                    label={getNavLabel(item.key, language)}
                                     component={NavLink}
                                     to={item.to}
                                     sx={{

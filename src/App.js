@@ -12,7 +12,7 @@ import { LanguageContext } from "./context/LanguageContext";
 import { ENV } from "./config/env";
 import { usePersistentPreference } from "./hooks/useAppInitialization";
 import AppRoutes from "./routes/AppRoutes";
-import { createAppMuiTheme } from "./styles/theme/muiTheme";
+import { createAppMuiTheme } from "./theme/muiTheme";
 
 import "./components/css/App.css";
 

@@ -29,25 +29,17 @@ export const MAIN_NAV_ITEMS = [
   {
     key: "home",
     to: APP_ROUTE_PATHS.HOME,
-    labelZh: "關於我",
-    labelEn: "About",
   },
   {
     key: "contact",
     to: APP_ROUTE_PATHS.CONTACT,
-    labelZh: "聯絡",
-    labelEn: "Contact",
   },
   {
     key: "note",
     to: APP_ROUTE_PATHS.NOTE,
-    labelZh: "筆記",
-    labelEn: "Notes",
   },
   {
     key: "tools",
     to: "/tools",
-    labelZh: "小工具",
-    labelEn: "Tools",
   },
 ];
