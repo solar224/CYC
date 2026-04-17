@@ -1,19 +1,13 @@
-import Tools from "../../components/Tools";
-import { TOOLS_ROUTE_PATHS, TOOLS_ROUTE_SEGMENTS } from "../../config/tools.constants";
-import SketchCanvas from "../../project/RoughFrame/SketchCanvas";
+import { TOOLS_ROUTE_PATHS } from "../../config/tools.constants";
+import SketchCanvas from "../../side-tool/RoughFrame/SketchCanvas";
 
 export const toolsDomainRoute = {
-    id: "tools.root",
-    path: TOOLS_ROUTE_PATHS.ROOT,
+    id: "tools.roughframe.root",
+    path: TOOLS_ROUTE_PATHS.ROUGHFRAME,
     children: [
         {
-            id: "tools.index",
-            index: true,
-            element: <Tools />,
-        },
-        {
             id: "tools.roughframe",
-            path: TOOLS_ROUTE_SEGMENTS.ROUGHFRAME,
+            index: true,
             element: <SketchCanvas />,
         },
     ],

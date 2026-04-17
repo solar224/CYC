@@ -60,7 +60,7 @@ const PhoneHeader = () => {
                             fontWeight: 600,
                             minWidth: "auto",
                             px: 1.2,
-                            borderRadius: 1.25,
+                            borderRadius: appTokens.radiusRoles.button,
                             whiteSpace: "nowrap",
                         }}
                     >

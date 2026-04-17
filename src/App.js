@@ -12,11 +12,13 @@ import { LanguageContext } from "./context/LanguageContext";
 import { ENV } from "./config/env";
 import { usePersistentPreference } from "./hooks/useAppInitialization";
 import useRouteDocumentTitle from "./hooks/useRouteDocumentTitle";
+import useScrollNavigationBehavior from "./hooks/useScrollNavigationBehavior";
 import AppRoutes from "./routes/AppRoutes";
 import { createAppMuiTheme } from "./theme/muiTheme";
 
 function RoutedApp({ theme }) {
   useRouteDocumentTitle();
+  useScrollNavigationBehavior();
   return <AppRoutes theme={theme} />;
 }
 

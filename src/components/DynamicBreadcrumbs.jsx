@@ -21,6 +21,7 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
     const { language } = useContext(LanguageContext);
     const muiTheme = useTheme();
     const semantic = useMemo(() => resolveSemanticTokens(muiTheme.palette.mode), [muiTheme.palette.mode]);
+    const typography = appTokens.typography.roles;
     const segmentLabelKeys = useMemo(
         () => ({
             ...APP_SEGMENT_LABEL_KEYS,
@@ -70,7 +71,7 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                     fontSize="small"
                     sx={{
                         color: semantic.header.textSubtle,
-                        fontSize: appTokens.typography.size.md,
+                        fontSize: typography.body.fontSize,
                     }}
                 />
             }
@@ -106,13 +107,13 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                                 fontWeight: appTokens.typography.weight.medium,
                                 fontSize:
                                     variant === "mobile"
-                                        ? appTokens.typography.size.md
-                                        : appTokens.typography.size.lg,
+                                        ? typography.body.fontSize
+                                        : typography.subheading.fontSize,
                                 letterSpacing: 0,
                                 color: semantic.header.textSubtle,
                                 px: 1,
                                 py: 0.5,
-                                borderRadius: 1,
+                                borderRadius: appTokens.radiusRoles.chip,
                                 textDecoration: "none",
                                 transition: "all .18s ease",
                                 "&:hover": {
@@ -138,12 +139,12 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
                             fontWeight: appTokens.typography.weight.semibold,
                             fontSize:
                                 variant === "mobile"
-                                    ? appTokens.typography.size.md
-                                    : appTokens.typography.size.lg,
+                                    ? typography.body.fontSize
+                                    : typography.subheading.fontSize,
                             color: semantic.header.textStrong,
                             px: 1,
                             py: 0.5,
-                            borderRadius: 1,
+                            borderRadius: appTokens.radiusRoles.chip,
                             backgroundColor: semantic.header.hover,
                             border: `1px solid ${semantic.header.border}`,
                         }}

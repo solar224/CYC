@@ -7,23 +7,12 @@ import { alpha } from "@mui/material/styles";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { Link as RouterLink } from "react-router-dom";
-import { TOOLS_ROUTE_PATHS } from "../config/tools.constants";
 import { ScrollSpyProvider, SpySection, Toc } from "../shared/scrollspy";
 import { LanguageContext } from "../context/LanguageContext";
 import { t } from "../i18n/messages";
-import { ENV } from "../config/env";
 import { appTokens } from "../theme/tokens";
 
-const TOOL_ITEMS = [
-    {
-        id: "rough-frame",
-        title: "RoughFrame",
-        descKey: "tools.roughframe.desc",
-        cover: `${ENV.PUBLIC_URL}/RoughFrame.svg`,
-        tags: ["whiteboard", "drawing", "SVG"],
-        to: TOOLS_ROUTE_PATHS.ROUGHFRAME,
-    },
-];
+const PROJECT_ITEMS = [];
 
 const SUMMARY_MAX = 80;
 const truncate = (s = "", n = SUMMARY_MAX) => {
@@ -31,27 +20,18 @@ const truncate = (s = "", n = SUMMARY_MAX) => {
     return arr.length > n ? arr.slice(0, n).join("") + "…" : s;
 };
 
-export default function Tools() {
+const Project = () => {
     const { language } = useContext(LanguageContext);
     const [q, setQ] = useState("");
 
-    const localizedToolItems = useMemo(
-        () =>
-            TOOL_ITEMS.map((item) => ({
-                ...item,
-                desc: item.descKey ? t(item.descKey, language) : item.desc,
-            })),
-        [language]
-    );
-
     const filtered = useMemo(() => {
-        if (!q.trim()) return localizedToolItems;
+        if (!q.trim()) return PROJECT_ITEMS;
         const kw = q.trim().toLowerCase();
-        return localizedToolItems.filter((item) => {
-            const hay = `${item.title} ${item.desc} ${(item.tags || []).join(" ")}`.toLowerCase();
+        return PROJECT_ITEMS.filter((item) => {
+            const hay = `${item.title || ""} ${item.desc || ""} ${(item.tags || []).join(" ")}`.toLowerCase();
             return hay.includes(kw);
         });
-    }, [localizedToolItems, q]);
+    }, [q]);
 
     return (
         <Box
@@ -64,7 +44,7 @@ export default function Tools() {
         >
             <Container sx={{ mt: 4, mb: 6 }}>
                 <ScrollSpyProvider headerOffset={appTokens.layout.scrollSpyOffset}>
-                    <SpySection id="tools" title={t("title.tools", language)}>
+                    <SpySection id="project" title={t("title.project", language)}>
                         <Stack
                             direction={{ xs: "column", sm: "row" }}
                             spacing={2}
@@ -72,11 +52,11 @@ export default function Tools() {
                             justifyContent="space-between"
                             sx={{ mb: 2 }}
                         >
-                            <Typography variant="title" fontWeight={900}>{t("title.tools", language)}</Typography>
+                            <Typography variant="title" fontWeight={900}>{t("title.project", language)}</Typography>
 
                             <TextField
                                 size="small"
-                                placeholder={t("tools.search.placeholder", language)}
+                                placeholder={t("project.search.placeholder", language)}
                                 value={q}
                                 onChange={(e) => setQ(e.target.value)}
                                 sx={{ width: { xs: "100%", sm: 320 } }}
@@ -99,8 +79,8 @@ export default function Tools() {
                     </SpySection>
 
                     <Typography variant="body" color="text.secondary" sx={{ mb: 2 }}>
-                        {t("tools.result.count", language, { count: filtered.length })}
-                        {q && ` · ${t("tools.result.keyword", language, { keyword: q })}`}
+                        {t("project.result.count", language, { count: filtered.length })}
+                        {q && ` · ${t("project.result.keyword", language, { keyword: q })}`}
                     </Typography>
 
                     {filtered.length === 0 ? (
@@ -109,13 +89,13 @@ export default function Tools() {
                                 py: 8,
                                 textAlign: "center",
                                 color: "text.secondary",
-                                border: (t) => `1px dashed ${t.palette.divider}`,
+                                border: (muiTheme) => `1px dashed ${muiTheme.palette.divider}`,
                                 borderRadius: appTokens.radiusRoles.card,
                             }}
                         >
-                            <Typography variant="body" fontWeight={700}>{t("tools.empty.title", language)}</Typography>
+                            <Typography variant="body" fontWeight={700}>{t("project.empty.title", language)}</Typography>
                             <Typography variant="body" sx={{ mt: 0.5 }}>
-                                {t("tools.empty.desc", language)}
+                                {t("project.empty.desc", language)}
                             </Typography>
                         </Box>
                     ) : (
@@ -124,13 +104,13 @@ export default function Tools() {
                                 <Grid item xs={12} sm={6} md={4} key={item.id}>
                                     <Card
                                         variant="outlined"
-                                        sx={(t) => ({
+                                        sx={(muiTheme) => ({
                                             height: "100%",
                                             display: "flex",
                                             flexDirection: "column",
                                             borderRadius: appTokens.radiusRoles.card,
-                                            bgcolor: alpha(t.palette.background.paper, 0.9),
-                                            borderColor: t.palette.divider,
+                                            bgcolor: alpha(muiTheme.palette.background.paper, 0.9),
+                                            borderColor: muiTheme.palette.divider,
                                             boxShadow: "none",
                                         })}
                                     >
@@ -145,7 +125,7 @@ export default function Tools() {
                                                     height="160"
                                                     image={item.cover}
                                                     alt={item.title}
-                                                    sx={(t) => ({ objectFit: "contain", p: 2, bgcolor: t.palette.common.white })}
+                                                    sx={(muiTheme) => ({ objectFit: "contain", p: 2, bgcolor: muiTheme.palette.common.white })}
                                                 />
                                             )}
                                             <CardContent>
@@ -172,12 +152,12 @@ export default function Tools() {
                                                             <Typography
                                                                 key={tag}
                                                                 variant="body"
-                                                                sx={(t) => ({
+                                                                sx={(muiTheme) => ({
                                                                     px: 1,
                                                                     py: 0.25,
                                                                     borderRadius: appTokens.radiusRoles.chip,
-                                                                    bgcolor: alpha(t.palette.primary.main, 0.1),
-                                                                    color: t.palette.primary.main,
+                                                                    bgcolor: alpha(muiTheme.palette.primary.main, 0.1),
+                                                                    color: muiTheme.palette.primary.main,
                                                                     fontWeight: 600,
                                                                     fontSize: 11,
                                                                 })}
@@ -200,4 +180,6 @@ export default function Tools() {
             </Container>
         </Box>
     );
-}
+};
+
+export default Project;

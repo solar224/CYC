@@ -94,7 +94,7 @@ export default function Notes() {
                             justifyContent="space-between"
                             sx={{ mb: 2 }}
                         >
-                            <Typography variant="h4" fontWeight={900}>{t("note.title", language)}</Typography>
+                            <Typography variant="title" fontWeight={900}>{t("note.title", language)}</Typography>
 
                             {/* 搜尋列 */}
                             <TextField
@@ -130,8 +130,8 @@ export default function Notes() {
                         allowScrollButtonsMobile
                         sx={{
                             mb: 2,
-                            "& .MuiTab-root": { fontWeight: 800, minHeight: 40 },
-                            "& .MuiTabs-indicator": { height: 3, borderRadius: 1.5 }
+                            "& .MuiTab-root": { fontWeight: 800, minHeight: 40, px: { xs: 1.25, sm: 2 } },
+                            "& .MuiTabs-indicator": { height: 3, borderRadius: appTokens.radiusRoles.indicator }
                         }}
                     >
                         {categoryFilters.map(c => (
@@ -144,7 +144,7 @@ export default function Notes() {
                     </Tabs>
 
                     {/* 搜尋／分類結果統計 */}
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    <Typography variant="body" color="text.secondary" sx={{ mb: 1 }}>
                         {t("note.result.count", language, { count: filtered.length })}
                         {cat !== "all" && ` · ${t("note.result.category", language, { category: categoryFilters.find(x => x.value === cat)?.label || "" })}`}
                         {q && ` · ${t("note.result.keyword", language, { keyword: q })}`}
@@ -158,16 +158,16 @@ export default function Notes() {
                                 textAlign: "center",
                                 color: "text.secondary",
                                 border: (t) => `1px dashed ${t.palette.divider}`,
-                                borderRadius: 2
+                                borderRadius: appTokens.radiusRoles.card
                             }}
                         >
-                            <Typography variant="body1" fontWeight={700}>{t("note.empty.title", language)}</Typography>
-                            <Typography variant="body2" sx={{ mt: 0.5 }}>
+                            <Typography variant="body" fontWeight={700}>{t("note.empty.title", language)}</Typography>
+                            <Typography variant="body" sx={{ mt: 0.5 }}>
                                 {t("note.empty.desc", language)}
                             </Typography>
                         </Box>
                     ) : (
-                        <Grid container spacing={3}>
+                        <Grid container spacing={{ xs: 2, md: 3 }}>
                             {filtered.map(n => {
                                 const isStarred = !!stars[n.id];
                                 return (
@@ -179,7 +179,7 @@ export default function Notes() {
                                                 height: "100%",
                                                 display: "flex",
                                                 flexDirection: "column",
-                                                borderRadius: 5,
+                                                borderRadius: appTokens.radiusRoles.card,
                                                 bgcolor: alpha(t.palette.background.paper, 0.9),
                                                 borderColor: t.palette.divider,
                                                 boxShadow: "none",
@@ -212,17 +212,17 @@ export default function Notes() {
                                             <CardActionArea component={RouterLink} to={`/notes/${n.slug}`} sx={{ flexGrow: 1 }}>
                                                 {n.cover && <CardMedia component="img" height="140" image={n.cover} alt={n.title} />}
                                                 <CardContent>
-                                                    <Typography variant="overline" sx={{ opacity: 0.7 }}>
+                                                    <Typography variant="body" sx={{ opacity: 0.7 }}>
                                                         {categoryFilters.find(c => c.value === n.category)?.label || t("note.category.unknown", language)}
                                                     </Typography>
-                                                    <Typography variant="h6" fontWeight={800} gutterBottom noWrap>
+                                                    <Typography variant="subheading" fontWeight={800} gutterBottom noWrap>
                                                         {n.title}
                                                     </Typography>
 
                                                     {/* 限制 summary 字數 + 行數（雙保險） */}
                                                     {n.summary && (
                                                         <Typography
-                                                            variant="body2"
+                                                            variant="body"
                                                             color="text.secondary"
                                                             sx={{
                                                                 overflow: "hidden",
@@ -235,7 +235,7 @@ export default function Notes() {
                                                         </Typography>
                                                     )}
 
-                                                    <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: "wrap" }}>
+                                                    <Stack direction="row" spacing={1} useFlexGap sx={{ mt: 1, flexWrap: "wrap" }}>
                                                         {n.tags?.slice(0, 3).map(t => <Chip key={t} size="small" label={t} />)}
                                                     </Stack>
                                                 </CardContent>

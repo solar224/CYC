@@ -2,14 +2,20 @@ import React, { useContext, useMemo } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { useTheme } from "@mui/material/styles";
-import { AppBar, Toolbar, Container, Tabs, Tab, Box } from "@mui/material";
+import { AppBar, Toolbar, Container, Tabs, Tab, Box, IconButton, Tooltip } from "@mui/material";
+import TranslateIcon from "@mui/icons-material/Translate";
+import LanguageIcon from "@mui/icons-material/Language";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
 import { APP_ROUTE_PATHS, MAIN_NAV_ITEMS } from "../../config/app.constants";
 import { NOTES_ROUTE_PATHS } from "../../config/notes.constants";
 import { TOOLS_ROUTE_PATHS } from "../../config/tools.constants";
 import { LanguageContext } from "../../context/LanguageContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import { getNavLabel } from "../../i18n/navigation";
 import { appTokens, resolveSemanticTokens } from "../../theme/tokens";
+import { usePreferenceSnackbar } from "../../hooks/usePreferenceSnackbar";
 
 function ElevationScroll({ children, semantic }) {
     const trigger = useScrollTrigger({ threshold: 8 });
@@ -27,9 +33,23 @@ function ElevationScroll({ children, semantic }) {
 
 const PcHeader = () => {
     const location = useLocation();
-    const { language } = useContext(LanguageContext);
+    const { language, toggleLanguage } = useContext(LanguageContext);
+    const { theme, toggleTheme } = useContext(ThemeContext);
+    const { showLanguageChanged, showThemeChanged } = usePreferenceSnackbar();
     const muiTheme = useTheme();
     const semantic = useMemo(() => resolveSemanticTokens(muiTheme.palette.mode), [muiTheme.palette.mode]);
+
+    const handleHeaderLanguageToggle = () => {
+        const nextLanguage = language === "zh" ? "en" : "zh";
+        toggleLanguage();
+        showLanguageChanged(nextLanguage);
+    };
+
+    const handleHeaderThemeToggle = () => {
+        const nextTheme = theme === "dark" ? "light" : "dark";
+        toggleTheme();
+        showThemeChanged(language, nextTheme);
+    };
 
     const current = useMemo(() => {
         const p = location.pathname;
@@ -84,7 +104,7 @@ const PcHeader = () => {
                                             opacity: 1,
                                             backgroundColor: semantic.header.hover,
                                         },
-                                        borderRadius: 1.5,
+                                        borderRadius: appTokens.radiusRoles.button,
                                         px: 1.5,
                                         minHeight: 48,
                                     }}
@@ -93,6 +113,53 @@ const PcHeader = () => {
                         </Tabs>
                     </Toolbar>
                 </Container>
+
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        right: 12,
+                        transform: "translateY(-50%)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        pr: 0.5,
+                    }}
+                >
+                    <Tooltip title={language === "zh" ? "切換到 English" : "Switch to 中文"} placement="bottom">
+                        <IconButton
+                            size="small"
+                            onClick={handleHeaderLanguageToggle}
+                            sx={{
+                                color: semantic.header.textSubtle,
+                                borderRadius: appTokens.radiusRoles.button,
+                                "&:hover": {
+                                    color: semantic.header.textStrong,
+                                    backgroundColor: semantic.header.hover,
+                                },
+                            }}
+                        >
+                            {language === "zh" ? <LanguageIcon fontSize="small" /> : <TranslateIcon fontSize="small" />}
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title={theme === "dark" ? "切換淺色模式" : "切換深色模式"} placement="bottom">
+                        <IconButton
+                            size="small"
+                            onClick={handleHeaderThemeToggle}
+                            sx={{
+                                color: semantic.header.textSubtle,
+                                borderRadius: appTokens.radiusRoles.button,
+                                "&:hover": {
+                                    color: semantic.header.textStrong,
+                                    backgroundColor: semantic.header.hover,
+                                },
+                            }}
+                        >
+                            {theme === "dark" ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
+                        </IconButton>
+                    </Tooltip>
+                </Box>
             </AppBar>
         </ElevationScroll>
     );

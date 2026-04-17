@@ -15,6 +15,7 @@ import {
 import { alpha } from "@mui/material/styles";
 import { ScrollSpyProvider, SpySection, Toc, useScrollSpy } from "../../shared/scrollspy";
 import useProfileData from "../../hooks/useProfileData";
+import { appTokens } from "../../theme/tokens";
 
 function MobileToc() {
     const { sections, activeId, scrollTo } = useScrollSpy();
@@ -42,11 +43,11 @@ function MobileToc() {
                         sx={(t) => ({
                             textTransform: "none",
                             whiteSpace: "nowrap",
-                            borderRadius: 99,
+                            borderRadius: appTokens.radiusRoles.pill,
                             minWidth: "auto",
                             px: 1,
-                            color: s.id === activeId ? "#0041CC" : t.palette.text.secondary,
-                            bgcolor: s.id === activeId ? alpha("#0041CC", 0.1) : "transparent",
+                            color: s.id === activeId ? t.palette.text.primary : t.palette.text.secondary,
+                            bgcolor: "transparent",
                             border: `1px solid ${s.id === activeId ? alpha("#0041CC", 0.3) : "transparent"}`,
                         })}
                     >
@@ -61,13 +62,13 @@ function MobileToc() {
 function SectionTitle({ children }) {
     return (
         <Typography
-            variant="subtitle2"
-            sx={{
+            variant="subheading"
+            sx={(t) => ({
                 letterSpacing: 1.2,
                 fontWeight: 700,
-                color: "#0041CC",
+                color: t.palette.text.primary,
                 textTransform: "uppercase",
-            }}
+            })}
         >
             {children}
         </Typography>
@@ -90,7 +91,7 @@ function EntryCard({ children, compact = false }) {
             variant="outlined"
             sx={{
                 p: compact ? { xs: 0.9, md: 1 } : { xs: 1.1, md: 1.2 },
-                borderRadius: 1,
+                borderRadius: appTokens.radiusRoles.card,
                 bgcolor: "transparent",
                 borderColor: "transparent",
             }}
@@ -120,7 +121,7 @@ export function CvContent({ mobile = false }) {
                 <Paper
                     variant="outlined"
                     sx={{
-                        borderRadius: 2,
+                        borderRadius: appTokens.radiusRoles.card,
                         borderColor: "transparent",
                         p: { xs: 1.2, sm: 1.8, md: 2.2 },
                         bgcolor: "transparent",
@@ -131,13 +132,13 @@ export function CvContent({ mobile = false }) {
                         <Box>
                             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1.5}>
                                 <Typography
-                                    variant={mobile ? "h5" : "h4"}
+                                    variant={mobile ? "heading" : "title"}
                                     fontWeight={800}
-                                    sx={{
+                                    sx={(t) => ({
                                         letterSpacing: 0.6,
                                         fontFamily: "Times New Roman, Georgia, serif",
-                                        color: "#0041CC",
-                                    }}
+                                        color: t.palette.text.primary,
+                                    })}
                                 >
                                     YU-CHEN CHAN
                                 </Typography>
@@ -149,13 +150,13 @@ export function CvContent({ mobile = false }) {
                                         href={cvPdfUrl}
                                         target="_blank"
                                         rel="noreferrer"
-                                        sx={{
+                                        sx={(t) => ({
                                             textTransform: "none",
-                                            color: "#0041CC",
+                                            color: t.palette.text.primary,
                                             whiteSpace: "nowrap",
                                             minWidth: "auto",
                                             px: 0.75,
-                                        }}
+                                        })}
                                     >
                                         View CV
                                     </Button>
@@ -168,17 +169,17 @@ export function CvContent({ mobile = false }) {
                             {CONTACTS.map((item) => (
                                 <Grid item xs={12} md={6} key={`${item.label}-${item.value}`}>
                                     <Stack direction="row" spacing={0.9} alignItems="baseline" sx={{ minHeight: 22 }}>
-                                        <Typography variant="body2" fontWeight={700} sx={{ minWidth: 76 }}>
+                                        <Typography variant="body" fontWeight={700} sx={{ minWidth: 76 }}>
                                             {item.label}:
                                         </Typography>
                                         {item.href ? (
                                             <Link href={item.href} target="_blank" rel="noreferrer" underline="hover" color="inherit">
-                                                <Typography variant="body2" sx={{ wordBreak: "break-word" }}>
+                                                <Typography variant="body" sx={{ wordBreak: "break-word" }}>
                                                     {item.value}
                                                 </Typography>
                                             </Link>
                                         ) : (
-                                            <Typography variant="body2" sx={{ wordBreak: "break-word" }}>
+                                            <Typography variant="body" sx={{ wordBreak: "break-word" }}>
                                                 {item.value}
                                             </Typography>
                                         )}
@@ -189,7 +190,7 @@ export function CvContent({ mobile = false }) {
 
                         <SpySection id="research-interests" title="RESEARCH INTERESTS">
                             <SectionBlock title="RESEARCH INTERESTS">
-                                <Typography variant="body2" sx={{ lineHeight: 1.75 }}>
+                                <Typography variant="body" sx={{ lineHeight: 1.75 }}>
                                     {researchInterests}
                                 </Typography>
                             </SectionBlock>
@@ -201,13 +202,13 @@ export function CvContent({ mobile = false }) {
                                     {EDUCATION.map((item) => (
                                         <EntryCard key={item.degree} compact>
                                             <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={1}>
-                                                <Typography variant="subtitle2" fontWeight={700}>{item.degree}</Typography>
-                                                <Typography variant="caption" color="text.secondary">{item.period}</Typography>
+                                                <Typography variant="subheading" fontWeight={700}>{item.degree}</Typography>
+                                                <Typography variant="body" color="text.secondary">{item.period}</Typography>
                                             </Stack>
-                                            <Typography variant="body2" sx={{ mt: 0.35 }}>{item.school}</Typography>
-                                            <Typography variant="body2" sx={{ mt: 0.35 }}>{item.gpa}</Typography>
-                                            <Typography variant="body2" sx={{ mt: 0.35 }}>{item.courses}</Typography>
-                                            {item.extra ? <Typography variant="body2" sx={{ mt: 0.35 }}>{item.extra}</Typography> : null}
+                                            <Typography variant="body" sx={{ mt: 0.35 }}>{item.school}</Typography>
+                                            <Typography variant="body" sx={{ mt: 0.35 }}>{item.gpa}</Typography>
+                                            <Typography variant="body" sx={{ mt: 0.35 }}>{item.courses}</Typography>
+                                            {item.extra ? <Typography variant="body" sx={{ mt: 0.35 }}>{item.extra}</Typography> : null}
                                         </EntryCard>
                                     ))}
                                 </Stack>
@@ -220,11 +221,11 @@ export function CvContent({ mobile = false }) {
                                     {RESEARCH_EXPERIENCE.map((item) => (
                                         <EntryCard key={item.role} compact>
                                             <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={1}>
-                                                <Typography variant="subtitle2" fontWeight={700}>{item.role}</Typography>
-                                                <Typography variant="caption" color="text.secondary">{item.period}</Typography>
+                                                <Typography variant="subheading" fontWeight={700}>{item.role}</Typography>
+                                                <Typography variant="body" color="text.secondary">{item.period}</Typography>
                                             </Stack>
-                                            <Typography variant="body2" sx={{ mt: 0.35 }}><b>Topics:</b> {item.topics}</Typography>
-                                            <Typography variant="body2" sx={{ mt: 0.35 }}><b>Keywords:</b> {item.keywords}</Typography>
+                                            <Typography variant="body" sx={{ mt: 0.35 }}><b>Topics:</b> {item.topics}</Typography>
+                                            <Typography variant="body" sx={{ mt: 0.35 }}><b>Keywords:</b> {item.keywords}</Typography>
                                         </EntryCard>
                                     ))}
                                 </Stack>
@@ -233,25 +234,25 @@ export function CvContent({ mobile = false }) {
 
                         <SpySection id="honors-and-scholarships" title="HONORS AND SCHOLARSHIPS">
                             <SectionBlock title="HONORS AND SCHOLARSHIPS">
-                                <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 0.5 }}>Academic Honors</Typography>
+                                <Typography variant="subheading" fontWeight={700} sx={{ mb: 0.5 }}>Academic Honors</Typography>
                                 <Stack spacing={0.55}>
                                     {ACADEMIC_HONORS.map((item) => (
                                         <EntryCard key={item.title} compact>
                                             <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={1}>
-                                                <Typography variant="body2">{item.title}</Typography>
-                                                {item.year ? <Typography variant="caption" color="text.secondary">{item.year}</Typography> : null}
+                                                <Typography variant="body">{item.title}</Typography>
+                                                {item.year ? <Typography variant="body" color="text.secondary">{item.year}</Typography> : null}
                                             </Stack>
                                         </EntryCard>
                                     ))}
                                 </Stack>
 
-                                <Typography variant="subtitle2" fontWeight={700} sx={{ mt: 1, mb: 0.5 }}>Scholarships</Typography>
+                                <Typography variant="subheading" fontWeight={700} sx={{ mt: 1, mb: 0.5 }}>Scholarships</Typography>
                                 <Stack spacing={0.55}>
                                     {SCHOLARSHIPS.map((item) => (
                                         <EntryCard key={item.title} compact>
                                             <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={1}>
-                                                <Typography variant="body2">{item.title}</Typography>
-                                                <Typography variant="caption" color="text.secondary">{item.year}</Typography>
+                                                <Typography variant="body">{item.title}</Typography>
+                                                <Typography variant="body" color="text.secondary">{item.year}</Typography>
                                             </Stack>
                                         </EntryCard>
                                     ))}
@@ -264,9 +265,9 @@ export function CvContent({ mobile = false }) {
                                 <Stack spacing={0.55}>
                                     {TEACHING_EXPERIENCE.map((item) => (
                                         <EntryCard key={`${item.role}-${item.term}`} compact>
-                                            <Typography variant="subtitle2" fontWeight={700}>{item.role}</Typography>
-                                            <Typography variant="body2" sx={{ mt: 0.25 }}>{item.org}</Typography>
-                                            <Typography variant="caption" color="text.secondary" sx={{ mt: 0.3, display: "block" }}>{item.term}</Typography>
+                                            <Typography variant="subheading" fontWeight={700}>{item.role}</Typography>
+                                            <Typography variant="body" sx={{ mt: 0.25 }}>{item.org}</Typography>
+                                            <Typography variant="body" color="text.secondary" sx={{ mt: 0.3, display: "block" }}>{item.term}</Typography>
                                         </EntryCard>
                                     ))}
                                 </Stack>
@@ -279,8 +280,8 @@ export function CvContent({ mobile = false }) {
                                     {CERTIFICATIONS.map((item) => (
                                         <EntryCard key={`${item.title}-${item.year}`} compact>
                                             <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={1}>
-                                                <Typography variant="body2">{item.title}</Typography>
-                                                <Typography variant="caption" color="text.secondary">{item.year}</Typography>
+                                                <Typography variant="body">{item.title}</Typography>
+                                                <Typography variant="body" color="text.secondary">{item.year}</Typography>
                                             </Stack>
                                         </EntryCard>
                                     ))}
@@ -293,10 +294,10 @@ export function CvContent({ mobile = false }) {
                                 <Stack spacing={0.8}>
                                     {PROJECTS.map((item) => (
                                         <EntryCard key={item.title} compact>
-                                            <Typography variant="subtitle2" fontWeight={700}>{item.title}</Typography>
-                                            <Typography variant="body2" sx={{ mt: 0.35 }}><b>Topics:</b> {item.topics}</Typography>
-                                            <Typography variant="body2" sx={{ mt: 0.35 }}><b>Tech Stack:</b> {item.stack}</Typography>
-                                            <Typography variant="body2" sx={{ mt: 0.35 }}><b>Keywords:</b> {item.keywords}</Typography>
+                                            <Typography variant="subheading" fontWeight={700}>{item.title}</Typography>
+                                            <Typography variant="body" sx={{ mt: 0.35 }}><b>Topics:</b> {item.topics}</Typography>
+                                            <Typography variant="body" sx={{ mt: 0.35 }}><b>Tech Stack:</b> {item.stack}</Typography>
+                                            <Typography variant="body" sx={{ mt: 0.35 }}><b>Keywords:</b> {item.keywords}</Typography>
                                             <Stack direction="row" spacing={0.55} sx={{ mt: 0.7 }}>
                                                 {item.links.map((link) => (
                                                     <Chip

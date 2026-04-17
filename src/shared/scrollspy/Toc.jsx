@@ -15,6 +15,7 @@ export function Toc({
     const { sections, activeId, scrollTo } = useScrollSpy();
     const [open, setOpen] = useState(false);
     const [lockedId, setLockedId] = useState(null);
+    const [hasScrollableContent, setHasScrollableContent] = useState(false);
     const currentId = lockedId ?? activeId;
 
     const stableSinceRef = useRef(null);
@@ -39,6 +40,29 @@ export function Toc({
         const fallback = setTimeout(() => setLockedId(null), 5000);
         return () => clearTimeout(fallback);
     }, [lockedId]);
+
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el || !open) {
+            setHasScrollableContent(false);
+            return;
+        }
+
+        const updateOverflowState = () => {
+            const hasOverflow = el.scrollHeight - el.clientHeight > 1;
+            setHasScrollableContent(hasOverflow);
+        };
+
+        updateOverflowState();
+        const resizeObserver = new ResizeObserver(updateOverflowState);
+        resizeObserver.observe(el);
+        window.addEventListener("resize", updateOverflowState);
+
+        return () => {
+            resizeObserver.disconnect();
+            window.removeEventListener("resize", updateOverflowState);
+        };
+    }, [open, sections.length]);
 
     // ⬅️ 新增：當 active/locked 改變時，自動把該項目捲到可視範圍
     useEffect(() => {
@@ -69,7 +93,7 @@ export function Toc({
                 width: { md: open ? sidebarWidth : collapsedWidth },
                 maxHeight: { md: "70vh" },          // 高度限制維持在 70vh
                 overflow: "hidden",                 // 讓外框維持乾淨；真正的滾動交給內層
-                zIndex: 1100,
+                zIndex: appTokens.layout.floating.zIndex + 20,
                 display: hiddenOnMobile ? { xs: "none", md: "block" } : "block",
                 p: { md: open ? 1 : 0 },
 
@@ -88,7 +112,7 @@ export function Toc({
                         ? "0 8px 30px rgba(0,0,0,.28)"
                         : "0 8px 24px rgba(0,0,0,.06)")
                     : "none",
-                borderRadius: open ? 8 : 0,
+                borderRadius: open ? appTokens.radiusRoles.floating : 0,
                 backgroundClip: "padding-box",
 
                 transition:
@@ -115,7 +139,7 @@ export function Toc({
                         sx={(t) => ({
                             height: 2,
                             width: "100%",
-                            borderRadius: 999,
+                            borderRadius: appTokens.radiusRoles.pill,
                             bgcolor:
                                 s.id === currentId
                                     ? t.palette.mode === "dark"
@@ -144,22 +168,24 @@ export function Toc({
                     display: { md: open ? "block" : "none" },
                     maxHeight: { md: "70vh" },     // 與外層同高，確保內層成為滾動容器
                     overflowY: "auto",
-                    pr: 0.5,                       // 滾動條不壓文字
+                    pr: hasScrollableContent ? 1 : 0.5,
+                    pb: hasScrollableContent ? 1 : 0,
+                    scrollPaddingBottom: hasScrollableContent ? 12 : 0,
                     // 些微捲軸樣式（可移除）
                     "&::-webkit-scrollbar": { width: 8 },
                     "&::-webkit-scrollbar-thumb": {
                         backgroundColor: alpha(t.palette.text.primary, 0.25),
-                        borderRadius: 8,
+                        borderRadius: appTokens.radiusRoles.indicator,
                     },
                     "&:hover::-webkit-scrollbar-thumb": {
                         backgroundColor: alpha(t.palette.text.primary, 0.4),
                     },
-                    // 上下淡淡遮罩，視覺上提示可滾動（非必要）
-                    maskImage:
-                        "linear-gradient(to bottom, transparent 0, black 12px, black calc(100% - 12px), transparent 100%)",
+                    maskImage: hasScrollableContent
+                        ? "linear-gradient(to bottom, transparent 0, black 8px, black calc(100% - 6px), transparent 100%)"
+                        : "none",
                 })}
             >
-                <List dense disablePadding>
+                <List dense disablePadding sx={{ pb: hasScrollableContent ? 0.75 : 0 }}>
                     {sections.map((s) => (
                         <Tooltip key={s.id} title={s.title} placement="left" enterDelay={350}>
                             <ListItemButton
@@ -175,7 +201,7 @@ export function Toc({
                                     pl: (s.level - 2) * 2 + 4,
                                     py: 0.5,
                                     my: 0.25,
-                                    borderRadius: 10,
+                                    borderRadius: appTokens.radiusRoles.button,
                                     transition:
                                         "background-color .18s ease, transform .18s ease, color .18s ease",
                                     "&:hover": {
@@ -188,7 +214,7 @@ export function Toc({
                                         top: 6,
                                         bottom: 6,
                                         width: 3,
-                                        borderRadius: 2,
+                                        borderRadius: appTokens.radiusRoles.micro,
                                         backgroundColor: "transparent",
                                         transform: "scaleY(0.6)",
                                         transition:

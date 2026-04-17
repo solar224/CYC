@@ -64,6 +64,55 @@ export function resolveSemanticTokens(mode = "dark") {
 	return semanticByMode[mode] || semanticByMode.dark;
 }
 
+const px = (value) => `${value}px`;
+
+const typographyRoles = Object.freeze({
+	title: {
+		fontSize: 32,
+		lineHeight: 1.2,
+		fontWeight: 800,
+	},
+	heading: {
+		fontSize: 24,
+		lineHeight: 1.3,
+		fontWeight: 700,
+	},
+	subheading: {
+		fontSize: 18,
+		lineHeight: 1.45,
+		fontWeight: 600,
+	},
+	body: {
+		fontSize: 14,
+		lineHeight: 1.6,
+		fontWeight: 400,
+	},
+});
+
+const radius = Object.freeze({
+	base: 4,
+	sm: 8,
+	md: 12,
+	lg: 16,
+	xl: 20,
+	pill: "999px",
+	circle: "50%",
+	squircle: "35%",
+});
+
+const radiusRoles = Object.freeze({
+	button: px(radius.md),
+	card: px(radius.xl),
+	floating: px(radius.lg),
+	field: px(radius.md),
+	chip: px(radius.sm),
+	indicator: px(radius.sm),
+	micro: px(radius.base),
+	pill: radius.pill,
+	circle: radius.circle,
+	fab: radius.squircle,
+});
+
 export const appTokens = {
 	breakpoints: {
 		mobileMax: 767,
@@ -98,14 +147,20 @@ export const appTokens = {
 	typography: {
 		family:
 			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
+		roles: typographyRoles,
 		size: {
+			title: typographyRoles.title.fontSize,
+			heading: typographyRoles.heading.fontSize,
+			subheading: typographyRoles.subheading.fontSize,
+			body: typographyRoles.body.fontSize,
 			xs: 12,
 			sm: 13,
-			md: 14,
-			lg: 16,
-			xl: 20,
+			md: typographyRoles.body.fontSize,
+			lg: typographyRoles.subheading.fontSize,
+			xl: typographyRoles.heading.fontSize,
 		},
 		weight: {
+			regular: 400,
 			medium: 500,
 			semibold: 600,
 			bold: 700,
@@ -115,11 +170,8 @@ export const appTokens = {
 	core,
 	semanticByMode,
 	semantic: resolveSemanticTokens("dark"),
-	radius: {
-		sm: 8,
-		md: 12,
-		lg: 16,
-	},
+	radius,
+	radiusRoles,
 	motion: {
 		fast: "0.18s ease",
 		normal: "0.3s ease",

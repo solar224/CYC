@@ -1,4 +1,4 @@
-import Contactme from "../../components/Contactme";
+import Project from "../../components/Project";
 import Home from "../../components/Home";
 import Note from "../../components/Note";
 import ResponsiveLayout from "../../components/layout/ResponsiveLayout";
@@ -16,12 +16,12 @@ export const appDomainRoutes = [
         element: <Note />,
     },
     {
-        id: "app.contact",
-        path: APP_ROUTE_PATHS.CONTACT,
+        id: "app.project",
+        path: APP_ROUTE_PATHS.PROJECT,
         element: (
             <ResponsiveLayout
-                mobile={<Contactme calendarVariant="mobile" />}
-                desktop={<Contactme calendarVariant="desktop" />}
+                mobile={<Project />}
+                desktop={<Project />}
             />
         ),
     },

@@ -138,7 +138,7 @@ const Footer = ({ compact = false, showSettings = false }) => {
                     </IconButton>
                 </Tooltip>
             </Box>
-            <Typography variant={compact ? "caption" : "body2"}>
+            <Typography variant="body">
                 © 2025 <strong>[YC-Chan]</strong>. All rights reserved.
             </Typography>
         </Box>

@@ -1,12 +1,8 @@
 
 # note
 
-git add .
-git commit -m "."
-git push origin main
-<!-- npm run build -->
+``` powershell
 npm run deploy
 
 npm start
-
-//localStorage
+```

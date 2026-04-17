@@ -5,6 +5,7 @@ import {
 import { alpha, useTheme } from "@mui/material/styles";
 import ImageRoundedIcon from "@mui/icons-material/ImageRounded";
 import { Link } from "react-router-dom";
+import { appTokens } from "../../theme/tokens";
 
 export default function NoteCard({ note }) {
     const t = useTheme();
@@ -16,7 +17,7 @@ export default function NoteCard({ note }) {
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
-                borderRadius: 3,
+                borderRadius: appTokens.radiusRoles.card,
                 bgcolor: "transparent",
                 borderColor: alpha(t.palette.divider, 0.6),
                 overflow: "hidden",
@@ -76,14 +77,14 @@ export default function NoteCard({ note }) {
                     />
                     {note.date && (
                         <Typography
-                            variant="caption"
+                            variant="body"
                             sx={{
                                 position: "absolute",
                                 right: 8,
                                 bottom: 8,
                                 px: 0.75,
                                 py: 0.25,
-                                borderRadius: 1,
+                                borderRadius: appTokens.radiusRoles.chip,
                                 fontWeight: 700,
                                 color: t.palette.getContrastText(t.palette.background.paper),
                                 bgcolor: alpha(t.palette.background.paper, 0.65),
@@ -97,12 +98,12 @@ export default function NoteCard({ note }) {
                 </Box>
 
                 <CardContent sx={{ width: 1, flexGrow: 1, pb: 2 }}>
-                    <Typography variant="overline" sx={{ opacity: 0.7 }}>
+                    <Typography variant="body" sx={{ opacity: 0.7 }}>
                         {note.categoryLabel || note.category || "未分類"}
                     </Typography>
 
                     <Typography
-                        variant="h6"
+                        variant="subheading"
                         fontWeight={900}
                         gutterBottom
                         sx={{
@@ -119,7 +120,7 @@ export default function NoteCard({ note }) {
 
                     {note.summary && (
                         <Typography
-                            variant="body2"
+                            variant="body"
                             color="text.secondary"
                             sx={{
                                 display: "-webkit-box",

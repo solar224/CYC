@@ -35,8 +35,8 @@ export default function NoteDetail() {
 
     if (!note) {
         return (
-            <Container maxWidth="md" sx={{ py: 6 }}>
-                <Typography variant="h5" fontWeight={800}>找不到這篇筆記</Typography>
+            <Container sx={{ mt: { xs: 2, md: 4 }, mb: { xs: 4, md: 6 } }}>
+                <Typography variant="heading" fontWeight={800}>找不到這篇筆記</Typography>
                 <Button sx={{ mt: 2 }} component={RouterLink} to="/notes">回到筆記列表</Button>
             </Container>
         );
@@ -47,15 +47,23 @@ export default function NoteDetail() {
             headerOffset={appTokens.layout.scrollSpyOffset}
             rootMargin={`-${appTokens.layout.scrollSpyOffset}px 0px -60% 0px`}
         >
-            <Container maxWidth="md" sx={{ py: { xs: 3, md: 6 } }}>
+            <Container sx={{ mt: { xs: 2, md: 4 }, mb: { xs: 4, md: 6 } }}>
                 {/* 上方導覽列 */}
-                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+                <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    alignItems={{ xs: "flex-start", sm: "center" }}
+                    justifyContent="space-between"
+                    spacing={{ xs: 0.5, sm: 0 }}
+                    sx={{ mb: 2 }}
+                >
                     <Button size="small" component={RouterLink} to="/notes">← 返回列表</Button>
-                    <Typography variant="caption" color="text.secondary">{note.date}</Typography>
+                    <Typography variant="body" color="text.secondary">{note.date}</Typography>
                 </Stack>
 
                 {/* 標題 + 標籤 */}
-                <Typography variant="h4" fontWeight={900} sx={{ mb: 1 }}>{note.title}</Typography>
+                <Typography variant="title" fontWeight={900} sx={{ mb: 1, fontSize: { xs: 28, sm: 32 } }}>
+                    {note.title}
+                </Typography>
                 <Stack
                     direction="row"
                     flexWrap="wrap"
@@ -69,7 +77,7 @@ export default function NoteDetail() {
 
                 {/* 封面：固定 16:9，避免彈跳 */}
                 {note.cover && (
-                    <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden", mb: 2 }}>
+                    <Paper variant="outlined" sx={{ borderRadius: appTokens.radiusRoles.card, overflow: "hidden", mb: 2 }}>
                         <Box sx={{ width: 1, aspectRatio: "16 / 9", overflow: "hidden" }}>
                             <Box
                                 component="img"
@@ -87,10 +95,12 @@ export default function NoteDetail() {
                         <CircularProgress />
                     </Box>
                 ) : (
-                    <MarkdownWithToc>{content}</MarkdownWithToc>
+                    <Box sx={{ minWidth: 0 }}>
+                        <MarkdownWithToc>{content}</MarkdownWithToc>
+                    </Box>
                 )}
             </Container>
-            <Toc sidebarWidth={260} collapsedWidth={18} containerMaxWidth={900} />
+            <Toc sidebarWidth={260} collapsedWidth={18} containerMaxWidth={1200} />
         </ScrollSpyProvider>
     );
 }

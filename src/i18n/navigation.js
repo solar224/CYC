@@ -2,7 +2,7 @@ import { t } from "./messages";
 
 const NAV_KEY_MAP = {
   home: "nav.home",
-  contact: "nav.contact",
+  project: "nav.project",
   note: "nav.note",
   tools: "nav.tools",
   homeAria: "aria.home",

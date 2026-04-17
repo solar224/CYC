@@ -35,6 +35,7 @@ import ini from "react-syntax-highlighter/dist/esm/languages/prism/ini";
 import toml from "react-syntax-highlighter/dist/esm/languages/prism/toml";
 
 import { SpySection } from "../shared/scrollspy";
+import { appTokens } from "../theme/tokens";
 
 SyntaxHighlighter.registerLanguage("go", go);
 SyntaxHighlighter.registerLanguage("c", c);
@@ -129,7 +130,13 @@ export default function MarkdownWithToc({ children }) {
                 const id = slug(title);
                 return (
                     <SpySection id={id} title={title} level={1}>
-                        <Typography id={id} variant="h4" fontWeight={900} sx={{ mt: 3, mb: 1 }} {...rest}>
+                        <Typography
+                            id={id}
+                            variant="title"
+                            fontWeight={900}
+                            sx={{ mt: 3, mb: 1, fontSize: { xs: 28, sm: 32 }, lineHeight: 1.25 }}
+                            {...rest}
+                        >
                             {children}
                         </Typography>
                     </SpySection>
@@ -140,7 +147,13 @@ export default function MarkdownWithToc({ children }) {
                 const id = slug(title);
                 return (
                     <SpySection id={id} title={title} level={2}>
-                        <Typography id={id} variant="h5" fontWeight={900} sx={{ mt: 3, mb: 1 }} {...rest}>
+                        <Typography
+                            id={id}
+                            variant="heading"
+                            fontWeight={900}
+                            sx={{ mt: 3, mb: 1, fontSize: { xs: 22, sm: 24 }, lineHeight: 1.3 }}
+                            {...rest}
+                        >
                             {children}
                         </Typography>
                     </SpySection>
@@ -151,24 +164,46 @@ export default function MarkdownWithToc({ children }) {
                 const id = slug(title);
                 return (
                     <SpySection id={id} title={title} level={3}>
-                        <Typography id={id} variant="h6" fontWeight={800} sx={{ mt: 3, mb: 1 }} {...rest}>
+                        <Typography
+                            id={id}
+                            variant="subheading"
+                            fontWeight={800}
+                            sx={{ mt: 3, mb: 1, fontSize: { xs: 17, sm: 18 }, lineHeight: 1.35 }}
+                            {...rest}
+                        >
                             {children}
                         </Typography>
                     </SpySection>
                 );
             },
 
-            p: (props) => <Typography sx={{ lineHeight: 1.8, mb: 1 }} {...props} />,
+            p: (props) => <Typography sx={{ lineHeight: 1.8, mb: 1, overflowWrap: "anywhere" }} {...props} />,
             li: (props) => <li style={{ lineHeight: 1.8, marginBottom: 6 }} {...props} />,
             a: ({ href, children, ...rest }) => (
-                <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }} {...rest}>
+                <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: "underline", overflowWrap: "anywhere" }}
+                    {...rest}
+                >
                     {children}
                 </a>
             ),
             img: ({ src, alt }) => (
-                <Box component="img" src={src} alt={alt} sx={{ maxWidth: "100%", borderRadius: 2, my: 1 }} />
+                <Box component="img" src={src} alt={alt} sx={{ maxWidth: "100%", borderRadius: appTokens.radiusRoles.card, my: 1 }} />
             ),
-            table: (props) => <Box component="table" sx={{ width: "100%", borderCollapse: "collapse", my: 2 }} {...props} />,
+            table: ({ children, ...props }) => (
+                <Box sx={{ my: 2, width: "100%", overflowX: "auto" }}>
+                    <Box
+                        component="table"
+                        sx={{ width: "100%", minWidth: 560, borderCollapse: "collapse" }}
+                        {...props}
+                    >
+                        {children}
+                    </Box>
+                </Box>
+            ),
             th: (props) => (
                 <Box
                     component="th"
@@ -200,7 +235,7 @@ export default function MarkdownWithToc({ children }) {
                         <code
                             style={{
                                 padding: "0 6px",
-                                borderRadius: 6,
+                                borderRadius: appTokens.radiusRoles.micro,
                                 background: "rgba(128,128,128,.15)",
                             }}
                             {...rest}
@@ -216,16 +251,17 @@ export default function MarkdownWithToc({ children }) {
                 const isSupported = lang && SUPPORTED.has(lang);
 
                 return (
-                    <Box sx={{ my: 1.5, "& pre": { m: 0 } }}>
+                    <Box sx={{ my: 1.5, width: "100%", overflowX: "auto", "& pre": { m: 0 } }}>
                         <SyntaxHighlighter
                             language={isSupported ? lang : undefined}
                             PreTag="div"
                             style={t.palette.mode === "dark" ? vscDarkPlus : oneLight}
                             customStyle={{
                                 margin: 0,
-                                borderRadius: 8,
+                                borderRadius: appTokens.radiusRoles.floating,
                                 fontSize: 14,
                                 lineHeight: 1.6,
+                                minWidth: "max-content",
                             }}
                             showLineNumbers
                             {...rest}
@@ -240,7 +276,7 @@ export default function MarkdownWithToc({ children }) {
     );
 
     return (
-        <Box sx={{ "& ul, & ol": { pl: 3, mt: 0.5, mb: 1 } }}>
+        <Box sx={{ width: "100%", minWidth: 0, "& ul, & ol": { pl: 3, mt: 0.5, mb: 1 }, "& *": { minWidth: 0 } }}>
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
                 {children}
             </ReactMarkdown>

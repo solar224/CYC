@@ -3,14 +3,14 @@ import { TOOLS_ROUTE_PATHS } from "./tools.constants";
 export const APP_ROUTE_KEYS = {
   HOME: "home",
   NOTE: "note",
-  CONTACT: "contact",
+  PROJECT: "project",
   TOOLS: "tools",
 };
 
 export const APP_ROUTE_PATHS = {
   HOME: "/",
   NOTE: "/note",
-  CONTACT: "/contact-me",
+  PROJECT: "/project",
 };
 
 export const APP_ROUTE_META = {
@@ -22,15 +22,15 @@ export const APP_ROUTE_META = {
     breadcrumbKey: "breadcrumb.note",
     titleKey: "title.note",
   },
-  [APP_ROUTE_PATHS.CONTACT]: {
-    breadcrumbKey: "breadcrumb.contact",
-    titleKey: "title.contact",
+  [APP_ROUTE_PATHS.PROJECT]: {
+    breadcrumbKey: "breadcrumb.project",
+    titleKey: "title.project",
   },
 };
 
 export const APP_SEGMENT_LABEL_KEYS = {
   "about-me": "segment.about-me",
-  "contact-me": "segment.contact",
+  project: "segment.project",
   note: "segment.note",
 };
 
@@ -40,8 +40,8 @@ export const MAIN_NAV_ITEMS = [
     to: APP_ROUTE_PATHS.HOME,
   },
   {
-    key: APP_ROUTE_KEYS.CONTACT,
-    to: APP_ROUTE_PATHS.CONTACT,
+    key: APP_ROUTE_KEYS.PROJECT,
+    to: APP_ROUTE_PATHS.PROJECT,
   },
   {
     key: APP_ROUTE_KEYS.NOTE,

@@ -3,6 +3,7 @@ import { appTokens, resolveSemanticTokens } from "../../theme/tokens";
 
 export function getAppDialogSx(mode = "dark", muiTheme) {
     const semantic = resolveSemanticTokens(mode);
+    const typography = appTokens.typography.roles;
     const palette = muiTheme?.palette;
     const commonBlack = palette?.common?.black || appTokens.core.ink[900];
     const isDark = mode === "dark";
@@ -22,7 +23,7 @@ export function getAppDialogSx(mode = "dark", muiTheme) {
     return {
         paper: {
             backgroundColor: paperBg,
-            borderRadius: "16px",
+            borderRadius: appTokens.radiusRoles.floating,
             minWidth: "280px",
             maxWidth: "320px",
             boxShadow: `0 8px 32px ${alpha(commonBlack, isDark ? 0.4 : 0.12)}`,
@@ -36,7 +37,7 @@ export function getAppDialogSx(mode = "dark", muiTheme) {
             justifyContent: "space-between",
         },
         titleText: {
-            fontSize: 14,
+            fontSize: typography.subheading.fontSize,
             fontWeight: 500,
             letterSpacing: "0.4px",
             color: textPrimary,
@@ -53,8 +54,8 @@ export function getAppDialogSx(mode = "dark", muiTheme) {
         },
         bodyText: {
             color: textSecondary,
-            fontSize: 14,
-            lineHeight: 1.5,
+            fontSize: typography.body.fontSize,
+            lineHeight: typography.body.lineHeight,
         },
         footer: {
             px: 2,
@@ -65,7 +66,7 @@ export function getAppDialogSx(mode = "dark", muiTheme) {
         },
         cancelButton: {
             textTransform: "none",
-            borderRadius: "8px",
+            borderRadius: appTokens.radiusRoles.button,
             px: 2,
             py: 0.8,
             color: textSecondary,
@@ -73,10 +74,10 @@ export function getAppDialogSx(mode = "dark", muiTheme) {
         },
         primaryButton: {
             textTransform: "none",
-            borderRadius: "8px",
+            borderRadius: appTokens.radiusRoles.button,
             px: 2.2,
             py: 0.8,
-            fontSize: 13,
+            fontSize: typography.body.fontSize,
             fontWeight: 500,
             bgcolor: primaryMain || semantic.action.settings,
             color: primaryContrast,
@@ -85,7 +86,7 @@ export function getAppDialogSx(mode = "dark", muiTheme) {
         },
         segmentWrap: {
             display: "flex",
-            borderRadius: "8px",
+            borderRadius: appTokens.radiusRoles.field,
             p: "3px",
             backgroundColor: actionHover,
         },
@@ -93,9 +94,9 @@ export function getAppDialogSx(mode = "dark", muiTheme) {
             px: 1.5,
             py: 0.75,
             minWidth: "auto",
-            borderRadius: "6px",
+            borderRadius: appTokens.radiusRoles.chip,
             textTransform: "none",
-            fontSize: 12,
+            fontSize: typography.body.fontSize,
             backgroundColor: active ? (palette?.background?.default || semantic.surface.canvas) : "transparent",
             color: active ? textPrimary : textSecondary,
             boxShadow: active ? `0 1px 3px ${alpha(commonBlack, 0.1)}` : "none",

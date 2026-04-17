@@ -1,3 +1,3 @@
-[submodule "src/project"]
-	path = src/project
-	url = https://github.com/solar224/project.git
+[submodule "src/side-tool"]
+	path = src/side-tool
+	url = https://github.com/solar224/side-tool.git
