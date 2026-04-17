@@ -1,13 +1,13 @@
 import React from "react";
 import { Contact } from "./Contactme_Cmp";
 
-const Contactme = () => {
+const Contactme = ({ calendarVariant = "desktop" }) => {
     return (
         <div
             className="Contactme"
             style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
         >
-            <Contact />
+            <Contact calendarVariant={calendarVariant} />
         </div>
     );
 };

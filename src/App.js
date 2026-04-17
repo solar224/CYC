@@ -4,11 +4,12 @@ import { createContext, useState, useEffect, useMemo } from "react";
 
 import Home from "./components/Home";
 import Contactme from "./components/Contactme";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FloatingCircle from "./components/FloatingCircle";
-import FloatingChat from "./components/FloatingChat";
 import DynamicBackground from "./components/DynamicBackground";
+import PhoneHeader from "./components/headerComponents/PhoneHeader";
+import PcHeader from "./components/headerComponents/PcHeader";
+import ResponsiveLayout from "./components/layout/ResponsiveLayout";
 import NotesHome from "./components/Note";
 import NoteDetail from "./components/NoteDetail";
 import Note from "./components/Note";
@@ -19,6 +20,7 @@ import { SnackbarProvider } from "notistack";
 
 import { ThemeProvider, createTheme, responsiveFontSizes } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
 import { appTokens } from "./theme/tokens";
 
 import "./components/css/App.css";
@@ -39,7 +41,7 @@ function AppFloatingCircle() {
 }
 
 function AppHeader() {
-  return <Header />;
+  return <ResponsiveLayout mobile={<PhoneHeader />} desktop={<PcHeader />} />;
 }
 
 function AppBackground({ theme }) {
@@ -99,7 +101,7 @@ export default function App() {
   const muiTheme = useMemo(() => {
     let t = createTheme({
       breakpoints: {
-        values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 },
+        values: appTokens.breakpoints.mui,
       },
       palette: {
         mode: theme === "dark" ? "dark" : "light",
@@ -132,25 +134,43 @@ export default function App() {
           <ThemeProvider theme={muiTheme}>
             <CssBaseline enableColorScheme />
 
-            <div className="app">
+            <Box
+              className="app"
+              sx={{
+                pt: {
+                  xs: "var(--app-header-mobile, 56px)",
+                  lg: "var(--app-header-desktop, 64px)",
+                },
+              }}
+            >
               <Router basename={process.env.PUBLIC_URL}>
                 <AppOverflowGuard />
                 <AppBackground theme={theme} />
                 <AppHeader />
                 <Routes>
-                  <Route path="/" element={<Home />} />
+                  <Route
+                    path="/"
+                    element={<ResponsiveLayout mobile={<Home layoutKind="mobile" />} desktop={<Home layoutKind="desktop" />} />}
+                  />
                   <Route path="/note" element={<Note />} />
-                  <Route path="/contact-me" element={<Contactme />} />
+                  <Route
+                    path="/contact-me"
+                    element={
+                      <ResponsiveLayout
+                        mobile={<Contactme calendarVariant="mobile" />}
+                        desktop={<Contactme calendarVariant="desktop" />}
+                      />
+                    }
+                  />
                   <Route path="/tools" element={<Tools />} />
                   <Route path="/tools/RoughFrame" element={<SketchCanvas />} />
                   <Route path="/notes" element={<NotesHome />} />
                   <Route path="/notes/:slug" element={<NoteDetail />} />
                 </Routes>
-                <FloatingChat />
                 <AppFloatingCircle />
                 <AppFooter />
               </Router>
-            </div>
+            </Box>
           </ThemeProvider>
         </LanguageContext.Provider>
       </ThemeContext.Provider>

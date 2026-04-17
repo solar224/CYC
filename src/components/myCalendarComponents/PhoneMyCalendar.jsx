@@ -6,7 +6,7 @@ import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
 import TodayRounded from "@mui/icons-material/TodayRounded";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
-import { getEventsBetween } from "../../shared/calendar/eventStore";
+import useCalendarEvents from "../../hooks/useCalendarEvents";
 
 dayjs.extend(isoWeek);
 
@@ -86,13 +86,8 @@ export default function PhoneMyCalendar() {
     // 只抓單日區間（保留 weekly repeat 展開邏輯）
     const dayStartISO = useMemo(() => selected.startOf("day").toISOString(), [selected]);
     const dayEndISO = useMemo(() => selected.endOf("day").toISOString(), [selected]);
-    const allEvents = useMemo(
-        () => getEventsBetween(dayStartISO, dayEndISO).sort((a, b) => new Date(a.start) - new Date(b.start)),
-        [dayStartISO, dayEndISO]
-    );
-
-    const allDayEvents = allEvents.filter((e) => !!e.allDay);
-    const timedEvents = layoutTimedEventsOneDay(allEvents.filter((e) => !e.allDay));
+    const { allDayEvents, timedEvents: rawTimedEvents } = useCalendarEvents(dayStartISO, dayEndISO);
+    const timedEvents = useMemo(() => layoutTimedEventsOneDay(rawTimedEvents), [rawTimedEvents]);
 
     /** 動態字色 */
     const ink = t.palette.mode === "dark" ? "rgba(255,255,255,.92)" : "rgba(0,0,0,.88)";

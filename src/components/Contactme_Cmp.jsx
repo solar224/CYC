@@ -1,22 +1,20 @@
 // src/pages/Contact.jsx
-import React, { useContext, useMemo } from "react";
+import React from "react";
 import { Container, Box, Stack, Typography, Button } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import SendIcon from "@mui/icons-material/Send";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { ScrollSpyProvider, SpySection, Toc } from "../shared/scrollspy";
 import { appTokens } from "../theme/tokens";
 
 import PcMyCalendar from "./myCalendarComponents/PcMyCalendar";
 import PhoneMyCalendar from "./myCalendarComponents/PhoneMyCalendar";
 
-import { ThemeContext } from "../App";
+import useAppModeTheme from "../hooks/useAppModeTheme";
 
-const Contact = () => {
-    const { theme: mode } = useContext(ThemeContext);
-    const muiTheme = useMemo(() => createTheme({ palette: { mode } }), [mode]);
-    const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
+const Contact = ({ calendarVariant = "desktop" }) => {
+    const muiTheme = useAppModeTheme();
+    const isMobileLayout = calendarVariant !== "desktop";
 
     return (
         <ThemeProvider theme={muiTheme}>
@@ -62,7 +60,7 @@ const Contact = () => {
                             以下為忙碌時段，若需聯繫請來信。
                         </Typography>
                     </Box>
-                    {isMobile ? <PhoneMyCalendar /> : <PcMyCalendar />}
+                    {isMobileLayout ? <PhoneMyCalendar /> : <PcMyCalendar />}
 
                 </Container>
                 <Toc sidebarWidth={260} collapsedWidth={18} containerMaxWidth={1200} />

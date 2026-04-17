@@ -6,7 +6,7 @@ import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
 import TodayRounded from "@mui/icons-material/TodayRounded";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
-import { getEventsBetween } from "../../shared/calendar/eventStore";
+import useCalendarEvents from "../../hooks/useCalendarEvents";
 
 dayjs.extend(isoWeek);
 
@@ -78,10 +78,7 @@ export default function PcMyCalendar() {
     const start = useMemo(() => anchor.isoWeekday(1).startOf("day"), [anchor]);
     const end = useMemo(() => start.add(7, "day").endOf("day"), [start]);
 
-    const events = useMemo(
-        () => getEventsBetween(start.toISOString(), end.toISOString()).sort((a, b) => new Date(a.start) - new Date(b.start)),
-        [start, end]
-    );
+    const { allEvents: events } = useCalendarEvents(start.toISOString(), end.toISOString());
 
     const days = useMemo(() => Array.from({ length: 7 }, (_, i) => start.add(i, "day")), [start]);
 

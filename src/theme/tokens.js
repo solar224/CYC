@@ -1,4 +1,18 @@
 export const appTokens = {
+  breakpoints: {
+    mobileMax: 767,
+    tabletMin: 768,
+    tabletMax: 1023,
+    desktopMin: 1024,
+    desktopWideMin: 1440,
+    mui: {
+      xs: 0,
+      sm: 600,
+      md: 768,
+      lg: 1024,
+      xl: 1440,
+    },
+  },
   layout: {
     headerHeight: {
       mobile: 56,

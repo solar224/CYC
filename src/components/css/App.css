@@ -1,12 +1,5 @@
 .app {
     min-height: 100vh;
     transition: background-color 0.3s ease, color 0.3s ease;
-    padding-top: var(--app-header-mobile, 56px);
     letter-spacing: 0.4px;
-}
-
-@media (min-width: 900px) {
-    .app {
-        padding-top: var(--app-header-desktop, 64px);
-    }
 }

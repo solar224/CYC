@@ -1,19 +1,11 @@
-import React, { useContext, useMemo } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React from "react";
+import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import { CvContent } from "./CvContent";
-
-import { ThemeContext } from "../../App";
+import useAppModeTheme from "../../hooks/useAppModeTheme";
 
 const PhoneHome = () => {
-    const { theme } = useContext(ThemeContext);
-    const muiTheme = useMemo(
-        () =>
-            createTheme({
-                palette: { mode: theme === "dark" ? "dark" : "light" },
-            }),
-        [theme]
-    );
+    const muiTheme = useAppModeTheme();
 
     return (
         <ThemeProvider theme={muiTheme}>

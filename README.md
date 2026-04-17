@@ -1,7 +1,5 @@
 # YC-Chan Personal Website
 
-> A personal website built with React + MUI, featuring a chat-based homepage, notes system, and built-in tools.
-
 **Live Site**: [https://solar224.github.io/CYC](https://solar224.github.io/CYC)
 
 ---
@@ -14,5 +12,5 @@
 
 ## Contact
 
-- Email: cyc.cs14@nycu.edu.tw
+- Email: <cyc.cs14@nycu.edu.tw>
 - Website: [https://solar224.github.io/CYC](https://solar224.github.io/CYC)

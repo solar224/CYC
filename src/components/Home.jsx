@@ -1,11 +1,10 @@
 import React from "react";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { Box } from "@mui/material";
 import { PcHome } from "./homeComponents/PcHome";
 import { PhoneHome } from "./homeComponents/PhoneHome";
 
-function Home() {
-    const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
+function Home({ layoutKind = "desktop" }) {
+    const isMobileLayout = layoutKind !== "desktop";
 
     return (
         <Box
@@ -19,7 +18,7 @@ function Home() {
                 flexDirection: "column",
             }}
         >
-            {isMobile ? <PhoneHome /> : <PcHome />}
+            {isMobileLayout ? <PhoneHome /> : <PcHome />}
         </Box>
     );
 }

@@ -517,9 +517,9 @@ export default function CanvasArea() {
           el.type === "freedraw"
             ? el.points.length > 1
             : el.type === "line" || el.type === "arrow"
-            ? el.points && el.points.length >= 2 &&
+              ? el.points && el.points.length >= 2 &&
               (Math.abs(el.points[1]?.[0] || 0) > 2 || Math.abs(el.points[1]?.[1] || 0) > 2)
-            : el.width > 2 || el.height > 2;
+              : el.width > 2 || el.height > 2;
 
         if (hasSize) {
           // Finalize binding for line/arrow end point
@@ -737,10 +737,10 @@ export default function CanvasArea() {
     mode === "panning"
       ? "grabbing"
       : spaceDownRef.current
-      ? "grab"
-      : state.activeTool === TOOL_TYPES.SELECT
-      ? "default"
-      : "crosshair";
+        ? "grab"
+        : state.activeTool === TOOL_TYPES.SELECT
+          ? "default"
+          : "crosshair";
 
   return (
     <Box
