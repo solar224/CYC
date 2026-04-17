@@ -28,7 +28,7 @@ const envSources = [
 ];
 
 function buildEnvCandidateKeys(name) {
-  return [name, `REACT_APP_${name}`, `VITE_${name}`];
+  return [name, `REACT_APP_${name}`];
 }
 
 function readRawEnv(name) {
