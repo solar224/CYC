@@ -17,6 +17,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Slide from "@mui/material/Slide";
 import { useSnackbar } from "notistack";
+import { useTheme as useMuiTheme } from "@mui/material/styles";
 import { ThemeContext } from "../context/ThemeContext";
 import { LanguageContext } from "../context/LanguageContext";
 import { appTokens } from "../theme/tokens";
@@ -38,10 +39,10 @@ export default function FloatingCircleNoLag() {
     const { enqueueSnackbar } = useSnackbar();
     const { theme, toggleTheme } = useContext(ThemeContext);
     const { language, toggleLanguage } = useContext(LanguageContext);
+    const muiTheme = useMuiTheme();
     const [loclang, setLoclang] = useState(language);
     const [loctheme, setLocTheme] = useState(theme);
-    const isDark = theme === "dark";
-    const dialogSx = getAppDialogSx(isDark);
+    const dialogSx = getAppDialogSx(theme, muiTheme);
 
     useEffect(() => {
         let ticking = false;
@@ -125,9 +126,9 @@ export default function FloatingCircleNoLag() {
                         onMouseLeave={() => setIsOneHovered(false)}
                     >
                         {isOneHovered ? (
-                            <KeyboardDoubleArrowUpIcon sx={{ color: "#fff", fontSize: 30 }} />
+                            <KeyboardDoubleArrowUpIcon sx={{ color: appTokens.core.white, fontSize: 30 }} />
                         ) : (
-                            <KeyboardArrowUpIcon sx={{ color: "#fff", fontSize: 30 }} />
+                            <KeyboardArrowUpIcon sx={{ color: appTokens.core.white, fontSize: 30 }} />
                         )}
                     </div>
                 </Tooltip>
@@ -151,9 +152,9 @@ export default function FloatingCircleNoLag() {
                         onMouseLeave={() => setIsTwoHovered(false)}
                     >
                         {isTwoHovered ? (
-                            <SettingsRoundedIcon sx={{ color: "#fff", fontSize: 30 }} />
+                            <SettingsRoundedIcon sx={{ color: appTokens.core.white, fontSize: 30 }} />
                         ) : (
-                            <SettingsIcon sx={{ color: "#fff" }} />
+                            <SettingsIcon sx={{ color: appTokens.core.white }} />
                         )}
                     </div>
                 </Tooltip>

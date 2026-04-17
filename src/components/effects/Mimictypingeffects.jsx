@@ -13,6 +13,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
+import { appTokens } from "../../theme/tokens";
 
 const TypingEffect = ({ textList, speed, variant, repeat }) => {
     const [textIndex, setTextIndex] = useState(0);
@@ -54,7 +55,7 @@ const TypingEffect = ({ textList, speed, variant, repeat }) => {
     return (
         <Typography variant={variant}>
             {displayedText}
-            <span style={{ color: "#f39212", userSelect: "none" }}>{showCursor ? "｜" : ""}</span>
+            <span style={{ color: appTokens.core.brand.orange, userSelect: "none" }}>{showCursor ? "｜" : ""}</span>
         </Typography>
     );
 };

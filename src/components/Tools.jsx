@@ -129,7 +129,7 @@ export default function Tools() {
                                                 height="160"
                                                 image={item.cover}
                                                 alt={item.title}
-                                                sx={{ objectFit: "contain", p: 2, bgcolor: "#ffffff" }}
+                                                sx={(t) => ({ objectFit: "contain", p: 2, bgcolor: t.palette.common.white })}
                                             />
                                         )}
                                         <CardContent>
