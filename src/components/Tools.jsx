@@ -7,15 +7,17 @@ import { alpha } from "@mui/material/styles";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { Link as RouterLink } from "react-router-dom";
+import { APP_ROUTES } from "../config/constants";
+import { ENV } from "../config/env";
 
 const TOOL_ITEMS = [
     {
         id: "rough-frame",
         title: "RoughFrame",
         desc: "美觀的無限白板繪圖工具 — 支援手繪風格、形狀、箭頭、自由筆、文字，可匯出 PNG/SVG/JSON。",
-        cover: `${process.env.PUBLIC_URL}/RoughFrame.svg`,
+        cover: `${ENV.PUBLIC_URL}/RoughFrame.svg`,
         tags: ["whiteboard", "drawing", "SVG"],
-        to: "/tools/RoughFrame",
+        to: APP_ROUTES.ROUGHFRAME,
     },
 ];
 
@@ -41,9 +43,10 @@ export default function Tools() {
         <Box
             component="main"
             sx={{
-                minHeight: { xs: "100svh", md: "100vh" },
+                height: "100%",
                 display: "flex",
                 flexDirection: "column",
+                overflowY: "auto",
             }}
         >
             <Container sx={{ mt: 4, mb: 6 }}>

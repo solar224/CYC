@@ -1,13 +1,6 @@
 // App.jsx
-import { BrowserRouter as Router, useLocation } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { useMemo } from "react";
-
-import Footer from "./components/Footer";
-import FloatingCircle from "./components/FloatingCircle";
-import DynamicBackground from "./components/DynamicBackground";
-import PhoneHeader from "./components/headerComponents/PhoneHeader";
-import PcHeader from "./components/headerComponents/PcHeader";
-import ResponsiveLayout from "./components/layout/ResponsiveLayout";
 
 import { SnackbarProvider } from "notistack";
 
@@ -17,41 +10,11 @@ import Box from "@mui/material/Box";
 import { ThemeContext } from "./context/ThemeContext";
 import { LanguageContext } from "./context/LanguageContext";
 import { ENV } from "./config/env";
-import { APP_ROUTES, APP_ROUTE_PREFIXES } from "./config/constants";
-import { useAppOverflowGuard, usePersistentPreference } from "./hooks/useAppInitialization";
+import { usePersistentPreference } from "./hooks/useAppInitialization";
 import AppRoutes from "./routes/AppRoutes";
 import { createAppMuiTheme } from "./styles/theme/muiTheme";
 
 import "./components/css/App.css";
-
-function AppFooter() {
-  const location = useLocation();
-  if (location.pathname.startsWith(APP_ROUTE_PREFIXES.TOOLS)) return null;
-  return <Footer />;
-}
-
-function AppFloatingCircle() {
-  const location = useLocation();
-  if (location.pathname.startsWith(APP_ROUTE_PREFIXES.TOOLS)) return null;
-  return <FloatingCircle />;
-}
-
-function AppHeader() {
-  return <ResponsiveLayout mobile={<PhoneHeader />} desktop={<PcHeader />} />;
-}
-
-function AppBackground({ theme }) {
-  const location = useLocation();
-  if (location.pathname.startsWith(APP_ROUTES.ROUGHFRAME)) return null;
-  return <DynamicBackground theme={theme} />;
-}
-
-function AppOverflowGuard() {
-  const location = useLocation();
-  const isToolPage = location.pathname.startsWith(APP_ROUTE_PREFIXES.TOOLS);
-  useAppOverflowGuard(isToolPage);
-  return null;
-}
 
 export default function App() {
   const [theme, setTheme] = usePersistentPreference("theme", "dark");
@@ -71,20 +34,10 @@ export default function App() {
 
             <Box
               className="app"
-              sx={{
-                pt: {
-                  xs: "var(--app-header-mobile, 56px)",
-                  lg: "var(--app-header-desktop, 64px)",
-                },
-              }}
+              sx={{ minHeight: "100vh" }}
             >
               <Router basename={ENV.PUBLIC_URL}>
-                <AppOverflowGuard />
-                <AppBackground theme={theme} />
-                <AppHeader />
-                <AppRoutes />
-                <AppFloatingCircle />
-                <AppFooter />
+                <AppRoutes theme={theme} />
               </Router>
             </Box>
           </ThemeProvider>

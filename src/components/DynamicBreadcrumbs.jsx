@@ -4,18 +4,7 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { NOTES } from "../data/notes";
 import { appTokens } from "../theme/tokens";
-
-const STATIC_NAME_MAP = {
-    "about-me": "關於我",
-    "contact-me": "聯絡",
-    note: "筆記",
-    notes: "筆記",
-    tools: "小工具",
-    RoughFrame: "RoughFrame",
-    "school-curriculum": "學校課程",
-    "coding-practice": "程式練習",
-    "other-practice": "其他",
-};
+import { BREADCRUMB_SEGMENT_LABELS } from "../config/constants";
 
 const toFriendlyName = (value) => {
     if (!value) return "";
@@ -34,7 +23,7 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
 
         pathnames.forEach((segment, index) => {
             const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
-            let label = STATIC_NAME_MAP[segment];
+            let label = BREADCRUMB_SEGMENT_LABELS[segment];
 
             if (!label && pathnames[index - 1] === "notes") {
                 const note = NOTES.find((n) => n.slug === segment);

@@ -9,6 +9,7 @@ import {
     Button,
 } from "@mui/material";
 import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
+import { APP_ROUTES } from "../../config/constants";
 import { appTokens } from "../../theme/tokens";
 
 function ElevationScroll({ children }) {
@@ -46,7 +47,7 @@ const PhoneHeader = () => {
                     </Box>
                     <Button
                         component={NavLink}
-                        to="/tools"
+                        to={APP_ROUTES.TOOLS}
                         variant="text"
                         color="inherit"
                         sx={{

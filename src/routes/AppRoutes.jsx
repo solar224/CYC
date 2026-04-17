@@ -6,30 +6,39 @@ import NoteDetail from "../components/NoteDetail";
 import NotesHome from "../components/Note";
 import Tools from "../components/Tools";
 import ResponsiveLayout from "../components/layout/ResponsiveLayout";
-import { APP_ROUTES } from "../config/constants";
+import { APP_ROUTES, TOOLS_ROUTE_SEGMENTS } from "../config/constants";
 import SketchCanvas from "../project/RoughFrame/SketchCanvas";
+import DefaultLayout from "./layouts/DefaultLayout";
+import ToolLayout from "./layouts/ToolLayout";
 
-export default function AppRoutes() {
+export default function AppRoutes({ theme }) {
     return (
         <Routes>
             <Route
-                path={APP_ROUTES.HOME}
-                element={<ResponsiveLayout mobile={<Home layoutKind="mobile" />} desktop={<Home layoutKind="desktop" />} />}
-            />
-            <Route path={APP_ROUTES.NOTE} element={<Note />} />
-            <Route
-                path={APP_ROUTES.CONTACT}
-                element={
-                    <ResponsiveLayout
-                        mobile={<Contactme calendarVariant="mobile" />}
-                        desktop={<Contactme calendarVariant="desktop" />}
-                    />
-                }
-            />
-            <Route path={APP_ROUTES.TOOLS} element={<Tools />} />
-            <Route path={APP_ROUTES.ROUGHFRAME} element={<SketchCanvas />} />
-            <Route path={APP_ROUTES.NOTES} element={<NotesHome />} />
-            <Route path={APP_ROUTES.NOTE_DETAIL} element={<NoteDetail />} />
+                element={<DefaultLayout theme={theme} />}
+            >
+                <Route
+                    path={APP_ROUTES.HOME}
+                    element={<ResponsiveLayout mobile={<Home layoutKind="mobile" />} desktop={<Home layoutKind="desktop" />} />}
+                />
+                <Route path={APP_ROUTES.NOTE} element={<Note />} />
+                <Route
+                    path={APP_ROUTES.CONTACT}
+                    element={
+                        <ResponsiveLayout
+                            mobile={<Contactme calendarVariant="mobile" />}
+                            desktop={<Contactme calendarVariant="desktop" />}
+                        />
+                    }
+                />
+                <Route path={APP_ROUTES.NOTES} element={<NotesHome />} />
+                <Route path={APP_ROUTES.NOTE_DETAIL} element={<NoteDetail />} />
+            </Route>
+
+            <Route path={APP_ROUTES.TOOLS} element={<ToolLayout />}>
+                <Route index element={<Tools />} />
+                <Route path={TOOLS_ROUTE_SEGMENTS.ROUGHFRAME} element={<SketchCanvas />} />
+            </Route>
         </Routes>
     );
 }
