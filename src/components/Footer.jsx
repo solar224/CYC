@@ -14,7 +14,8 @@ import CodeIcon from '@mui/icons-material/Code';
 import TranslateIcon from "@mui/icons-material/Translate";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { ThemeContext, LanguageContext } from "../App";
+import { ThemeContext } from "../context/ThemeContext";
+import { LanguageContext } from "../context/LanguageContext";
 import { appTokens } from "../theme/tokens";
 const Footer = ({ compact = false, showSettings = false }) => {
     const { theme, toggleTheme } = useContext(ThemeContext);
@@ -62,81 +63,81 @@ const Footer = ({ compact = false, showSettings = false }) => {
                 </Stack>
             )}
 
-        <Box
-            sx={{
-                display: "flex",
-                justifyContent: compact ? "flex-start" : "center",
-                mb: compact ? 0.5 : 1,
-            }}
-        >
-            <Tooltip title="github" placement="top">
-                <IconButton
-                    href="https://github.com/solar224"
-                    target="_blank"
-                    rel="noopener"
-                    sx={{
-                        color: compact ? "text.secondary" : appTokens.color.footer.fg,
-                        "&:hover": {
-                            color: "#61dafb",
-                        },
-                        p: compact ? 0.5 : 1,
-                    }}
-                >
-                    <GitHubIcon fontSize={compact ? "small" : "large"} />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Linkedin" placement="top">
-                <IconButton
-                    href="https://www.linkedin.com/in/%E5%AE%87%E5%AE%B8-%E8%A9%B9-71211a347/"
-                    target="_blank"
-                    rel="noopener"
-                    sx={{
-                        color: compact ? "text.secondary" : appTokens.color.footer.fg,
-                        "&:hover": {
-                            color: "#0e76a8",
-                        },
-                        p: compact ? 0.5 : 1,
-                    }}
-                >
-                    <LinkedInIcon fontSize={compact ? "small" : "large"} />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Gmail" placement="top">
-                <IconButton
-                    href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=cyc.cs14@nycu.edu.tw"
-                    target="_blank"
-                    rel="noopener"
-                    sx={{
-                        color: compact ? "text.secondary" : appTokens.color.footer.fg,
-                        "&:hover": {
-                            color: "#db4437",
-                        },
-                        p: compact ? 0.5 : 1,
-                    }}
-                >
-                    <MailOutlineIcon fontSize={compact ? "small" : "large"} />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Leetcode" placement="top">
-                <IconButton
-                    href="https://leetcode.com/u/c_1_1/"
-                    target="_blank"
-                    rel="noopener"
-                    sx={{
-                        color: compact ? "text.secondary" : appTokens.color.footer.fg,
-                        "&:hover": {
-                            color: "#00FF00",
-                        },
-                        p: compact ? 0.5 : 1,
-                    }}
-                >
-                    <CodeIcon fontSize={compact ? "small" : "large"} />
-                </IconButton>
-            </Tooltip>
-        </Box>
-        <Typography variant={compact ? "caption" : "body2"}>
-            © 2025 <strong>[YC-Chan]</strong>. All rights reserved.
-        </Typography>
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: compact ? "flex-start" : "center",
+                    mb: compact ? 0.5 : 1,
+                }}
+            >
+                <Tooltip title="github" placement="top">
+                    <IconButton
+                        href="https://github.com/solar224"
+                        target="_blank"
+                        rel="noopener"
+                        sx={{
+                            color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                            "&:hover": {
+                                color: "#61dafb",
+                            },
+                            p: compact ? 0.5 : 1,
+                        }}
+                    >
+                        <GitHubIcon fontSize={compact ? "small" : "large"} />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Linkedin" placement="top">
+                    <IconButton
+                        href="https://www.linkedin.com/in/%E5%AE%87%E5%AE%B8-%E8%A9%B9-71211a347/"
+                        target="_blank"
+                        rel="noopener"
+                        sx={{
+                            color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                            "&:hover": {
+                                color: "#0e76a8",
+                            },
+                            p: compact ? 0.5 : 1,
+                        }}
+                    >
+                        <LinkedInIcon fontSize={compact ? "small" : "large"} />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Gmail" placement="top">
+                    <IconButton
+                        href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=cyc.cs14@nycu.edu.tw"
+                        target="_blank"
+                        rel="noopener"
+                        sx={{
+                            color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                            "&:hover": {
+                                color: "#db4437",
+                            },
+                            p: compact ? 0.5 : 1,
+                        }}
+                    >
+                        <MailOutlineIcon fontSize={compact ? "small" : "large"} />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Leetcode" placement="top">
+                    <IconButton
+                        href="https://leetcode.com/u/c_1_1/"
+                        target="_blank"
+                        rel="noopener"
+                        sx={{
+                            color: compact ? "text.secondary" : appTokens.color.footer.fg,
+                            "&:hover": {
+                                color: "#00FF00",
+                            },
+                            p: compact ? 0.5 : 1,
+                        }}
+                    >
+                        <CodeIcon fontSize={compact ? "small" : "large"} />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+            <Typography variant={compact ? "caption" : "body2"}>
+                © 2025 <strong>[YC-Chan]</strong>. All rights reserved.
+            </Typography>
         </Box>
     );
 };

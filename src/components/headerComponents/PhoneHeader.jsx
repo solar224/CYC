@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { LanguageContext } from "../../App";
+import { LanguageContext } from "../../context/LanguageContext";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import {
     AppBar,

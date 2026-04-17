@@ -17,7 +17,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Slide from "@mui/material/Slide";
 import { useSnackbar } from "notistack";
-import { ThemeContext, LanguageContext } from "../App";
+import { ThemeContext } from "../context/ThemeContext";
+import { LanguageContext } from "../context/LanguageContext";
 import { appTokens } from "../theme/tokens";
 import { getAppDialogSx } from "../shared/dialog/dialogStyles";
 
