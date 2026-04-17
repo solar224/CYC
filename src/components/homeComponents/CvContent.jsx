@@ -123,7 +123,7 @@ export function CvContent({ mobile = false }) {
                         borderRadius: 2,
                         borderColor: "transparent",
                         p: { xs: 1.2, sm: 1.8, md: 2.2 },
-                        bgcolor: "background.paper",
+                        bgcolor: "transparent",
                     }}
                 >
                     <Stack spacing={1.8}>
