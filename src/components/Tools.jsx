@@ -7,7 +7,7 @@ import { alpha } from "@mui/material/styles";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { Link as RouterLink } from "react-router-dom";
-import { APP_ROUTES } from "../config/constants";
+import { TOOLS_ROUTE_PATHS } from "../config/tools.constants";
 import { ENV } from "../config/env";
 
 const TOOL_ITEMS = [
@@ -17,7 +17,7 @@ const TOOL_ITEMS = [
         desc: "美觀的無限白板繪圖工具 — 支援手繪風格、形狀、箭頭、自由筆、文字，可匯出 PNG/SVG/JSON。",
         cover: `${ENV.PUBLIC_URL}/RoughFrame.svg`,
         tags: ["whiteboard", "drawing", "SVG"],
-        to: APP_ROUTES.ROUGHFRAME,
+        to: TOOLS_ROUTE_PATHS.ROUGHFRAME,
     },
 ];
 

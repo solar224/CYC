@@ -3,7 +3,9 @@ import { NavLink, useLocation } from "react-router-dom";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { AppBar, Toolbar, Container, Tabs, Tab, Box } from "@mui/material";
 import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
-import { APP_ROUTES, MAIN_NAV_ITEMS } from "../../config/constants";
+import { APP_ROUTE_PATHS, MAIN_NAV_ITEMS } from "../../config/app.constants";
+import { NOTES_ROUTE_PATHS } from "../../config/notes.constants";
+import { TOOLS_ROUTE_PATHS } from "../../config/tools.constants";
 import { LanguageContext } from "../../context/LanguageContext";
 import { getNavLabel } from "../../i18n/navigation";
 import { appTokens } from "../../theme/tokens";
@@ -26,11 +28,11 @@ const PcHeader = () => {
 
     const current = useMemo(() => {
         const p = location.pathname;
-        if (p.startsWith(APP_ROUTES.NOTE) || p.startsWith(APP_ROUTES.NOTES)) {
-            return APP_ROUTES.NOTE;
+        if (p.startsWith(APP_ROUTE_PATHS.NOTE) || p.startsWith(NOTES_ROUTE_PATHS.HOME)) {
+            return APP_ROUTE_PATHS.NOTE;
         }
-        if (p.startsWith(APP_ROUTES.TOOLS)) {
-            return APP_ROUTES.TOOLS;
+        if (p.startsWith(TOOLS_ROUTE_PATHS.ROOT)) {
+            return TOOLS_ROUTE_PATHS.ROOT;
         }
         return p;
     }, [location.pathname]);

@@ -8,23 +8,23 @@ export const APP_ROUTE_PATHS = {
 
 export const APP_ROUTE_META = {
   [APP_ROUTE_PATHS.HOME]: {
-    breadcrumb: "首頁",
-    title: "Home",
+    breadcrumbKey: "breadcrumb.home",
+    titleKey: "title.home",
   },
   [APP_ROUTE_PATHS.NOTE]: {
-    breadcrumb: "筆記",
-    title: "Note",
+    breadcrumbKey: "breadcrumb.note",
+    titleKey: "title.note",
   },
   [APP_ROUTE_PATHS.CONTACT]: {
-    breadcrumb: "聯絡",
-    title: "Contact",
+    breadcrumbKey: "breadcrumb.contact",
+    titleKey: "title.contact",
   },
 };
 
-export const APP_SEGMENT_LABELS = {
-  "about-me": "關於我",
-  "contact-me": "聯絡",
-  note: "筆記",
+export const APP_SEGMENT_LABEL_KEYS = {
+  "about-me": "segment.about-me",
+  "contact-me": "segment.contact",
+  note: "segment.note",
 };
 
 export const MAIN_NAV_ITEMS = [

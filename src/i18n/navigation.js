@@ -1,23 +1,14 @@
-const FALLBACK_LANGUAGE = "zh";
+import { t } from "./messages";
 
-export const NAV_LABELS = {
-  zh: {
-    home: "關於我",
-    contact: "聯絡",
-    note: "筆記",
-    tools: "小工具",
-    homeAria: "返回首頁",
-  },
-  en: {
-    home: "About",
-    contact: "Contact",
-    note: "Notes",
-    tools: "Tools",
-    homeAria: "Go Home",
-  },
+const NAV_KEY_MAP = {
+  home: "nav.home",
+  contact: "nav.contact",
+  note: "nav.note",
+  tools: "nav.tools",
+  homeAria: "aria.home",
 };
 
-export function getNavLabel(key, language = FALLBACK_LANGUAGE) {
-  const dict = NAV_LABELS[language] || NAV_LABELS[FALLBACK_LANGUAGE];
-  return dict[key] || key;
+export function getNavLabel(key, language = "zh") {
+  const messageKey = NAV_KEY_MAP[key] || key;
+  return t(messageKey, language);
 }

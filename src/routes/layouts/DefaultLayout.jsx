@@ -17,8 +17,8 @@ export default function DefaultLayout({ theme }) {
             <DynamicBackground theme={theme} />
             <AppHeader />
             <Box
-                className="default-layout"
                 sx={{
+                    minHeight: "100vh",
                     pt: {
                         xs: "var(--app-header-mobile)",
                         lg: "var(--app-header-desktop)",

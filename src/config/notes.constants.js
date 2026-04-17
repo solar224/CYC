@@ -5,18 +5,18 @@ export const NOTES_ROUTE_PATHS = {
 
 export const NOTES_ROUTE_META = {
   [NOTES_ROUTE_PATHS.HOME]: {
-    breadcrumb: "筆記",
-    title: "Notes",
+    breadcrumbKey: "breadcrumb.notes",
+    titleKey: "title.notes",
   },
   [NOTES_ROUTE_PATHS.DETAIL]: {
-    breadcrumb: "筆記內容",
-    title: "Note Detail",
+    breadcrumbKey: "breadcrumb.noteDetail",
+    titleKey: "title.noteDetail",
   },
 };
 
-export const NOTES_SEGMENT_LABELS = {
-  notes: "筆記",
-  "school-curriculum": "學校課程",
-  "coding-practice": "程式練習",
-  "other-practice": "其他",
+export const NOTES_SEGMENT_LABEL_KEYS = {
+  notes: "segment.notes",
+  "school-curriculum": "segment.school-curriculum",
+  "coding-practice": "segment.coding-practice",
+  "other-practice": "segment.other-practice",
 };

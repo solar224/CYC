@@ -9,18 +9,18 @@ export const TOOLS_ROUTE_SEGMENTS = {
 
 export const TOOLS_ROUTE_META = {
   [TOOLS_ROUTE_PATHS.ROOT]: {
-    breadcrumb: "小工具",
-    title: "Tools",
+    breadcrumbKey: "breadcrumb.tools",
+    titleKey: "title.tools",
   },
   [TOOLS_ROUTE_PATHS.ROUGHFRAME]: {
-    breadcrumb: "RoughFrame",
-    title: "RoughFrame",
+    breadcrumbKey: "breadcrumb.roughframe",
+    titleKey: "title.roughframe",
   },
 };
 
-export const TOOLS_SEGMENT_LABELS = {
-  tools: "小工具",
-  RoughFrame: "RoughFrame",
+export const TOOLS_SEGMENT_LABEL_KEYS = {
+  tools: "segment.tools",
+  RoughFrame: "segment.roughframe",
 };
 
 export const TOOL_ROUTE_PREFIX = TOOLS_ROUTE_PATHS.ROOT;

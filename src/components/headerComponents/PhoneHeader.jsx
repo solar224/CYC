@@ -9,7 +9,7 @@ import {
     Button,
 } from "@mui/material";
 import DynamicBreadcrumbs from "../DynamicBreadcrumbs";
-import { APP_ROUTES } from "../../config/constants";
+import { TOOLS_ROUTE_PATHS } from "../../config/tools.constants";
 import { getNavLabel } from "../../i18n/navigation";
 import { appTokens } from "../../theme/tokens";
 
@@ -48,7 +48,7 @@ const PhoneHeader = () => {
                     </Box>
                     <Button
                         component={NavLink}
-                        to={APP_ROUTES.TOOLS}
+                        to={TOOLS_ROUTE_PATHS.ROOT}
                         variant="text"
                         color="inherit"
                         sx={{

@@ -1,43 +1,34 @@
 import { Route, Routes } from "react-router-dom";
-import Contactme from "../components/Contactme";
-import Home from "../components/Home";
-import Note from "../components/Note";
-import NoteDetail from "../components/NoteDetail";
-import NotesHome from "../components/Note";
-import Tools from "../components/Tools";
-import ResponsiveLayout from "../components/layout/ResponsiveLayout";
-import { APP_ROUTES, TOOLS_ROUTE_SEGMENTS } from "../config/constants";
-import SketchCanvas from "../project/RoughFrame/SketchCanvas";
+import { appDomainRoutes } from "./domains/appDomainRoutes";
+import { notesDomainRoutes } from "./domains/notesDomainRoutes";
+import { toolsDomainRoute } from "./domains/toolsDomainRoutes";
 import DefaultLayout from "./layouts/DefaultLayout";
 import ToolLayout from "./layouts/ToolLayout";
 
 export default function AppRoutes({ theme }) {
+    const defaultLayoutRoutes = [...appDomainRoutes, ...notesDomainRoutes];
+
     return (
         <Routes>
-            <Route
-                element={<DefaultLayout theme={theme} />}
-            >
-                <Route
-                    path={APP_ROUTES.HOME}
-                    element={<ResponsiveLayout mobile={<Home layoutKind="mobile" />} desktop={<Home layoutKind="desktop" />} />}
-                />
-                <Route path={APP_ROUTES.NOTE} element={<Note />} />
-                <Route
-                    path={APP_ROUTES.CONTACT}
-                    element={
-                        <ResponsiveLayout
-                            mobile={<Contactme calendarVariant="mobile" />}
-                            desktop={<Contactme calendarVariant="desktop" />}
-                        />
-                    }
-                />
-                <Route path={APP_ROUTES.NOTES} element={<NotesHome />} />
-                <Route path={APP_ROUTES.NOTE_DETAIL} element={<NoteDetail />} />
+            <Route element={<DefaultLayout theme={theme} />}>
+                {defaultLayoutRoutes.map((routeDef) => (
+                    <Route
+                        key={routeDef.id}
+                        path={routeDef.path}
+                        element={routeDef.element}
+                    />
+                ))}
             </Route>
 
-            <Route path={APP_ROUTES.TOOLS} element={<ToolLayout />}>
-                <Route index element={<Tools />} />
-                <Route path={TOOLS_ROUTE_SEGMENTS.ROUGHFRAME} element={<SketchCanvas />} />
+            <Route path={toolsDomainRoute.path} element={<ToolLayout />}>
+                {toolsDomainRoute.children.map((routeDef) => (
+                    <Route
+                        key={routeDef.id}
+                        index={routeDef.index}
+                        path={routeDef.path}
+                        element={routeDef.element}
+                    />
+                ))}
             </Route>
         </Routes>
     );

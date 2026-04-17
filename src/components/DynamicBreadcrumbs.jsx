@@ -1,10 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { NOTES } from "../data/notes";
 import { appTokens } from "../theme/tokens";
-import { BREADCRUMB_SEGMENT_LABELS } from "../config/constants";
+import { LanguageContext } from "../context/LanguageContext";
+import { APP_ROUTE_META, APP_ROUTE_PATHS, APP_SEGMENT_LABEL_KEYS } from "../config/app.constants";
+import { NOTES_SEGMENT_LABEL_KEYS } from "../config/notes.constants";
+import { TOOLS_SEGMENT_LABEL_KEYS } from "../config/tools.constants";
+import { t } from "../i18n/messages";
 
 const toFriendlyName = (value) => {
     if (!value) return "";
@@ -13,17 +17,27 @@ const toFriendlyName = (value) => {
 
 export default function DynamicBreadcrumbs({ variant = "desktop" }) {
     const location = useLocation();
+    const { language } = useContext(LanguageContext);
+    const segmentLabelKeys = useMemo(
+        () => ({
+            ...APP_SEGMENT_LABEL_KEYS,
+            ...NOTES_SEGMENT_LABEL_KEYS,
+            ...TOOLS_SEGMENT_LABEL_KEYS,
+        }),
+        []
+    );
 
     const items = useMemo(() => {
         const pathnames = location.pathname.split("/").filter(Boolean);
         const crumbs = [
-            { label: "YC-Chan", to: "/" },
-            { label: "首頁", to: "/" },
+            { label: t("brand.name", language), to: APP_ROUTE_PATHS.HOME },
+            { label: t(APP_ROUTE_META[APP_ROUTE_PATHS.HOME].breadcrumbKey, language), to: APP_ROUTE_PATHS.HOME },
         ];
 
         pathnames.forEach((segment, index) => {
             const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
-            let label = BREADCRUMB_SEGMENT_LABELS[segment];
+            const labelKey = segmentLabelKeys[segment];
+            let label = labelKey ? t(labelKey, language) : "";
 
             if (!label && pathnames[index - 1] === "notes") {
                 const note = NOTES.find((n) => n.slug === segment);
@@ -37,7 +51,7 @@ export default function DynamicBreadcrumbs({ variant = "desktop" }) {
         });
 
         return crumbs;
-    }, [location.pathname]);
+    }, [language, location.pathname, segmentLabelKeys]);
 
     const mobileItems = useMemo(() => {
         if (items.length <= 2) return items;
