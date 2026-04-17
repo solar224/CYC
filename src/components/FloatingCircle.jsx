@@ -106,7 +106,6 @@ export default function FloatingCircleNoLag() {
                 {/* 回到頂部 */}
                 <Tooltip title="回到最上面" placement="left">
                     <div
-                        className="scroll-to-top-circle"
                         style={{
                             width: `${appTokens.layout.floating.size}px`,
                             height: `${appTokens.layout.floating.size}px`,
@@ -136,7 +135,6 @@ export default function FloatingCircleNoLag() {
                 {/* 設定 */}
                 <Tooltip title={language === "en" ? "setting" : "設定"} placement="left">
                     <div
-                        className="floating-circle"
                         style={{
                             width: `${appTokens.layout.floating.size}px`,
                             height: `${appTokens.layout.floating.size}px`,

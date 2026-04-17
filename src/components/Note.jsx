@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { NOTES } from "../data/notes";
 import {
     Container, Grid, Card, CardActionArea, CardContent, CardMedia,
@@ -12,14 +12,10 @@ import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import { Link as RouterLink } from "react-router-dom";
 import { ScrollSpyProvider, SpySection, Toc } from "../shared/scrollspy";
+import { LanguageContext } from "../context/LanguageContext";
+import { NOTE_CATEGORY_FILTERS } from "../config/notes.constants";
+import { t } from "../i18n/messages";
 import { appTokens } from "../theme/tokens";
-
-const CATS = [
-    { label: "全部", value: "all" },
-    { label: "學校課程", value: "school-curriculum" },
-    { label: "程式練習", value: "coding-practice" },
-    { label: "其他", value: "other-practice" },
-];
 
 const SUMMARY_MAX = 80;
 const truncate = (s = "", n = SUMMARY_MAX) => {
@@ -28,8 +24,17 @@ const truncate = (s = "", n = SUMMARY_MAX) => {
 };
 
 export default function Notes() {
+    const { language } = useContext(LanguageContext);
     const [cat, setCat] = useState("all");
     const [q, setQ] = useState("");
+
+    const categoryFilters = useMemo(
+        () => NOTE_CATEGORY_FILTERS.map((item) => ({
+            ...item,
+            label: t(item.labelKey, language),
+        })),
+        [language]
+    );
 
     const [stars, setStars] = useState(() => {
         try {
@@ -81,7 +86,7 @@ export default function Notes() {
         >
             <Container sx={{ mt: 4, mb: 6 }}>
                 <ScrollSpyProvider headerOffset={appTokens.layout.scrollSpyOffset}>
-                    <SpySection id="筆記" title="筆記">
+                    <SpySection id="notes" title={t("note.title", language)}>
                         <Stack
                             direction={{ xs: "column", sm: "row" }}
                             spacing={2}
@@ -89,12 +94,12 @@ export default function Notes() {
                             justifyContent="space-between"
                             sx={{ mb: 2 }}
                         >
-                            <Typography variant="h4" fontWeight={900}>筆記</Typography>
+                            <Typography variant="h4" fontWeight={900}>{t("note.title", language)}</Typography>
 
                             {/* 搜尋列 */}
                             <TextField
                                 size="small"
-                                placeholder="搜尋標題、摘要或標籤…"
+                                placeholder={t("note.search.placeholder", language)}
                                 value={q}
                                 onChange={(e) => setQ(e.target.value)}
                                 sx={{ width: { xs: "100%", sm: 320 } }}
@@ -129,7 +134,7 @@ export default function Notes() {
                             "& .MuiTabs-indicator": { height: 3, borderRadius: 1.5 }
                         }}
                     >
-                        {CATS.map(c => (
+                        {categoryFilters.map(c => (
                             <Tab
                                 key={c.value}
                                 value={c.value}
@@ -140,9 +145,9 @@ export default function Notes() {
 
                     {/* 搜尋／分類結果統計 */}
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        共 {filtered.length} 筆結果
-                        {cat !== "all" && ` · 分類：${CATS.find(x => x.value === cat)?.label}`}
-                        {q && ` · 關鍵字：「${q}」`}
+                        {t("note.result.count", language, { count: filtered.length })}
+                        {cat !== "all" && ` · ${t("note.result.category", language, { category: categoryFilters.find(x => x.value === cat)?.label || "" })}`}
+                        {q && ` · ${t("note.result.keyword", language, { keyword: q })}`}
                     </Typography>
 
                     {/* 卡片列表 */}
@@ -156,9 +161,9 @@ export default function Notes() {
                                 borderRadius: 2
                             }}
                         >
-                            <Typography variant="body1" fontWeight={700}>沒有符合的筆記</Typography>
+                            <Typography variant="body1" fontWeight={700}>{t("note.empty.title", language)}</Typography>
                             <Typography variant="body2" sx={{ mt: 0.5 }}>
-                                試著更換關鍵字或切換分類。
+                                {t("note.empty.desc", language)}
                             </Typography>
                         </Box>
                     ) : (
@@ -182,7 +187,7 @@ export default function Notes() {
                                         >
                                             {/* 右上角星號 */}
                                             <Box sx={{ position: "absolute", top: 8, right: 8, zIndex: 2 }}>
-                                                <Tooltip title={isStarred ? "取消星號" : "加上星號"}>
+                                                <Tooltip title={isStarred ? t("note.star.remove", language) : t("note.star.add", language)}>
                                                     <IconButton
                                                         size="small"
                                                         onClick={(e) => {
@@ -197,7 +202,7 @@ export default function Notes() {
                                                             "&:hover": { bgcolor: alpha(t.palette.background.default, 0.9) },
                                                             color: isStarred ? t.palette.warning.main : t.palette.text.secondary,
                                                         })}
-                                                        aria-label={isStarred ? "unstar" : "star"}
+                                                        aria-label={isStarred ? t("note.star.remove", language) : t("note.star.add", language)}
                                                     >
                                                         {isStarred ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
                                                     </IconButton>
@@ -208,7 +213,7 @@ export default function Notes() {
                                                 {n.cover && <CardMedia component="img" height="140" image={n.cover} alt={n.title} />}
                                                 <CardContent>
                                                     <Typography variant="overline" sx={{ opacity: 0.7 }}>
-                                                        {CATS.find(c => c.value === n.category)?.label || "未分類"}
+                                                        {categoryFilters.find(c => c.value === n.category)?.label || t("note.category.unknown", language)}
                                                     </Typography>
                                                     <Typography variant="h6" fontWeight={800} gutterBottom noWrap>
                                                         {n.title}

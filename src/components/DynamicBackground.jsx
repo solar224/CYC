@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import "./css/DynamicBackground.css";
 
 const DynamicBackground = ({ theme }) => {
     const sceneRef = useRef(null);
@@ -56,7 +55,21 @@ const DynamicBackground = ({ theme }) => {
         }
     }, [theme]);
 
-    return <canvas id="dynamic-background" />;
+    return (
+        <canvas
+            id="dynamic-background"
+            style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: -1,
+                pointerEvents: "none",
+                transition: "background-color 0.3s ease",
+            }}
+        />
+    );
 };
 
 export default DynamicBackground;

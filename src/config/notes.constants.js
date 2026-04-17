@@ -20,3 +20,10 @@ export const NOTES_SEGMENT_LABEL_KEYS = {
   "coding-practice": "segment.coding-practice",
   "other-practice": "segment.other-practice",
 };
+
+export const NOTE_CATEGORY_FILTERS = [
+  { value: "all", labelKey: "note.category.all" },
+  { value: "school-curriculum", labelKey: "note.category.school-curriculum" },
+  { value: "coding-practice", labelKey: "note.category.coding-practice" },
+  { value: "other-practice", labelKey: "note.category.other-practice" },
+];

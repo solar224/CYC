@@ -14,8 +14,6 @@ import { usePersistentPreference } from "./hooks/useAppInitialization";
 import AppRoutes from "./routes/AppRoutes";
 import { createAppMuiTheme } from "./theme/muiTheme";
 
-import "./components/css/App.css";
-
 export default function App() {
   const [theme, setTheme] = usePersistentPreference("theme", "dark");
   const [language, setLanguage] = usePersistentPreference("language", "zh");
@@ -51,8 +49,11 @@ export default function App() {
             <CssBaseline enableColorScheme />
 
             <Box
-              className="app"
-              sx={{ minHeight: "100vh" }}
+              sx={{
+                minHeight: "100vh",
+                transition: `background-color 0.3s ease, color 0.3s ease`,
+                letterSpacing: 0.4,
+              }}
             >
               <Router basename={routerBasename}>
                 <AppRoutes theme={theme} />
