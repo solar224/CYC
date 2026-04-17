@@ -1,3 +1,5 @@
+import { TOOLS_ROUTE_PATHS } from "./tools.constants";
+
 export const APP_ROUTE_PATHS = {
   HOME: "/",
   NOTE: "/note",
@@ -40,6 +42,6 @@ export const MAIN_NAV_ITEMS = [
   },
   {
     key: "tools",
-    to: "/tools",
+    to: TOOLS_ROUTE_PATHS.ROOT,
   },
 ];

@@ -24,6 +24,24 @@ export default function App() {
   const toggleLanguage = () => setLanguage(prev => (prev === "zh" ? "en" : "zh"));
 
   const muiTheme = useMemo(() => createAppMuiTheme(theme === "dark" ? "dark" : "light"), [theme]);
+  const routerBasename = useMemo(() => {
+    if (typeof window === "undefined") {
+      return ENV.PUBLIC_URL || "";
+    }
+
+    const currentPath = window.location.pathname;
+    if (ENV.PUBLIC_URL) {
+      return currentPath.startsWith(ENV.PUBLIC_URL) ? ENV.PUBLIC_URL : "";
+    }
+
+    // CRA dev server may leave PUBLIC_URL empty even when opening /CYC.
+    const firstSegment = currentPath.split("/").filter(Boolean)[0] || "";
+    if (firstSegment.toLowerCase() === "cyc") {
+      return `/${firstSegment}`;
+    }
+
+    return "";
+  }, []);
 
   return (
     <SnackbarProvider maxSnack={3} autoHideDuration={800}>
@@ -36,7 +54,7 @@ export default function App() {
               className="app"
               sx={{ minHeight: "100vh" }}
             >
-              <Router basename={ENV.PUBLIC_URL}>
+              <Router basename={routerBasename}>
                 <AppRoutes theme={theme} />
               </Router>
             </Box>

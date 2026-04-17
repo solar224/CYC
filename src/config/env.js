@@ -1,11 +1,55 @@
 const allowedNodeEnvs = new Set(["development", "test", "production"]);
 
+function createRuntimeEnvSource() {
+  return {
+    name: "runtime.__APP_ENV__",
+    read(key) {
+      if (typeof window === "undefined") return undefined;
+      const runtimeEnv = window.__APP_ENV__;
+      if (!runtimeEnv || typeof runtimeEnv !== "object") return undefined;
+      return runtimeEnv[key];
+    },
+  };
+}
+
+function createProcessEnvSource() {
+  return {
+    name: "process.env",
+    read(key) {
+      if (typeof process === "undefined" || !process.env) return undefined;
+      return process.env[key];
+    },
+  };
+}
+
+const envSources = [
+  createRuntimeEnvSource(),
+  createProcessEnvSource(),
+];
+
+function buildEnvCandidateKeys(name) {
+  return [name, `REACT_APP_${name}`, `VITE_${name}`];
+}
+
+function readRawEnv(name) {
+  const keys = buildEnvCandidateKeys(name);
+  for (const key of keys) {
+    for (const source of envSources) {
+      const value = source.read(key);
+      if (value !== undefined && value !== null && value !== "") {
+        return String(value);
+      }
+    }
+  }
+  return undefined;
+}
+
 function readEnvString(name, fallback = "") {
-  const value = process.env[name];
-  if (value === undefined || value === null || value === "") {
+  const value = readRawEnv(name);
+  if (value === undefined) {
     return fallback;
   }
-  return String(value);
+  return value;
 }
 
 function normalizePublicUrl(value) {
